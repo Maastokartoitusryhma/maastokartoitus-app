@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: circleci/node:7.10
 
-    working_directory: ~/repo
+    working_directory: ~/maastokartoitus-app
 
     steps:
       - checkout
@@ -19,14 +19,8 @@ jobs:
       - run: yarn install
 
       - save_cache:
-          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
-          paths:
-            - ~/.cache/yarn
-
-      - save_cache:
           key: node-v1-{{ checksum "package.json" }}-{{ arch }}
           paths:
             - node_modules
 
-      # run tests!
       - run: yarn test
