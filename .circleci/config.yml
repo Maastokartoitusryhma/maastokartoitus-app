@@ -19,5 +19,3 @@ jobs:
           key: node-v1-{{ checksum "maastokartoitus-app/package.json" }}-{{ arch }}
           paths:
             - node_modules
-
-      - run: yarn test
