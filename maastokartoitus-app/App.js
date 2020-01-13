@@ -1,10 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 
 export default function App() {
   return (
     <View style={styles.container}>
       <Text>Tämä tulee olemaan meidän hieno maastokartoitussovelluksemme!</Text>
+      <Button
+        onPress={() =>  {
+          alert('Lisätään siis havainto!');
+        }}
+        title='Lisää havainto' />
     </View>
   );
 }
