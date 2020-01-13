@@ -4,22 +4,19 @@ jobs:
     docker:
       - image: circleci/node:7.10
 
-    working_directory: ~/maastokartoitus-app/maastokartoitus-app
+    working_directory: ~/maastokartoitus-app
 
     steps:
       - checkout
 
       # Download and cache dependencies
       - restore_cache:
-          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
-
-      - restore_cache:
-          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+          key: node-v1-{{ checksum "maastokartoitus-app/package.json" }}-{{ arch }}
 
       - run: yarn install
 
       - save_cache:
-          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+          key: node-v1-{{ checksum "maastokartoitus-app/package.json" }}-{{ arch }}
           paths:
             - node_modules
 
