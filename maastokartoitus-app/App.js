@@ -1,17 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, Dimensions } from 'react-native';
+import MapView from 'react-native-maps'
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Tämä tulee olemaan meidän hieno maastokartoitussovelluksemme!</Text>
-      <Button
-        onPress={() =>  {
-          alert('Lisätään siis havainto!');
-        }}
-        title='Lisää havainto' />
-    </View>
-  );
+export default class App extends React.Component {
+    render() {
+        return (
+            <View style={styles.container}>
+                <MapView style={styles.mapStyle}/>
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -20,5 +18,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  mapStyle: {
+      width: Dimensions.get('window').width,
+      height: Dimensions.get('window').height,
   },
 });
