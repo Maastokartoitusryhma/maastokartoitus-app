@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button, Dimensions } from 'react-native';
+import { StyleSheet, View, Button, Dimensions } from 'react-native';
 import MapComponent from './components/MapComponent'
 
 export default class App extends Component {
@@ -7,6 +7,9 @@ export default class App extends Component {
         return (
             <View style={styles.container}>
                 <MapComponent style={styles.mapStyle}/>
+                <View style={styles.buttonContainer}>
+                    <Button title="Lisää havainto" />
+                </View>
             </View>
         )
     }
@@ -23,4 +26,9 @@ const styles = StyleSheet.create({
       width: Dimensions.get('window').width,
       height: Dimensions.get('window').height,
   },
+  buttonContainer: {
+      position: 'absolute',
+      bottom: 20,
+      right: 20
+  }
 });
