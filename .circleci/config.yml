@@ -8,9 +8,6 @@ jobs:
 
     steps:
       - checkout
-      - run:
-          name: Update npm
-          command: 'sudo npm install -g npm@latest'
       - restore_cache:
           key: node-v1-{{ checksum "maastokartoitus-app/package-lock.json" }}-{{ arch }}
       - run: 
