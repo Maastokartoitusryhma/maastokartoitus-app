@@ -8,13 +8,14 @@ jobs:
 
     steps:
       - checkout
-
-      # Download and cache dependencies
+      - run:
+          name: Update npm
+          command: 'sudo npm install -g npm@latest'
       - restore_cache:
           key: node-v1-{{ checksum "maastokartoitus-app/package.json" }}-{{ arch }}
-
-      - run: yarn install
-
+      - run: 
+          name: Install dependencies
+          command: 'npm install'
       - save_cache:
           key: node-v1-{{ checksum "maastokartoitus-app/package.json" }}-{{ arch }}
           paths:
