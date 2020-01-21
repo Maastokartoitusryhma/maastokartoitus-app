@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import MapView, { Marker } from 'react-native-maps'
-import { StyleSheet, Text, View, Button, Dimensions } from 'react-native';
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 
