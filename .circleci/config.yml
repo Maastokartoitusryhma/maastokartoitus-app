@@ -12,11 +12,11 @@ jobs:
           name: Update npm
           command: 'sudo npm install -g npm@latest'
       - restore_cache:
-          key: node-v1-{{ checksum "maastokartoitus-app/package.json" }}-{{ arch }}
+          key: node-v1-{{ checksum "maastokartoitus-app/package-lock.json" }}-{{ arch }}
       - run: 
           name: Install dependencies
           command: 'npm install'
       - save_cache:
-          key: node-v1-{{ checksum "maastokartoitus-app/package.json" }}-{{ arch }}
+          key: node-v1-{{ checksum "maastokartoitus-app/package-lock.json" }}-{{ arch }}
           paths:
             - node_modules
