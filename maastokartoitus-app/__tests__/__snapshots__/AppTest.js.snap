@@ -155,114 +155,104 @@ exports[`<App /> renders correctly 1`] = `
                     }
                   }
                 >
-                  <View
-                    style={
-                      Object {
-                        "alignItems": "center",
-                        "flexDirection": "column",
-                        "justifyContent": "center",
-                      }
-                    }
-                  >
+                  <View>
                     <View
                       style={
                         Object {
-                          "padding": 10,
-                          "width": "40%",
+                          "alignItems": "center",
+                          "flexDirection": "column",
+                          "justifyContent": "center",
+                          "paddingTop": "45%",
                         }
                       }
                     >
                       <View
-                        accessibilityRole="button"
-                        accessibilityStates={Array []}
-                        accessible={true}
-                        focusable={true}
-                        isTVSelectable={true}
-                        onClick={[Function]}
-                        onResponderGrant={[Function]}
-                        onResponderMove={[Function]}
-                        onResponderRelease={[Function]}
-                        onResponderTerminate={[Function]}
-                        onResponderTerminationRequest={[Function]}
-                        onStartShouldSetResponder={[Function]}
                         style={
                           Object {
-                            "opacity": 1,
+                            "alignItems": "center",
+                            "justifyContent": "space-between",
+                            "width": "90%",
                           }
                         }
                       >
-                        <View
+                        <Text
                           style={
-                            Array [
-                              Object {},
-                            ]
+                            Object {
+                              "padding": 10,
+                              "textAlign": "center",
+                            }
                           }
                         >
-                          <Text
-                            style={
-                              Array [
-                                Object {
-                                  "color": "#007AFF",
-                                  "fontSize": 18,
-                                  "padding": 8,
-                                  "textAlign": "center",
-                                },
-                              ]
+                          Syötä henkilökohtainen tokenisi
+                        </Text>
+                        <TextInput
+                          allowFontScaling={true}
+                          placeholder="personToken"
+                          rejectResponderTermination={true}
+                          style={
+                            Object {
+                              "borderColor": "#DEDEDE",
+                              "borderWidth": 1,
+                              "height": 40,
+                              "padding": 10,
+                              "width": "80%",
                             }
-                          >
-                            Näytä kartta
-                          </Text>
-                        </View>
+                          }
+                          underlineColorAndroid="transparent"
+                        />
                       </View>
-                    </View>
-                    <View
-                      style={
-                        Object {
-                          "padding": 10,
-                          "width": "40%",
-                        }
-                      }
-                    >
                       <View
-                        accessibilityRole="button"
-                        accessibilityStates={Array []}
-                        accessible={true}
-                        focusable={true}
-                        isTVSelectable={true}
-                        onClick={[Function]}
-                        onResponderGrant={[Function]}
-                        onResponderMove={[Function]}
-                        onResponderRelease={[Function]}
-                        onResponderTerminate={[Function]}
-                        onResponderTerminationRequest={[Function]}
-                        onStartShouldSetResponder={[Function]}
                         style={
                           Object {
-                            "opacity": 1,
+                            "padding": 10,
+                            "width": "50%",
                           }
                         }
                       >
                         <View
+                          accessibilityRole="button"
+                          accessibilityStates={Array []}
+                          accessible={true}
+                          focusable={true}
+                          isTVSelectable={true}
+                          onClick={[Function]}
+                          onResponderGrant={[Function]}
+                          onResponderMove={[Function]}
+                          onResponderRelease={[Function]}
+                          onResponderTerminate={[Function]}
+                          onResponderTerminationRequest={[Function]}
+                          onStartShouldSetResponder={[Function]}
                           style={
-                            Array [
-                              Object {},
-                            ]
+                            Object {
+                              "opacity": 1,
+                            }
                           }
                         >
-                          <Text
+                          <View
                             style={
                               Array [
-                                Object {
-                                  "color": "#007AFF",
-                                  "fontSize": 18,
-                                  "padding": 8,
-                                  "textAlign": "center",
-                                },
+                                Object {},
                               ]
                             }
                           >
-                            Lisää havainto
-                          </Text>
+                            <Text
+                              style={
+                                Array [
+                                  Object {
+                                    "color": "#007AFF",
+                                    "fontSize": 18,
+                                    "padding": 8,
+                                    "textAlign": "center",
+                                  },
+                                  Object {
+                                    "color": "#1D76B2",
+                                  },
+                                ]
+                              }
+                            >
+                              Kirjaudu sisään
+                            </Text>
+                          </View>
                         </View>
                       </View>
                     </View>
@@ -316,7 +306,7 @@ exports[`<App /> renders correctly 1`] = `
         <View
           style={
             Object {
-              "backgroundColor": "#fff",
+              "backgroundColor": "#3498DB",
               "borderBottomColor": "#a7a7aa",
               "flex": 1,
               "shadowColor": "#a7a7aa",
@@ -375,7 +365,7 @@ exports[`<App /> renders correctly 1`] = `
               onLayout={[Function]}
               style={
                 Object {
-                  "color": "rgba(0, 0, 0, 0.9)",
+                  "color": "#FFFFFF",
                   "fontSize": 17,
                   "fontWeight": "600",
                 }
