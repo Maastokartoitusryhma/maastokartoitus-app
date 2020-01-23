@@ -7,7 +7,8 @@ export default class HomeScreen extends Component {
   }
 
   render() {
-    const {navigate} = this.props.navigation
+    const navigate = this.props.navigation
+    
     return (
       <View style={styles.buttonContainer}>
         <View style={styles.button}>
