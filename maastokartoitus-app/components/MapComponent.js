@@ -2,37 +2,59 @@ import React, { useState, useEffect } from 'react'
 import MapView, { Marker } from 'react-native-maps'
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
+import * as TaskManager from 'expo-task-manager'
+import { Button, Text } from 'react-native'
 
 export default MapComponent = ({ style }) => {
-    [ locationState, setLocationState ] = useState({ location: null, region: {latitude: 62.0, longitude: -27.0, latitudeDelta: 1.0, longitudeDelta: 1.0}, errorMsg: null })
+    const [ regionState, setRegionState ] = useState({ latitude: 62.0, longitude: -27.0, latitudeDelta: 0.25, longitudeDelta: 0.25 })
+    const [ locationState, setLocationState ] = useState({ location: null, errorMsg: null })
     
     useEffect(() => {
-        getLocation()    
+        watchLocationAsync()    
     }, [])
 
-    getLocation = async () => {
+    watchLocationAsync = async () => {
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
 
         if(status !== 'granted') {
-            setLocationState({ location: null, region: null, errorMsg: 'Location permission denied' })
+            setLocationState({ location: null, errorMsg: 'Location permission denied' })
         }
 
-        let location = await Location.getCurrentPositionAsync({})
+        initialLocation = await Location.getCurrentPositionAsync({})
+
         const region = {
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-            latitudeDelta: 1.0,
-            longitudeDelta: 1.0,
+            latitude: initialLocation.coords.latitude,
+            longitude: initialLocation.coords.longitude,
+            latitudeDelta: 0.25,
+            longitudeDelta: 0.25,
         }
 
-        setLocationState({ location, region, errorMsg: null });
+        setRegionState(region)
+
+        await Location.watchPositionAsync({
+            distanceInterval: 10,
+            timeInterval: 5000
+        },
+        location => {
+            setLocationState({ location, errorMsg: null });
+        })
     }
+
+    //centerMap = () => {
+    //    const region = {...regionState}
+    //    const coords = {...locationState.location.coords}
+        
+    //    region.latitude = coords.latitude
+    //    region.longitude = coords.latitude
+
+    //    setRegionState(region)
+    //}
 
     return (
         <>
             <MapView 
                 style = {style}
-                region = {locationState.region}
+                region = {regionState}
             >
                 {locationState.location !== null ? 
                     <Marker
