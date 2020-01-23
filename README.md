@@ -12,5 +12,5 @@ Mobile app for the Finnish government officials to report their field findings f
 ---
 ### Dokumentaatio - Documentation
 
-[Product backlog, Sprint backlogit, tuntikirjanpito](https://docs.google.com/spreadsheets/d/1m7VQjWEWSzhMSs83YdCRn0AIC5W5rsfShjiJ0MSNvu4/edit#gid=0)
-[Definition of Done](https://github.com/Maastokartoitusryhma/maastokartoitus-app/blob/master/definition_of_done.md)
+[Product backlog, Sprint backlogit, tuntikirjanpito](https://docs.google.com/spreadsheets/d/1m7VQjWEWSzhMSs83YdCRn0AIC5W5rsfShjiJ0MSNvu4/edit#gid=0)<br/>
+[Definition of Done](https://github.com/Maastokartoitusryhma/maastokartoitus-app/blob/master/definition_of_done.md)<br/>
