@@ -4,9 +4,9 @@
 
 Unit/integration tests are not required for every user story, but will be used if the user story can be reasonably tested with
 unit or integration tests. This is because some stories can be unreasonably difficult and/or useless to test with automatic
-testing. However, our definition of done requires that all tests that have been written are passing on CircleCI server, because
-if some tests won't pass after the commit, then something is probably broken and we should use the stop and fix -principle, 
-before the story can be marked as done.
+testing. Testing APIs is an example where testing is recommended. Also, our definition of done requires that all tests that 
+have been written are passing on CircleCI server, because if some tests won't pass after the commit, then something is probably 
+broken and we should use the stop and fix -principle, before the story can be marked as done.
 
 <h2>Code reviews</h2>
 
