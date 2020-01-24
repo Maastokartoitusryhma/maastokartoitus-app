@@ -21,14 +21,12 @@ const HomeComponent = (props) => {
             </Picker>
           </View>
           <View style={styles.buttonContainer}>
-            <Button style={styles.button} title='Jatka'></Button>
+            <Button onPress={props.onPressMap} style={styles.button} title='Kartta'></Button>
+            <Button onPress={props.onPressObservation} style={styles.button} title='Uusi havainto'></Button>
           </View>
         </View>
       </View>
-
-
     </View>
-
   )
 }
 

@@ -16,7 +16,7 @@ export default class HomeScreen extends Component {
     const { navigate } = this.props.navigation
 
     return (
-      <HomeComponent />
+      <HomeComponent onPressMap={() => navigate('Map')} onPressObservation={() => navigate('Observation')} />
     )
   }
 }
