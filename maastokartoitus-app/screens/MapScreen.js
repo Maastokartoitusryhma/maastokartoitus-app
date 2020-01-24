@@ -11,7 +11,7 @@ export default class MapScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <MapComponent style={styles.mapStyle} />
+        <MapComponent mapStyle={styles.mapStyle} buttonStyle={styles.buttonStyle} />
       </View>
     )
   }  
@@ -25,12 +25,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   mapStyle: {
+    flex: 1,
       width: Dimensions.get('window').width,
       height: Dimensions.get('window').height,
   },
-  buttonContainer: {
+  buttonStyle: { 
       position: 'absolute',
-      bottom: 20,
-      right: 20
+      top: '20px',
+      right: '20px'
   }
 })

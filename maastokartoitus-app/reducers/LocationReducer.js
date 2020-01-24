@@ -11,7 +11,7 @@ const locationReducer = (state = null, action) => {
 
 const pathReducer = (state = [], action) => {
   switch (action.type) {
-    case 'APPEND_LOCATION':
+    case 'APPEND_PATH':
       return [...action.data, ...state]
     default:
       return state
