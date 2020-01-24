@@ -25,10 +25,10 @@ const HomeComponent = (props) => {
           </View>
         </View>
       </View>
-      
+
 
     </View>
-    
+
   )
 }
 

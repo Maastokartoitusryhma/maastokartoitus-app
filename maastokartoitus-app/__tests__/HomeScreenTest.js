@@ -7,7 +7,7 @@ describe('<HomeScreen />', () => {
 
   it('renders correctly', () => {
     const tree = renderer.create(<HomeScreen />).toJSON()
-   expect(tree).toMatchSnapshot()
+    expect(tree).toMatchSnapshot()
   })
 
 })

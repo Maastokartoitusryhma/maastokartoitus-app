@@ -6,66 +6,66 @@ import * as TaskManager from 'expo-task-manager'
 import { Button, Text } from 'react-native'
 
 export default MapComponent = ({ style }) => {
-    const [ regionState, setRegionState ] = useState({ latitude: 62.0, longitude: -27.0, latitudeDelta: 0.25, longitudeDelta: 0.25 })
-    const [ locationState, setLocationState ] = useState({ location: null, errorMsg: null })
-    
-    useEffect(() => {
-        watchLocationAsync()    
-    }, [])
+  const [ regionState, setRegionState ] = useState({ latitude: 62.0, longitude: -27.0, latitudeDelta: 0.25, longitudeDelta: 0.25 })
+  const [ locationState, setLocationState ] = useState({ location: null, errorMsg: null })
 
-    watchLocationAsync = async () => {
-        let { status } = await Permissions.askAsync(Permissions.LOCATION);
+  useEffect(() => {
+    watchLocationAsync()
+  }, [])
 
-        if(status !== 'granted') {
-            setLocationState({ location: null, errorMsg: 'Location permission denied' })
-        }
+  watchLocationAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION)
 
-        initialLocation = await Location.getCurrentPositionAsync({})
-
-        const region = {
-            latitude: initialLocation.coords.latitude,
-            longitude: initialLocation.coords.longitude,
-            latitudeDelta: 0.25,
-            longitudeDelta: 0.25,
-        }
-
-        setRegionState(region)
-
-        await Location.watchPositionAsync({
-            distanceInterval: 10,
-            timeInterval: 5000
-        },
-        location => {
-            setLocationState({ location, errorMsg: null });
-        })
+    if(status !== 'granted') {
+      setLocationState({ location: null, errorMsg: 'Location permission denied' })
     }
 
-    //centerMap = () => {
-    //    const region = {...regionState}
-    //    const coords = {...locationState.location.coords}
-        
-    //    region.latitude = coords.latitude
-    //    region.longitude = coords.latitude
+    initialLocation = await Location.getCurrentPositionAsync({})
 
-    //    setRegionState(region)
-    //}
+    const region = {
+      latitude: initialLocation.coords.latitude,
+      longitude: initialLocation.coords.longitude,
+      latitudeDelta: 0.25,
+      longitudeDelta: 0.25,
+    }
 
-    return (
-        <>
-            <MapView 
-                style = {style}
-                region = {regionState}
-            >
-                {locationState.location !== null ? 
-                    <Marker
-                        coordinate = {{
-                            latitude: locationState.location.coords.latitude,
-                            longitude: locationState.location.coords.longitude
-                        }}
-                    />
-                    : null
-                }
-            </MapView>
-        </>
-    )
+    setRegionState(region)
+
+    await Location.watchPositionAsync({
+      distanceInterval: 10,
+      timeInterval: 5000
+    },
+    location => {
+      setLocationState({ location, errorMsg: null })
+    })
+  }
+
+  //centerMap = () => {
+  //    const region = {...regionState}
+  //    const coords = {...locationState.location.coords}
+
+  //    region.latitude = coords.latitude
+  //    region.longitude = coords.latitude
+
+  //    setRegionState(region)
+  //}
+
+  return (
+    <>
+      <MapView
+        style = {style}
+        region = {regionState}
+      >
+        {locationState.location !== null ?
+          <Marker
+            coordinate = {{
+              latitude: locationState.location.coords.latitude,
+              longitude: locationState.location.coords.longitude
+            }}
+          />
+          : null
+        }
+      </MapView>
+    </>
+  )
 }

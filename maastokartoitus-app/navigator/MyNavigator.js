@@ -1,9 +1,9 @@
-import { createAppContainer } from "react-navigation"
+import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 import HomeScreen from '../screens/HomeScreen'
 import MapScreen from '../screens/MapScreen'
 import HavaintoScreen from '../screens/HavaintoScreen'
-import LoginScreen from "../screens/LoginScreen";
+import LoginScreen from '../screens/LoginScreen'
 
 const AppNavigator = createStackNavigator(
   {
@@ -19,4 +19,3 @@ const AppNavigator = createStackNavigator(
 
 const AppContainer = createAppContainer(AppNavigator)
 export default AppContainer
-  

@@ -6,16 +6,16 @@ const LoginComponent = (props) => {
 
   return (
     <View>
-        <View style={styles.container}>
-          <View style={styles.inputContainer}>
-            <Text style={styles.text}>Syötä henkilökohtainen tokenisi</Text>
-            <TextInput placeholder='personToken' style={styles.input} /> 
-          </View>
-          <View style={styles.button}>
-            <Button onPress={props.onPress} title="Kirjaudu sisään" color={Colors.neutralButton}/>
-          </View>
+      <View style={styles.container}>
+        <View style={styles.inputContainer}>
+          <Text style={styles.text}>Syötä henkilökohtainen tokenisi</Text>
+          <TextInput placeholder='personToken' style={styles.input} />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={props.onPress} title="Kirjaudu sisään" color={Colors.neutralButton}/>
         </View>
       </View>
+    </View>
   )
 }
 
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.inputBorder,
     borderWidth: 1,
     height: 40,
-    width: '80%', 
+    width: '80%',
     padding: 10
   },
   text: {
