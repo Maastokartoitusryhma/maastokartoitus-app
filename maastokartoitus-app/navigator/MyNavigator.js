@@ -2,7 +2,7 @@ import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 import HomeScreen from '../screens/HomeScreen'
 import MapScreen from '../screens/MapScreen'
-import HavaintoScreen from '../screens/HavaintoScreen'
+import ObservationScreen from '../screens/ObservationScreen'
 import LoginScreen from '../screens/LoginScreen'
 
 const AppNavigator = createStackNavigator(
@@ -10,7 +10,7 @@ const AppNavigator = createStackNavigator(
     Login: LoginScreen,
     Home: HomeScreen,
     Map: MapScreen,
-    Havainto: HavaintoScreen
+    Observation: ObservationScreen
   },
   {
     initialRouteName: 'Login'

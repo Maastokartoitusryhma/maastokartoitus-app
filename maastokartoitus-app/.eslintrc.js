@@ -42,10 +42,16 @@ module.exports = {
             'never'
         ],
         'eqeqeq': 'error',
-        "no-trailing-spaces": "error",
-        "no-console": 0,
-        "arrow-spacing": [
-            "error", { "before": true, "after": true }
+        'no-trailing-spaces': 'error',
+        'no-console': 0,
+        'object-curly-spacing': [
+            'error', 'always'
+        ],
+        'arrow-spacing': [
+            'error', { 'before': true, 'after': true }
+        ],
+        'comma-spacing': [
+            'error', { 'before': false, 'after': true }
         ]
     }
 }

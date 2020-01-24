@@ -6,7 +6,7 @@ const HomeComponent = (props) => {
   return (
     <View>
       <Text style={styles.loggedIn}>Kirjautuneena:
-        <Text style={{fontStyle: 'italic'}}> username tähän</Text>
+        <Text style={{ fontStyle: 'italic' }}> username tähän</Text>
       </Text>
       <View style={styles.container}>
         <View style={styles.havaintoContainer}>
@@ -21,14 +21,12 @@ const HomeComponent = (props) => {
             </Picker>
           </View>
           <View style={styles.buttonContainer}>
-            <Button style={styles.button} title='Jatka'></Button>
+            <Button onPress={props.onPressMap} style={styles.button} title='Kartta'></Button>
+            <Button onPress={props.onPressObservation} style={styles.button} title='Uusi havainto'></Button>
           </View>
         </View>
       </View>
-
-
     </View>
-
   )
 }
 
