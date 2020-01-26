@@ -22,7 +22,6 @@ const HomeComponent = (props) => {
           </View>
           <View style={styles.buttonContainer}>
             <Button onPress={props.onPressMap} style={styles.button} title='Kartta'></Button>
-            <Button onPress={props.onPressObservation} style={styles.button} title='Uusi havainto'></Button>
           </View>
         </View>
       </View>

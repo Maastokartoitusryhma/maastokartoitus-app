@@ -8,13 +8,14 @@ export default class MapScreen extends React.Component {
   }
 
   render() {
+    const { navigate } = this.props.navigation
 
     return (
       <View style={styles.container}>
-        <MapComponent mapStyle={styles.mapStyle} buttonStyle={styles.buttonStyle} />
+        <MapComponent mapStyle={styles.mapStyle} onPress1={() => navigate('Observation')} />
       </View>
     )
-  }  
+  }
 }
 
 const styles = StyleSheet.create({
@@ -28,10 +29,5 @@ const styles = StyleSheet.create({
     flex: 1,
       width: Dimensions.get('window').width,
       height: Dimensions.get('window').height,
-  },
-  buttonStyle: { 
-      position: 'absolute',
-      top: '20px',
-      right: '20px'
   }
 })

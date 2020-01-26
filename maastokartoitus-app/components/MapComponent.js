@@ -8,7 +8,7 @@ import { Text, Button, View } from 'react-native'
 const MapComponent = props => {
   const [ regionState, setRegionState ] = useState(null)
 
-  centerMap = () => {
+  const centerMap = () => {
     if (props.location) {
       const coords = { ...props.location.coords }
 
@@ -49,11 +49,25 @@ const MapComponent = props => {
           : null
         }
       </MapView>
+      <View
+        style={{
+          position: 'absolute',
+          top: '80%',
+          alignSelf: 'flex-end'
+        }}>
+        <Button title={'Keskitä'} onPress={() => centerMap()} />
+      </View>
+      <View
+        style={{
+          position: 'absolute',
+          top: '90%',
+          alignSelf: 'flex-end'
+        }}>
+        <Button onPress={props.onPress1} title='Havainto' />
+      </View>
     </>
   )
 }
-
-//<Button title={'Keskitä'} buttonStyle={props.buttonStyle} onPress={() => centerMap()}/>
 
 const mapStateToProps = (state) => {
   const { location, path } = state
