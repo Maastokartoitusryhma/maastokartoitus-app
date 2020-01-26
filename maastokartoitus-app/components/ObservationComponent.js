@@ -1,12 +1,14 @@
 import React from 'react'
-import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native'
+import { View, Text, TextInput, Button, Alert, StyleSheet, AsyncStorage } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { connect } from 'react-redux'
 import Colors from '../constants/colors'
 
 const ObservationComponent = (props) => {
   const { control, handleSubmit, errors } = useForm()
-  const onSubmit = data => Alert.alert('Form data', JSON.stringify(data))
+  const onSubmit1 = data => save(data)
+  const onSubmit2 = () => fetch()
+  const onSubmit3 = () => clear()
   const onChange = args => {
     return {
       value: args[0].nativeEvent.text,
@@ -71,9 +73,48 @@ const ObservationComponent = (props) => {
         defaultValue=''
       />
 
-      <Button onPress={handleSubmit(onSubmit)} title='Lähetä' style={styles.button}></Button>
+      <Button onPress={handleSubmit(onSubmit1)} title='Tallenna' style={styles.button}></Button>
+      <Button onPress={handleSubmit(onSubmit2)} title='Hae' style={styles.button}></Button>
+      <Button onPress={handleSubmit(onSubmit3)} title='Nollaa' style={styles.button}></Button>
     </View>
   )
+}
+
+const save = async (data) => {
+  const observation_id_1 = {
+    species: data.species,
+    location: data.location,
+    date: data.date,
+    time: data.time,
+    info: data.info
+  }
+  try {
+    await AsyncStorage.setItem('observation_id_1', JSON.stringify(observation_id_1))
+  } catch (error) {
+    alert(error)
+  }
+  return null
+}
+
+const fetch = async () => {
+  try {
+    const fetchedObservation = await AsyncStorage.getItem('observation_id_1')
+
+    if (fetchedObservation !== null) {
+      alert(JSON.stringify(fetchedObservation))
+      return null
+    }
+  } catch (error) {
+    alert('Failed to fetch from async storage. ', error)
+  }
+}
+
+const clear = async () => {
+  try {
+    await AsyncStorage.clear()
+  } catch (error) {
+    alert('Failed to clear the async storage. ', error)
+  }
 }
 
 const styles = StyleSheet.create({
