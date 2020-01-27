@@ -1,8 +1,9 @@
 import React from 'react'
-import { View, Text, TextInput, Button, Alert, StyleSheet, AsyncStorage } from 'react-native'
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { connect } from 'react-redux'
 import Colors from '../constants/colors'
+import { save, fetch, clear } from '../dao/ObservationDAO'
 
 const ObservationComponent = (props) => {
   const { control, handleSubmit, errors } = useForm()
@@ -78,43 +79,6 @@ const ObservationComponent = (props) => {
       <Button onPress={handleSubmit(onSubmit3)} title='Nollaa' style={styles.button}></Button>
     </View>
   )
-}
-
-const save = async (data) => {
-  const observation_id_1 = {
-    species: data.species,
-    location: data.location,
-    date: data.date,
-    time: data.time,
-    info: data.info
-  }
-  try {
-    await AsyncStorage.setItem('observation_id_1', JSON.stringify(observation_id_1))
-  } catch (error) {
-    alert(error)
-  }
-  return null
-}
-
-const fetch = async () => {
-  try {
-    const fetchedObservation = await AsyncStorage.getItem('observation_id_1')
-
-    if (fetchedObservation !== null) {
-      alert(JSON.stringify(fetchedObservation))
-      return null
-    }
-  } catch (error) {
-    alert('Failed to fetch from async storage. ', error)
-  }
-}
-
-const clear = async () => {
-  try {
-    await AsyncStorage.clear()
-  } catch (error) {
-    alert('Failed to clear the async storage. ', error)
-  }
 }
 
 const styles = StyleSheet.create({
