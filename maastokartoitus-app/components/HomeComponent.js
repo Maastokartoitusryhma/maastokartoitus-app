@@ -1,12 +1,12 @@
 import React from 'react'
-import { View, Text, TextInput, Button, StyleSheet, Picker } from 'react-native'
+import { View, Text, Button, StyleSheet, Picker } from 'react-native'
 import Colors from '../constants/colors'
 
 const HomeComponent = (props) => {
+
   return (
     <View>
-      <Text style={styles.loggedIn}>Kirjautuneena:
-        <Text style={{ fontStyle: 'italic' }}> username tähän</Text>
+      <Text style={styles.loggedIn}>Kirjautuneena: 
       </Text>
       <View style={styles.container}>
         <View style={styles.havaintoContainer}>

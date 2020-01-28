@@ -1,19 +1,57 @@
-import React from 'react'
-import { View, Button, Text, TextInput, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
+import { View, Button, Text, TextInput, StyleSheet, AsyncStorage } from 'react-native'
 import Colors from '../constants/colors'
+import userService from '../services/UserService'
 
 const LoginComponent = (props) => {
+
+  const [personToken, setPersonToken] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const login = async () => {
+    await userService.getUserByPersonToken(personToken).then(userObject => {
+      if (userObject.error === undefined) { // if user is not found, a json object with error is returned, hence check if it exists
+        storeLoggedInUser(userObject)
+        setErrorMessage('')
+        props.onPress()
+      } else {
+        setErrorMessage('Virheellinen token')
+      }
+    })
+  }
+
+  const storeLoggedInUser = async (userObject) => {
+    try {
+      await AsyncStorage.setItem('LoggedInID', userObject.id)
+      await AsyncStorage.setItem('LoggedInFullName', userObject.fullName)
+      await AsyncStorage.setItem('LoggedInEmail', userObject.emailAddress)
+      await AsyncStorage.setItem('LoggedInDefLang', userObject.defaultLanguage)
+      await AsyncStorage.setItem('LoggedInPersonToken', personToken)
+    } catch(e) {
+      console.log('Error saving to storage: ', e)
+    }
+  }
+
+  const inputHandler = personToken => {
+    setPersonToken(personToken)
+  }
 
   return (
     <View>
       <View style={styles.container}>
         <View style={styles.inputContainer}>
           <Text style={styles.text}>Syötä henkilökohtainen tokenisi</Text>
-          <TextInput placeholder='personToken' style={styles.input} />
+          <TextInput
+            placeholder='personToken'
+            style={styles.input}
+            value={personToken}
+            onChangeText={inputHandler}
+          />
         </View>
         <View style={styles.button}>
-          <Button onPress={props.onPress} title="Kirjaudu sisään" color={Colors.neutralButton}/>
+          <Button onPress={login} title="Kirjaudu sisään" color={Colors.neutralButton}/>
         </View>
+        <Text style={styles.errorMessage}>{errorMessage}</Text>
       </View>
     </View>
   )
@@ -45,6 +83,9 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
     padding: 10
+  },
+  errorMessage: {
+    color: Colors.negativeColor
   }
 })
 

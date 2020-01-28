@@ -4,5 +4,6 @@ export default {
   neutralButton: '#1D76B2',
   positiveButton: '#5cb85c',
   negativeButton: '#d9534f',
-  inputBorder: '#DEDEDE'
+  inputBorder: '#DEDEDE',
+  negativeColor: '#d9534f'
 }
