@@ -6,8 +6,7 @@ const HomeComponent = (props) => {
 
   return (
     <View>
-      <Text style={styles.loggedIn}>Kirjautuneena: 
-      </Text>
+      <Text style={styles.loggedIn}>Kirjautuneena:</Text>
       <View style={styles.container}>
         <View style={styles.havaintoContainer}>
           <Text style={styles.havaintoTitle}>Uusi havaintotapahtuma</Text>

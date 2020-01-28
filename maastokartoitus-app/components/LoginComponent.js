@@ -1,9 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Button, Text, TextInput, StyleSheet, AsyncStorage } from 'react-native'
 import Colors from '../constants/colors'
 import userService from '../services/UserService'
 
 const LoginComponent = (props) => {
+
+  useEffect(() => {
+    const loggedInUserName = AsyncStorage.getItem('LoggedInFullName')
+    if (loggedInUserName !== null) {
+      props.onPress()
+    }
+  }, [])
 
   const [personToken, setPersonToken] = useState('')
   const [errorMessage, setErrorMessage] = useState('')

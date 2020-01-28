@@ -12,10 +12,8 @@ export default class LoginScreen extends Component {
   }
 
   render() {
-    const { navigate } = this.props.navigation
-    
     return (
-      <LoginComponent onPress={() => navigate('Home')} />
+      <LoginComponent onPress={() => this.props.navigation.replace('Home')} />
     )
   }
 }
