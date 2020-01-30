@@ -13,7 +13,6 @@ export default class HomeScreen extends Component {
   }
 
   render() {
-
     return (
       <HomeComponent
         onPressMap={() => this.props.navigation.navigate('Map')}
