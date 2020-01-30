@@ -1,12 +1,13 @@
 import React from 'react'
 import { View, Text, Button, StyleSheet, Picker } from 'react-native'
+import UserInfoComponent from './UserInfoComponent'
 import Colors from '../constants/colors'
 
 const HomeComponent = (props) => {
 
   return (
     <View>
-      <Text style={styles.loggedIn}>Kirjautuneena:</Text>
+      <UserInfoComponent onLogout={props.onLogout} />
       <View style={styles.container}>
         <View style={styles.havaintoContainer}>
           <Text style={styles.havaintoTitle}>Uusi havaintotapahtuma</Text>
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
   },
   havaintoContainer: {
     width: '90%',
-    backgroundColor: '#d9edf7',
+    backgroundColor: Colors.blueBackground,
     borderColor: '#bce8f1',
   },
   havaintoTitle: {

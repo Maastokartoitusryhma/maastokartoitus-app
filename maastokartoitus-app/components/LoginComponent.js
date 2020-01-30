@@ -5,20 +5,25 @@ import userService from '../services/UserService'
 
 const LoginComponent = (props) => {
 
-  useEffect(() => {
-    const loggedInUserName = AsyncStorage.getItem('LoggedInFullName')
-    if (loggedInUserName !== null) {
-      props.onPress()
-    }
-  }, [])
-
   const [personToken, setPersonToken] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
 
+  // Check if user has previously logged in, redirect to home screen if is
+  useEffect(() => {
+    AsyncStorage.getItem('userData')
+    .then(userData => {
+      if (userData !== null) {
+        props.onPress()
+      }
+    })
+  }, [])
+
   const login = async () => {
-    await userService.getUserByPersonToken(personToken).then(userObject => {
-      if (userObject.error === undefined) { // if user is not found, a json object with error is returned, hence check if it exists
-        storeLoggedInUser(userObject)
+    await userService.getUserByPersonToken(personToken)
+    .then(userObject => {
+      // If user is not found, a JSON object with key 'error' is returned, hence check if it exists
+      if (userObject.error === undefined) { 
+        storeUserData(JSON.stringify(userObject))
         setErrorMessage('')
         props.onPress()
       } else {
@@ -27,15 +32,12 @@ const LoginComponent = (props) => {
     })
   }
 
-  const storeLoggedInUser = async (userObject) => {
+  // Save user data to storage
+  const storeUserData = async (userObject) => {
     try {
-      await AsyncStorage.setItem('LoggedInID', userObject.id)
-      await AsyncStorage.setItem('LoggedInFullName', userObject.fullName)
-      await AsyncStorage.setItem('LoggedInEmail', userObject.emailAddress)
-      await AsyncStorage.setItem('LoggedInDefLang', userObject.defaultLanguage)
-      await AsyncStorage.setItem('LoggedInPersonToken', personToken)
+      await AsyncStorage.setItem('userData', userObject)
     } catch(e) {
-      console.log('Error saving to storage: ', e)
+      console.log('Error saving user data to storage: ', e)
     }
   }
 
