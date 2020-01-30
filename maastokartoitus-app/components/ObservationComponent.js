@@ -3,13 +3,13 @@ import { View, Text, TextInput, Button, StyleSheet } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { connect } from 'react-redux'
 import Colors from '../constants/colors'
-import { save, fetch, clear } from '../dao/ObservationDAO'
+import { save, fetch, clear } from '../dao/DAO'
 
 const ObservationComponent = (props) => {
   const { control, handleSubmit, errors } = useForm()
-  const onSubmit1 = data => save(data)
-  const onSubmit2 = () => fetch()
-  const onSubmit3 = () => clear()
+  //const onSubmit1 = data => save(data)
+  //const onSubmit2 = () => fetch()
+  //const onSubmit3 = () => clear()
   const onChange = args => {
     return {
       value: args[0].nativeEvent.text,
@@ -73,13 +73,13 @@ const ObservationComponent = (props) => {
         name = 'info'
         defaultValue = ''
       />
-
-      <Button onPress = { handleSubmit(onSubmit1) } title = 'Tallenna' style = { styles.button }></Button>
-      <Button onPress = { handleSubmit(onSubmit2) } title = 'Hae'      style = { styles.button }></Button>
-      <Button onPress = { handleSubmit(onSubmit3) } title = 'Nollaa'   style = { styles.button }></Button>
     </View>
   )
 }
+
+//<Button onPress = { handleSubmit(onSubmit1) } title = 'Tallenna' style = { styles.button }></Button>
+//<Button onPress = { handleSubmit(onSubmit2) } title = 'Hae'      style = { styles.button }></Button>
+//<Button onPress = { handleSubmit(onSubmit3) } title = 'Nollaa'   style = { styles.button }></Button>
 
 const styles = StyleSheet.create({
   container: {
