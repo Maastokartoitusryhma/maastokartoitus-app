@@ -12,11 +12,11 @@ export default class HomeScreen extends Component {
     headerTintColor: Colors.white,
     headerLeft: () => null,
     headerRight: () => (
-      <View style={styles.logoutButtonContainer}>
+      <View style = { styles.logoutButtonContainer }>
         <Button
-          style={styles.logoutButton}
-          color={Colors.negativeButton}
-          title="Kirjaudu ulos"
+          style = { styles.logoutButton }
+          color = { Colors.negativeButton }
+          title = "Kirjaudu ulos"
           />
       </View>
       
@@ -28,7 +28,7 @@ export default class HomeScreen extends Component {
 
     return (
       <HomeComponent
-        onPressMap={() => navigate('Map')}
+        onPressMap = { () => navigate('Map') }
        />
     )
   }

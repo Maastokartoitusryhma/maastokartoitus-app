@@ -11,8 +11,8 @@ export default class MapScreen extends React.Component {
     const { navigate } = this.props.navigation
 
     return (
-      <View style={styles.container}>
-        <MapComponent mapStyle={styles.mapStyle} onPress1={() => navigate('Observation')} />
+      <View style = { styles.container }>
+        <MapComponent mapStyle = { styles.mapStyle } onPress1 = { () => navigate('Observation') } />
       </View>
     )
   }

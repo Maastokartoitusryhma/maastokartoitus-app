@@ -17,7 +17,7 @@ const HomeComponent = (props) => {
               <Picker.Item label = 'Suurmetsän metsä' value = '2'/>
               <Picker.Item label = 'Puistolan metsä'  value = '3'/>
               <Picker.Item label = 'Keskuspuisto'     value = '4'/>
-            </Picker> 
+            </Picker>
           </View>
           <View style={styles.buttonContainer}>
             <Button onPress = { props.onPressMap } style = { styles.button } title = 'Kartta'></Button>
