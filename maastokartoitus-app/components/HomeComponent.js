@@ -6,21 +6,21 @@ const HomeComponent = (props) => {
 
   return (
     <View>
-      <Text style={styles.loggedIn}>Kirjautuneena:</Text>
-      <View style={styles.container}>
-        <View style={styles.havaintoContainer}>
-          <Text style={styles.havaintoTitle}>Uusi havaintotapahtuma</Text>
-          <View style={styles.pickerContainer}>
+      <Text style = { styles.loggedIn }>Kirjautuneena:</Text>
+      <View style = { styles.container }>
+        <View style = { styles.havaintoContainer }>
+          <Text style = { styles.havaintoTitle }>Uusi havaintotapahtuma</Text>
+          <View style = { styles.pickerContainer }>
             <Text>Valitse havainnointialue</Text>
             <Picker>
-              <Picker.Item label= 'Kumpulan metsä' value='1'/>
-              <Picker.Item label= 'Suurmetsän metsä' value='2'/>
-              <Picker.Item label= 'Puistolan metsä' value='3'/>
-              <Picker.Item label= 'Keskuspuisto' value='4'/>
-            </Picker>
+              <Picker.Item label = 'Kumpulan metsä'   value = '1'/>
+              <Picker.Item label = 'Suurmetsän metsä' value = '2'/>
+              <Picker.Item label = 'Puistolan metsä'  value = '3'/>
+              <Picker.Item label = 'Keskuspuisto'     value = '4'/>
+            </Picker> 
           </View>
           <View style={styles.buttonContainer}>
-            <Button onPress={props.onPressMap} style={styles.button} title='Kartta'></Button>
+            <Button onPress = { props.onPressMap } style = { styles.button } title = 'Kartta'></Button>
           </View>
         </View>
       </View>

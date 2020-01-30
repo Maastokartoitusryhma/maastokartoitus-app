@@ -45,20 +45,20 @@ const LoginComponent = (props) => {
 
   return (
     <View>
-      <View style={styles.container}>
-        <View style={styles.inputContainer}>
-          <Text style={styles.text}>Syötä henkilökohtainen tokenisi</Text>
+      <View style = { styles.container }>
+        <View style = { styles.inputContainer }>
+          <Text style = { styles.text }>Syötä henkilökohtainen tokenisi</Text>
           <TextInput
-            placeholder='personToken'
-            style={styles.input}
-            value={personToken}
-            onChangeText={inputHandler}
+            placeholder = 'personToken'
+            style = { styles.input }
+            value = { personToken }
+            onChangeText = { inputHandler }
           />
         </View>
-        <View style={styles.button}>
-          <Button onPress={login} title="Kirjaudu sisään" color={Colors.neutralButton}/>
+        <View style = { styles.button }>
+          <Button onPress = { login } title = "Kirjaudu sisään" color = { Colors.neutralButton }/>
         </View>
-        <Text style={styles.errorMessage}>{errorMessage}</Text>
+        <Text style = { styles.errorMessage }>{ errorMessage }</Text>
       </View>
     </View>
   )

@@ -20,7 +20,7 @@ export default class App extends Component {
   watchLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION)
   
-    if(status !== 'granted') {
+    if (status !== 'granted') {
       store.dispatch(updateLocation(null))
     }
   
