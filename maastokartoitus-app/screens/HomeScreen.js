@@ -6,7 +6,7 @@ export default class HomeScreen extends Component {
   static navigationOptions = {
     title: 'Etusivu',
     headerStyle: {
-      backgroundColor: Colors.primary
+      backgroundColor: Colors.headerBackground,
     },
     headerTintColor: Colors.white,
     headerLeft: () => null

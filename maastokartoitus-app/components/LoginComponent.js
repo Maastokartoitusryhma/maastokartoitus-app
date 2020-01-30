@@ -48,6 +48,7 @@ const LoginComponent = (props) => {
   return (
     <View>
       <View style = { styles.container }>
+        <Text style={styles.header}>Kirjaudu sisään</Text>
         <View style = { styles.inputContainer }>
           <Text style = { styles.text }>Syötä henkilökohtainen tokenisi</Text>
           <TextInput
@@ -58,7 +59,7 @@ const LoginComponent = (props) => {
           />
         </View>
         <View style = { styles.button }>
-          <Button onPress = { login } title = "Kirjaudu sisään" color = { Colors.neutralButton }/>
+          <Button onPress = { login } title = "Kirjaudu sisään" color = { Colors.neutralColor }/>
         </View>
         <Text style = { styles.errorMessage }>{ errorMessage }</Text>
       </View>
@@ -72,6 +73,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: '45%'
+  },
+  header: {
+    fontSize: 25,
   },
   button: {
     width: '50%',

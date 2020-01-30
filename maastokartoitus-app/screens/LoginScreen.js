@@ -6,7 +6,7 @@ export default class LoginScreen extends Component {
   static navigationOptions = {
     title: 'Mobiilisovellus maastokartoituksiin',
     headerStyle: {
-      backgroundColor: Colors.primary
+      backgroundColor: Colors.headerBackground
     },
     headerTintColor: Colors.white
   }

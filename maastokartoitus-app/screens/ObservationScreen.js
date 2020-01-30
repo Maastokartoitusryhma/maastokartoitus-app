@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
-import { View, Text } from 'react-native'
 import ObservationComponent from '../components/ObservationComponent'
+import Colors from '../constants/colors'
 
 export default class ObservationScreen extends Component {
   static navigationOptions = {
-    title: 'Lisää havainto'
+    title: 'Lisää havainto',
+    headerStyle: {
+      backgroundColor: Colors.headerBackground
+    },
+    headerTintColor: Colors.white
   }
 
   render() {

@@ -1,10 +1,15 @@
 import React from 'react'
 import { StyleSheet, View, Button, Dimensions } from 'react-native';
 import MapComponent from '../components/MapComponent'
+import Colors from '../constants/colors'
 
 export default class MapScreen extends React.Component {
   static navigationOptions = {
-    title: 'Kartta'
+    title: 'Kartta',
+    headerStyle: {
+      backgroundColor: Colors.headerBackground,
+    },
+    headerTintColor: Colors.white,
   }
 
   render() {

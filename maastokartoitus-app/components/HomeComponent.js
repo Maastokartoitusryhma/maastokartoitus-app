@@ -7,19 +7,11 @@ const HomeComponent = (props) => {
 
   return (
     <View>
-<<<<<<< HEAD
       <UserInfoComponent onLogout={props.onLogout} />
       <View style={styles.container}>
         <View style={styles.havaintoContainer}>
           <Text style={styles.havaintoTitle}>Uusi havaintotapahtuma</Text>
           <View style={styles.pickerContainer}>
-=======
-      <Text style = { styles.loggedIn }>Kirjautuneena:</Text>
-      <View style = { styles.container }>
-        <View style = { styles.havaintoContainer }>
-          <Text style = { styles.havaintoTitle }>Uusi havaintotapahtuma</Text>
-          <View style = { styles.pickerContainer }>
->>>>>>> 722a747ab94ec4d7dd28e5378625df21bf35b77c
             <Text>Valitse havainnointialue</Text>
             <Picker>
               <Picker.Item label = 'Kumpulan metsä'   value = '1'/>
@@ -56,8 +48,7 @@ const styles = StyleSheet.create({
   },
   havaintoContainer: {
     width: '90%',
-    backgroundColor: Colors.blueBackground,
-    borderColor: '#bce8f1',
+    backgroundColor: Colors.blueBackground
   },
   havaintoTitle: {
     fontWeight: 'bold',
