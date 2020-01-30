@@ -26,10 +26,10 @@ const MapComponent = props => {
   return (
     <>
       <MapView
-        style = {props.mapStyle}
-        region = {regionState}
+        style = { props.mapStyle }
+        region = { regionState }
       >
-        {props.location !== null ?
+        { props.location !== null ?
           <Marker
             coordinate = {{
               latitude: props.location.coords.latitude,
@@ -38,32 +38,32 @@ const MapComponent = props => {
           />
           : null
         }
-        {props.path.length !== 0 ?
+        { props.path.length !== 0 ?
           <Polyline
-            coordinates = {props.path.map(location => ({
+            coordinates = { props.path.map(location => ({
               latitude: location.coords.latitude,
               longitude: location.coords.longitude,
             }))}
-            strokeWidth = {2}
+            strokeWidth = { 2 }
           />
           : null
         }
       </MapView>
       <View
-        style={{
+        style = {{
           position: 'absolute',
           top: '80%',
           alignSelf: 'flex-end'
         }}>
-        <Button title={'Keskitä'} onPress={() => centerMap()} />
+        <Button title = { 'Keskitä' } onPress = { () => centerMap() } />
       </View>
       <View
-        style={{
+        style = {{
           position: 'absolute',
           top: '90%',
           alignSelf: 'flex-end'
         }}>
-        <Button onPress={props.onPress1} title='Havainto' />
+        <Button onPress = { props.onPress1 } title = 'Havainto' />
       </View>
     </>
   )
