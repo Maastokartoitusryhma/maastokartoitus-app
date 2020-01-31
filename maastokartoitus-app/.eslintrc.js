@@ -44,6 +44,7 @@ module.exports = {
         ],
         'eqeqeq': 'error',
         'no-trailing-spaces': 'error',
+        'no-const-assign': 'error',
         'no-console': 0,
         'object-curly-spacing': [
             'error', 'always'
@@ -53,6 +54,15 @@ module.exports = {
         ],
         'comma-spacing': [
             'error', { 'before': false, 'after': true }
+        ],
+        'keyword-spacing': [
+            'error', { 'before': true, 'after': true }
+        ],
+        'key-spacing': [
+            'error'
+        ],
+        'space-infix-ops': [
+            'error'
         ]
     }
 }
