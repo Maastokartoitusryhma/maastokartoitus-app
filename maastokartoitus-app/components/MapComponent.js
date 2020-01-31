@@ -1,33 +1,66 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import MapView, { Marker, Polyline } from 'react-native-maps'
 import { connect } from 'react-redux'
-import { updateLocation } from '../actions/LocationActions'
-import { bindActionCreators } from 'redux'
 import { Text, Button, View } from 'react-native'
 
 const MapComponent = props => {
-  const [ regionState, setRegionState ] = useState(null)
+  const [ regionState, setRegionState ] = useState({ latitude: 64, longitude: 24, latitudeDelta: 0.25, longitudeDelta: 0.25 })
+  const [ centered, setCentered ] = useState(true)
 
-  const centerMap = () => {
+  useEffect(() => {
+    if (centered && props.location) {
+      followUser()
+    }
+  })
+
+  let mapView = React.createRef()
+
+  const followUser = () => {
+    const region = getRegionFromCoords()
+    mapView.animateToRegion(region, 500)
+  }
+
+  const getRegionFromCoords = () => {
     if (props.location) {
       const coords = { ...props.location.coords }
 
       const region = {
         latitude: coords.latitude,
         longitude: coords.longitude,
-        latitudeDelta: 0.25,
-        longitudeDelta: 0.25,
+        latitudeDelta: regionState.latitudeDelta,
+        longitudeDelta: regionState.longitudeDelta,
       }
 
-      setRegionState(region)
+      return region
     }
+  }
+
+  const centerMapAnim = () => {
+    centered ? null : setCentered(true)
+
+    const region = getRegionFromCoords()
+
+    if (mapView && region) {
+      mapView.animateToRegion(region, 500)
+    }
+  }
+
+  const onPanDrag = () => {
+    centered ? setCentered(false) : null
+  }
+
+  const onRegionChangeComplete = (region) => {
+    setRegionState(region)
   }
 
   return (
     <>
       <MapView
+        ref = {map => {mapView = map}}
         style = { props.mapStyle }
-        region = { regionState }
+        initialRegion = { regionState }
+        onPanDrag = {() => onPanDrag()}
+        onRegionChangeComplete = {(region) => onRegionChangeComplete(region)}
       >
         { props.location !== null ?
           <Marker
@@ -55,7 +88,7 @@ const MapComponent = props => {
           top: '80%',
           alignSelf: 'flex-end'
         }}>
-        <Button title = { 'Keskitä' } onPress = { () => centerMap() } />
+        <Button title = { 'Keskitä' } onPress = {() => centerMapAnim()}/>
       </View>
       <View
         style = {{
@@ -63,7 +96,7 @@ const MapComponent = props => {
           top: '90%',
           alignSelf: 'flex-end'
         }}>
-        <Button onPress = { props.onPress1 } title = 'Havainto' />
+        <Button title = 'Havainto' onPress = { props.onPress1}/>
       </View>
     </>
   )
@@ -73,11 +106,5 @@ const mapStateToProps = (state) => {
   const { location, path } = state
   return { location, path }
 }
-
-//const mapDispatchToProps = dispatch => (
-//  bindActionCreators({
-//    updateLocation
-//  }, dispatch)
-//)
 
 export default connect(mapStateToProps)(MapComponent)
