@@ -1,29 +1,31 @@
 import { AsyncStorage } from 'react-native'
 
-export const save = async (key, value) => {
+const save = async (key, value) => {
   try {
-    await AsyncStorage.setItem(key, value) //JSON.stringify(value)???
+    await AsyncStorage.setItem(key, value)
+    return value
   } catch (error) {
-    alert('Failed to save into async storage. ', error)
+    alert('Failed to save into the local storage. ', error)
   }
-  return null
 }
 
-export const fetch = async (key) => {
+const fetch = async (key) => {
   try {
     const value = await AsyncStorage.getItem(key)
     if (value !== null) {
       return value
     }
   } catch (error) {
-    alert('Failed to fetch from async storage. ', error)
+    alert('Failed to fetch from the local storage. ', error)
   }
 }
 
-export const clear = async () => {
+const clear = async () => {
   try {
     await AsyncStorage.clear()
   } catch (error) {
-    alert('Failed to clear the async storage. ', error)
+    alert('Failed to clear the local storage. ', error)
   }
 }
+
+export default { save, fetch, clear }

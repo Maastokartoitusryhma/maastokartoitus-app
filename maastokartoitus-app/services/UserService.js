@@ -9,7 +9,6 @@ const getUserByPersonToken = async (personToken) => {
         return responseJson
       })
   )
-
 }
 
 export default { getUserByPersonToken }

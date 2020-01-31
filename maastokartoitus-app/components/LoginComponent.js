@@ -9,34 +9,34 @@ const LoginComponent = (props) => {
   const [errorMessage, setErrorMessage] = useState('')
 
   // Check if user has previously logged in, redirect to home screen if is
+
   useEffect(() => {
-    AsyncStorage.getItem('userData')
-    .then(userData => {
+    const loadUserData = async () => {
+      const userData = await AsyncStorage.getItem('userData')
       if (userData !== null) {
         props.onPress()
       }
-    })
+    }
+    loadUserData()
   }, [])
 
   const login = async () => {
-    await userService.getUserByPersonToken(personToken)
-    .then(userObject => {
-      // If user is not found, a JSON object with key 'error' is returned, hence check if it exists
-      if (userObject.error === undefined) { 
-        storeUserData(JSON.stringify(userObject))
-        setErrorMessage('')
-        props.onPress()
-      } else {
-        setErrorMessage('Virheellinen token')
-      }
-    })
+    const userObject = await userService.getUserByPersonToken(personToken)
+    // If user is not found, a JSON object with key 'error' is returned, hence check if it exists
+    if (userObject.error === undefined) {
+      storeUserData(JSON.stringify(userObject))
+      setErrorMessage('')
+      props.onPress()
+    } else {
+      setErrorMessage('Virheellinen token')
+    }
   }
 
   // Save user data to storage
   const storeUserData = async (userObject) => {
     try {
       await AsyncStorage.setItem('userData', userObject)
-    } catch(e) {
+    } catch (e) {
       console.log('Error saving user data to storage: ', e)
     }
   }
@@ -47,21 +47,21 @@ const LoginComponent = (props) => {
 
   return (
     <View>
-      <View style = { styles.container }>
+      <View style={styles.container}>
         <Text style={styles.header}>Kirjaudu sisään</Text>
-        <View style = { styles.inputContainer }>
-          <Text style = { styles.text }>Syötä henkilökohtainen tokenisi</Text>
+        <View style={styles.inputContainer}>
+          <Text style={styles.text}>Syötä henkilökohtainen tokenisi</Text>
           <TextInput
-            placeholder = 'personToken'
-            style = { styles.input }
-            value = { personToken }
-            onChangeText = { inputHandler }
+            placeholder='personToken'
+            style={styles.input}
+            value={personToken}
+            onChangeText={inputHandler}
           />
         </View>
-        <View style = { styles.button }>
-          <Button onPress = { login } title = "Kirjaudu sisään" color = { Colors.neutralColor }/>
+        <View style={styles.button}>
+          <Button onPress={login} title="Kirjaudu sisään" color={Colors.neutralColor} />
         </View>
-        <Text style = { styles.errorMessage }>{ errorMessage }</Text>
+        <Text style={styles.errorMessage}>{errorMessage}</Text>
       </View>
     </View>
   )
