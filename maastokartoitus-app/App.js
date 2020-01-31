@@ -7,6 +7,7 @@ import locationReducer from './reducers/LocationReducer'
 import * as TaskManager from 'expo-task-manager'
 import * as Permissions from 'expo-permissions'
 import * as Location from 'expo-location'
+import './language/i18n'
 
 const LOCATION_BACKGROUND_TASK = 'backgroundLocationHandler'
 const store = createStore(locationReducer)

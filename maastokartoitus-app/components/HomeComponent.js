@@ -1,17 +1,19 @@
 import React from 'react'
 import { View, Text, Button, StyleSheet, Picker } from 'react-native'
+import UserInfoComponent from './UserInfoComponent'
 import Colors from '../constants/colors'
+import { useTranslation } from 'react-i18next'
 
 const HomeComponent = (props) => {
-
+  const { t, i18n } = useTranslation()
   return (
     <View>
-      <Text style = { styles.loggedIn }>Kirjautuneena:</Text>
-      <View style = { styles.container }>
-        <View style = { styles.havaintoContainer }>
-          <Text style = { styles.havaintoTitle }>Uusi havaintotapahtuma</Text>
-          <View style = { styles.pickerContainer }>
-            <Text>Valitse havainnointialue</Text>
+      <UserInfoComponent onLogout={props.onLogout} />
+      <View style={styles.container}>
+        <View style={styles.havaintoContainer}>
+          <Text style={styles.havaintoTitle}>Uusi havaintotapahtuma</Text>
+          <View style={styles.pickerContainer}>
+  <Text>{t('havainnointialue')}</Text>
             <Picker>
               <Picker.Item label = 'Kumpulan metsä'   value = '1'/>
               <Picker.Item label = 'Suurmetsän metsä' value = '2'/>
@@ -47,8 +49,7 @@ const styles = StyleSheet.create({
   },
   havaintoContainer: {
     width: '90%',
-    backgroundColor: '#d9edf7',
-    borderColor: '#bce8f1',
+    backgroundColor: Colors.blueBackground
   },
   havaintoTitle: {
     fontWeight: 'bold',
