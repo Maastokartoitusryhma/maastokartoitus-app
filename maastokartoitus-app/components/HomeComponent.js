@@ -11,9 +11,9 @@ const HomeComponent = (props) => {
       <UserInfoComponent onLogout={props.onLogout} />
       <View style={styles.container}>
         <View style={styles.havaintoContainer}>
-          <Text style={styles.havaintoTitle}>{t('havaintotapahtuma')}</Text>
+          <Text style={styles.havaintoTitle}>{t('observation event')}</Text>
           <View style={styles.pickerContainer}>
-            <Text>{t('havainnointialue')}</Text>
+            <Text>{t('observation zone')}</Text>
             <Picker>
               <Picker.Item label = 'Kumpulan metsä'   value = '1'/>
               <Picker.Item label = 'Suurmetsän metsä' value = '2'/>
