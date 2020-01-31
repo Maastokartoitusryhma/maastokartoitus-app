@@ -2,13 +2,8 @@ const accessToken = 'tYsCRgKtaJgeiMTN6y156xMA2pEEwylvLSWywZFKL8ADr3Ver4ZzDMtNBGG
 
 const getUserByPersonToken = async (personToken) => {
   const url = `https://api.laji.fi/v0/person/${personToken}?access_token=${accessToken}`
-  return (
-    fetch(url, { method: 'GET' })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        return responseJson
-      })
-  )
+  const fetchResult = await fetch(url, { method: 'GET' })
+  return fetchResult.json()
 }
 
 export default { getUserByPersonToken }
