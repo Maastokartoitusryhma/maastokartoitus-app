@@ -8,16 +8,16 @@ i18n
     fallbackLng: 'en',
     resources: {
       fi: {
-        havainnointialue: 'Valitse havainnointialue',
-        common: {
-
+        translation: {
+          'havaintotapahtuma': 'Uuusi havaintotapahtuma',
+          'havainnointialue': 'Valitse havainnointialue',
         },
       },
       en: {
-        havainnointialue: 'Select observation zone',
-        common: {
-
-        },
+        translation: {
+          'havaintotapahtuma': 'New observation event',
+          'havainnointialue': 'Select observation zone',
+        },       
       },
     },
     //ns: ['common'],
