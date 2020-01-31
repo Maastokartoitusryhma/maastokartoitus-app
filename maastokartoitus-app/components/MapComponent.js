@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import MapView, { Marker, Polyline } from 'react-native-maps'
 import { connect } from 'react-redux'
-import { Text, Button, View } from 'react-native'
+import { Button, View } from 'react-native'
 
 const MapComponent = props => {
   const [ regionState, setRegionState ] = useState({ latitude: 64, longitude: 24, latitudeDelta: 0.25, longitudeDelta: 0.25 })

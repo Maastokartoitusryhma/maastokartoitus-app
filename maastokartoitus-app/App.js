@@ -7,32 +7,46 @@ import locationReducer from './reducers/LocationReducer'
 import * as TaskManager from 'expo-task-manager'
 import * as Permissions from 'expo-permissions'
 import * as Location from 'expo-location'
+import Platform from 'react-native'
 import './language/i18n'
 
-const LOCATION_BACKGROUND_TASK = 'backgroundLocationHandler'
 const store = createStore(locationReducer)
+const LOCATION_BACKGROUND_TASK = 'backgroundLocationHandler'
 
 export default class App extends Component {
   constructor() {
     super()
-    this.watchLocationAsync()
+
+    if (Platform.OS === 'ios') {
+      this.watchLocationAsynciOS()
+    } else {
+      this.watchLocationAsyncAndroid()
+    }
   }
 
-  watchLocationAsync = async () => {
+  watchLocationAsyncAndroid = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION)
-  
+
     if (status !== 'granted') {
       store.dispatch(updateLocation(null))
     }
-  
+
     await Location.startLocationUpdatesAsync(LOCATION_BACKGROUND_TASK, {
-      distanceInterval: 1,
-      timeInterval: 500,
+      distanceInterval: 10,
+      timeInterval: 1000,
     })
-  
+  }
+
+  watchLocationAsynciOS = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION)
+
+    if (status !== 'granted') {
+      store.dispatch(updateLocation(null))
+    }
+
     await Location.watchPositionAsync({
-      distanceInterval: 1,
-      timeInterval: 500
+      distanceInterval: 10,
+      timeInterval: 1000
     },
     location => {
       store.dispatch(updateLocation(location))
