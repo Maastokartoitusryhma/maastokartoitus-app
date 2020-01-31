@@ -65,7 +65,7 @@ const ObservationComponent = (props) => {
           rules = {{ required: true }}
           defaultValue = {now}
         />
-      { errors.time && <Text>Pakollinen kenttä.</Text> }
+        { errors.time && <Text>Pakollinen kenttä.</Text> }
       </View>
 
       <View style={styles.inputContainer}>
@@ -91,7 +91,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     paddingTop: 10,
   },
-  
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
