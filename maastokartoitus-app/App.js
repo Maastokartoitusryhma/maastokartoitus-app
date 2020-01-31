@@ -20,16 +20,16 @@ export default class App extends Component {
 
   watchLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION)
-  
+
     if (status !== 'granted') {
       store.dispatch(updateLocation(null))
     }
-  
+
     await Location.startLocationUpdatesAsync(LOCATION_BACKGROUND_TASK, {
       distanceInterval: 1,
       timeInterval: 500,
     })
-  
+
     await Location.watchPositionAsync({
       distanceInterval: 1,
       timeInterval: 500
