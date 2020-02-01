@@ -1,7 +1,9 @@
 import React from 'react'
-import { Text, Button, View, StyleSheet, AsyncStorage, Picker } from 'react-native'
+import { Text, Button, View, StyleSheet, AsyncStorage } from 'react-native'
 import Colors from '../constants/colors'
 import { useTranslation } from 'react-i18next'
+import Cs from '../styles/ContainerStyles'
+import Ts from '../styles/TextStyles'
 
 const UserInfoComponent = (props) => {
   
@@ -23,14 +25,14 @@ const UserInfoComponent = (props) => {
 
   return (
     <>
-    <View style={styles.container}>
+    <View style={Cs.userInfoContainer}>
       <Text>{t('select language')}</Text>
       <Button title={t('finnish')} onPress={() => {i18n.changeLanguage('fi')}}/>
       <Button title={t('english')} onPress={() => {i18n.changeLanguage('en')}}/>
     </View>
-    <View style={styles.container}>
-      <View style={styles.title}>
-        <Text style={styles.loggedIn}>{t('loggedin')}Tähän Tulee Nimi</Text>
+    <View style={Cs.userInfoContainer}>
+      <View style={Ts.userInfoTitle}>
+        <Text style={Ts.loggedIn}>{t('loggedin')}Tähän Tulee Nimi</Text>
       </View>
       <Button
         color={Colors.negativeColor}
@@ -41,17 +43,5 @@ const UserInfoComponent = (props) => {
     </>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '90%',
-    padding: 10
-  },
-  title: {
-    padding: 10
-  },
-})
 
 export default UserInfoComponent

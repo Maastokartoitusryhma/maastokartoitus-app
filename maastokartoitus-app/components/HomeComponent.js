@@ -1,18 +1,20 @@
 import React from 'react'
-import { View, Text, Button, StyleSheet, Picker } from 'react-native'
+import { View, Text, Button, Picker } from 'react-native'
 import UserInfoComponent from './UserInfoComponent'
-import Colors from '../constants/colors'
 import { useTranslation } from 'react-i18next'
+import Cs from '../styles/ContainerStyles'
+import Bs from '../styles/ButtonStyles'
+import Ts from '../styles/TextStyles'
 
 const HomeComponent = (props) => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   return (
     <View>
       <UserInfoComponent onLogout={props.onLogout} />
-      <View style={styles.container}>
-        <View style={styles.havaintoContainer}>
-          <Text style={styles.havaintoTitle}>{t('observation event')}</Text>
-          <View style={styles.pickerContainer}>
+      <View style={Cs.homeContainer}>
+        <View style={Cs.observationContainer}>
+          <Text style={Ts.observationTitle}>{t('observation event')}</Text>
+          <View style={Cs.pickerContainer}>
             <Text>{t('observation zone')}</Text>
             <Picker>
               <Picker.Item label = 'Kumpulan metsä'   value = '1'/>
@@ -21,43 +23,13 @@ const HomeComponent = (props) => {
               <Picker.Item label = 'Keskuspuisto'     value = '4'/>
             </Picker>
           </View>
-          <View style={styles.buttonContainer}>
-            <Button onPress = { props.onPressMap } style = { styles.button } title = 'Kartta'></Button>
+          <View style={Cs.buttonContainer}>
+            <Button onPress = { props.onPressMap } style = { Bs.homeButton } title = 'Kartta'></Button>
           </View>
         </View>
       </View>
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 10
-  },
-  buttonContainer: {
-    padding: 10
-  },
-  button: {
-    width: '20%',
-    padding: 10,
-  },
-  loggedIn: {
-    padding: 10,
-  },
-  havaintoContainer: {
-    width: '90%',
-    backgroundColor: Colors.blueBackground
-  },
-  havaintoTitle: {
-    fontWeight: 'bold',
-    padding: 10
-  },
-  pickerContainer: {
-    paddingLeft: 20
-  }
-})
 
 export default HomeComponent
