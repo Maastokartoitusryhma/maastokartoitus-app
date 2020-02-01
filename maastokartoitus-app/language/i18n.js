@@ -12,7 +12,12 @@ i18n
           'observation event': 'Uusi havaintotapahtuma',
           'observation zone': 'Valitse havainnointialue',
           'species': 'laji',
-          'required field': 'Pakollinen kenttä.'
+          'required field': 'Pakollinen kenttä.',
+          'loggedin': 'Kirjautuneena: ',
+          'logout': 'Kirjaudu ulos',
+          'finnish': 'suomi',
+          'english': 'englanti',
+          'select language': 'Valitse kieli',
         },
       },
       en: {
@@ -20,7 +25,12 @@ i18n
           'observation event': 'New observation event',
           'observation zone': 'Select observation zone',
           'species': 'species',
-          'required field': 'Required field.'
+          'required field': 'Required field.',
+          'loggedin': 'Logged in: ',
+          'logout': 'Log out',
+          'finnish': 'Finnish',
+          'english': 'English',
+          'select language': 'Select language',
         },
       },
     },

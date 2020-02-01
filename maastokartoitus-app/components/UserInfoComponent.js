@@ -1,8 +1,11 @@
 import React from 'react'
-import { Text, Button, View, StyleSheet, AsyncStorage } from 'react-native'
+import { Text, Button, View, StyleSheet, AsyncStorage, Picker } from 'react-native'
 import Colors from '../constants/colors'
+import { useTranslation } from 'react-i18next'
 
 const UserInfoComponent = (props) => {
+  
+  const { t, i18n } = useTranslation()
 
   const logout = () => {
     clearUserData()
@@ -19,16 +22,23 @@ const UserInfoComponent = (props) => {
   }
 
   return (
+    <>
+    <View style={styles.container}>
+      <Text>{t('select language')}</Text>
+      <Button title={t('finnish')} onPress={() => {i18n.changeLanguage('fi')}}/>
+      <Button title={t('english')} onPress={() => {i18n.changeLanguage('en')}}/>
+    </View>
     <View style={styles.container}>
       <View style={styles.title}>
-        <Text style={styles.loggedIn}>Kirjautuneena: Tähän Tulee Nimi</Text>
+        <Text style={styles.loggedIn}>{t('loggedin')}Tähän Tulee Nimi</Text>
       </View>
       <Button
         color={Colors.negativeColor}
-        title="Kirjaudu ulos"
+        title={t('logout')}
         onPress={logout}
       />
     </View>
+    </>
   )
 }
 
