@@ -24,7 +24,7 @@ const HomeComponent = (props) => {
             </Picker>
           </View>
           <View style={Cs.buttonContainer}>
-            <Button onPress = { props.onPressMap } style = { Bs.homeButton } title = 'Kartta'></Button>
+            <Button onPress = { props.onPressMap } style = { Bs.homeButton } title = {t('map')}></Button>
           </View>
         </View>
       </View>

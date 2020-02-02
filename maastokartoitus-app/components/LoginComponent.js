@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { View, Button, Text, TextInput, AsyncStorage } from 'react-native'
 import Colors from '../constants/colors'
 import userService from '../services/UserService'
+import { useTranslation } from 'react-i18next'
 import Cs from '../styles/ContainerStyles'
 import Bs from '../styles/ButtonStyles'
 import Ts from '../styles/TextStyles'
@@ -11,6 +12,7 @@ const LoginComponent = (props) => {
 
   const [personToken, setPersonToken] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
+  const { t } = useTranslation()
 
   // Check if user has previously logged in, redirect to home screen if is
 
@@ -32,7 +34,7 @@ const LoginComponent = (props) => {
       setErrorMessage('')
       props.onPress()
     } else {
-      setErrorMessage('Virheellinen token')
+      setErrorMessage(t('incorrect token'))
     }
   }
 
@@ -52,9 +54,9 @@ const LoginComponent = (props) => {
   return (
     <View>
       <View style={Cs.loginContainer}>
-        <Text style={Ts.loginHeader}>Kirjaudu sisään</Text>
+      <Text style={Ts.loginHeader}>{t('login')}</Text>
         <View style={Cs.inputContainer}>
-          <Text style={Ts.loginText}>Syötä henkilökohtainen tokenisi</Text>
+        <Text style={Ts.loginText}>{t('personal token')}</Text>
           <TextInput
             placeholder='personToken'
             style={Os.textInput}
@@ -63,7 +65,7 @@ const LoginComponent = (props) => {
           />
         </View>
         <View style={Bs.loginButton}>
-          <Button onPress={login} title="Kirjaudu sisään" color={Colors.neutralColor} />
+          <Button onPress={login} title={t('login')} color={Colors.neutralColor} />
         </View>
         <Text style={Ts.errorText}>{errorMessage}</Text>
       </View>
