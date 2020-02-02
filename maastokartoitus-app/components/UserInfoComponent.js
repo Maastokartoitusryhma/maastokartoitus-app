@@ -6,7 +6,7 @@ import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 
 const UserInfoComponent = (props) => {
-  
+
   const { t, i18n } = useTranslation()
 
   const logout = () => {
@@ -25,21 +25,21 @@ const UserInfoComponent = (props) => {
 
   return (
     <>
-    <View style={Cs.userInfoContainer}>
-      <Text>{t('select language')}</Text>
-      <Button title={t('finnish')} onPress={() => {i18n.changeLanguage('fi')}}/>
-      <Button title={t('english')} onPress={() => {i18n.changeLanguage('en')}}/>
-    </View>
-    <View style={Cs.userInfoContainer}>
-      <View style={Ts.userInfoTitle}>
-        <Text style={Ts.loggedIn}>{t('loggedin')}Tähän Tulee Nimi</Text>
+      <View style={Cs.userInfoContainer}>
+        <Text>{t('select language')}</Text>
+        <Button title={t('finnish')} onPress={() => {i18n.changeLanguage('fi')}}/>
+        <Button title={t('english')} onPress={() => {i18n.changeLanguage('en')}}/>
       </View>
-      <Button
-        color={Colors.negativeColor}
-        title={t('logout')}
-        onPress={logout}
-      />
-    </View>
+      <View style={Cs.userInfoContainer}>
+        <View style={Ts.userInfoTitle}>
+          <Text style={Ts.loggedIn}>{t('loggedin')}Tähän Tulee Nimi</Text>
+        </View>
+        <Button
+          color={Colors.negativeColor}
+          title={t('logout')}
+          onPress={logout}
+        />
+      </View>
     </>
   )
 }

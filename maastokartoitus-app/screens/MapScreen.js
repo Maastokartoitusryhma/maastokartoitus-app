@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Button, Dimensions } from 'react-native';
+import { StyleSheet, View, Button, Dimensions } from 'react-native'
 import MapComponent from '../components/MapComponent'
 import Colors from '../constants/colors'
 
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   },
   mapStyle: {
     flex: 1,
-      width: Dimensions.get('window').width,
-      height: Dimensions.get('window').height,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   }
 })

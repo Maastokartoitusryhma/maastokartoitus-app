@@ -54,9 +54,9 @@ const LoginComponent = (props) => {
   return (
     <View>
       <View style={Cs.loginContainer}>
-      <Text style={Ts.loginHeader}>{t('login')}</Text>
+        <Text style={Ts.loginHeader}>{t('login')}</Text>
         <View style={Cs.inputContainer}>
-        <Text style={Ts.loginText}>{t('personal token')}</Text>
+          <Text style={Ts.loginText}>{t('personal token')}</Text>
           <TextInput
             placeholder='personToken'
             style={Os.textInput}

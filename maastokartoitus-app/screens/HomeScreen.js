@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Colors from '../constants/colors'  
+import Colors from '../constants/colors'
 import HomeComponent from '../components/HomeComponent'
 
 export default class HomeScreen extends Component {
@@ -17,7 +17,7 @@ export default class HomeScreen extends Component {
       <HomeComponent
         onPressMap={() => this.props.navigation.navigate('Map')}
         onLogout={() => this.props.navigation.replace('Login')}
-       />
+      />
     )
   }
 }
