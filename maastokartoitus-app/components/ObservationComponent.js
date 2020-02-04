@@ -1,15 +1,24 @@
-import React from 'react'
-import { View, Text, TextInput, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, TextInput, StyleSheet, Button } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { connect } from 'react-redux'
 import Colors from '../constants/colors'
-import { save, fetch, clear } from '../dao/DAO'
+import DAO from '../dao/DAO'
 
 const ObservationComponent = (props) => {
+  const [key, setKey] = useState('')
   const { control, handleSubmit, errors } = useForm()
-  //const onSubmit1 = data => save(data)
-  //const onSubmit2 = () => fetch()
-  //const onSubmit3 = () => clear()
+
+  const onSave = async data => {
+    DAO.save((data.date + '/' + data.time + '/' + data.species), JSON.stringify(data))
+    setKey(data.date + '/' + data.time + '/' + data.species)
+  }
+  const onFetch = async () => {
+    DAO.fetch(key)
+  }
+
+  const onReset = async () => DAO.clear()
+
   const onChange = args => {
     return {
       value: args[0].nativeEvent.text,
@@ -32,7 +41,7 @@ const ObservationComponent = (props) => {
           placeholder = 'Laji'
         />
       </View>
-      { errors.species && <Text>Pakollinen kenttä.</Text> }
+      { errors.species && <Text style={styles.validationText}>Pakollinen kenttä.</Text> }
       <View style={ styles.inputContainer }>
         <Text style= { styles.text }>Sijainti</Text>
         <Controller as = { <TextInput style = { styles.input }/> }
@@ -43,7 +52,7 @@ const ObservationComponent = (props) => {
           defaultValue = { observationLocation }
         />
       </View>
-      { errors.location && <Text>Pakollinen kenttä.</Text> }
+      { errors.location && <Text style={styles.validationText}>Pakollinen kenttä.</Text> }
       <View style={styles.inputContainer}>
         <Text style= { styles.text }>Päivä</Text>
         <Controller as = { <TextInput style = { styles.input }/> }
@@ -53,9 +62,8 @@ const ObservationComponent = (props) => {
           rules = {{ required: true }}
           defaultValue = { today }
         />
-        { errors.date && <Text>Pakollinen kenttä.</Text> }
       </View>
-
+      { errors.date && <Text style={styles.validationText}>Pakollinen kenttä.</Text> }
       <View style={styles.inputContainer}>
         <Text style={ styles.text }>Aika</Text>
         <Controller as = { <TextInput style = { styles.input }/> }
@@ -65,8 +73,8 @@ const ObservationComponent = (props) => {
           rules = {{ required: true }}
           defaultValue = {now}
         />
-        { errors.time && <Text>Pakollinen kenttä.</Text> }
       </View>
+      { errors.time && <Text style={styles.validationText}>Pakollinen kenttä.</Text> }
 
       <View style={styles.inputContainer}>
         <Text style={ styles.text }>Lisätietoja</Text>
@@ -77,13 +85,16 @@ const ObservationComponent = (props) => {
           defaultValue = ''
         />
       </View>
+      <View style={styles.buttonContainer}>
+        <Button onPress = { handleSubmit(onSave) } title = 'Tallenna'></Button>
+        <Button onPress = { handleSubmit(onFetch) } title = 'Hae'></Button>
+        <Button onPress = { handleSubmit(onReset) } title = 'Nollaa'></Button>
+      </View>
+      
     </View>
   )
 }
 
-//<Button onPress = { handleSubmit(onSubmit1) } title = 'Tallenna' style = { styles.button }></Button>
-//<Button onPress = { handleSubmit(onSubmit2) } title = 'Hae'      style = { styles.button }></Button>
-//<Button onPress = { handleSubmit(onSubmit3) } title = 'Nollaa'   style = { styles.button }></Button>
 
 const styles = StyleSheet.create({
   container: {
@@ -107,10 +118,17 @@ const styles = StyleSheet.create({
   text: {
     fontWeight: 'bold'
   },
-  button: {
-    width: '50%',
+  buttonContainer: {
+    flex: 3,
     padding: 10,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-evenly'
   },
+  validationText: {
+    padding: 10,
+    color: Colors.negativeColor
+  }
 })
 
 const mapStateToProps = (state) => {

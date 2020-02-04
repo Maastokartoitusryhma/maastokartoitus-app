@@ -3,7 +3,7 @@ import { AsyncStorage } from 'react-native'
 const save = async (key, value) => {
   try {
     await AsyncStorage.setItem(key, value)
-    return value
+    alert('Tallennus onnistui')
   } catch (error) {
     alert('Failed to save into the local storage. ', error)
   }
@@ -12,9 +12,7 @@ const save = async (key, value) => {
 const fetch = async (key) => {
   try {
     const value = await AsyncStorage.getItem(key)
-    if (value !== null) {
-      return value
-    }
+    alert(value)
   } catch (error) {
     alert('Failed to fetch from the local storage. ', error)
   }
@@ -23,6 +21,7 @@ const fetch = async (key) => {
 const clear = async () => {
   try {
     await AsyncStorage.clear()
+    alert('Nollaus onnistui')
   } catch (error) {
     alert('Failed to clear the local storage. ', error)
   }
