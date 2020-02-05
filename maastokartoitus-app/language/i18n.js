@@ -25,6 +25,8 @@ i18n
           'personal token': 'Syötä henkilökohtainen tokenisi',
           'incorrect token': 'Virheellinen token',
           'center': 'Keskitä',
+          'home page': 'Etusivu',
+          'add observation': 'Lisää havainto',
         },
       },
       en: {
@@ -45,6 +47,8 @@ i18n
           'personal token': 'Enter your personal token',
           'incorrect token': 'Incorrect token',
           'center': 'Center',
+          'home page': 'Home page',
+          'add observation': 'Add observation',
         },
       },
     },

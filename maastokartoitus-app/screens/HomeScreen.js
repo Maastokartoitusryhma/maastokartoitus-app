@@ -3,14 +3,14 @@ import Colors from '../constants/colors'
 import HomeComponent from '../components/HomeComponent'
 
 export default class HomeScreen extends Component {
-  static navigationOptions = {
-    title: 'Etusivu',
+  static navigationOptions = ({ screenProps: { t } }) => ({
+    title: t('home page'),
     headerStyle: {
       backgroundColor: Colors.headerBackground,
     },
     headerTintColor: Colors.white,
     headerLeft: () => null
-  }
+  })
 
   render() {
     return (

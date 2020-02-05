@@ -4,13 +4,13 @@ import LoginComponent from '../components/LoginComponent'
 import { getForm } from '../controllers/Controllers'
 
 export default class LoginScreen extends Component {
-  static navigationOptions = {
-    title: 'Mobiilisovellus maastokartoituksiin',
+  static navigationOptions = ({ screenProps: { t } }) => ({
+    title: t('mobile app'),
     headerStyle: {
       backgroundColor: Colors.headerBackground
     },
     headerTintColor: Colors.white
-  }
+  })
 
   render() {
     getForm()
