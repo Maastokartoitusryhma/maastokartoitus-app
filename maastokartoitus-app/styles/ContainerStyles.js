@@ -47,9 +47,13 @@ const ContainerStyles = StyleSheet.create({
   userInfoContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '90%',
-    padding: 10
+    paddingLeft: 10,
+    paddingRight: 10
   },
+  logoutButtonContainer: {
+    paddingTop: 10,
+    paddingRight: 10
+  }
 })
 
 export default ContainerStyles

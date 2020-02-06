@@ -27,7 +27,7 @@ const TextStyles = StyleSheet.create({
     padding: 10,
   },
   userInfoTitle: {
-    padding: 10
+    paddingTop: 10
   },
 })
 

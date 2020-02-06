@@ -29,11 +29,13 @@ const UserInfoComponent = (props) => {
         <View style={Ts.userInfoTitle}>
           <Text style={Ts.loggedIn}>{t('loggedin')}Tähän Tulee Nimi</Text>
         </View>
-        <Button
-          color={Colors.negativeColor}
-          title={t('logout')}
-          onPress={logout}
-        />
+        <View style={Cs.logoutButtonContainer}>
+          <Button
+            color={Colors.negativeColor}
+            title={t('logout')}
+            onPress={logout}
+          />
+        </View>
       </View>
     </View>
   )
