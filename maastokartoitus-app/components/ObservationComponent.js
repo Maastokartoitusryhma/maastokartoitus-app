@@ -95,15 +95,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly'
   },
-<<<<<<< HEAD
   notch: {
     width: '100%',
     height: 15
-=======
+  },
   validationText: {
     padding: 10,
     color: Colors.negativeColor
->>>>>>> 39312ed97d3ba861d380c35bcd11754b28d48538
   }
 })
 
@@ -113,62 +111,3 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps)(ObservationComponent)
-
-// <View style = { styles.container }>
-    //   <View style={ styles.inputContainer }>
-    //     <Text style= { styles.text }>Laji</Text>
-    //     <Controller as = { <TextInput style = { styles.input }/> }
-    //       control = { control }
-    //       name = 'species'
-    //       onChange = { onChange }
-    //       rules = {{ required: true }}
-    //       defaultValue = 'Liito-orava'
-    //       placeholder = 'Laji'
-    //     />
-    //   </View>
-    //   { errors.species && <Text>Pakollinen kenttä.</Text> }
-    //   <View style={ styles.inputContainer }>
-    //     <Text style= { styles.text }>Sijainti</Text>
-    //     <Controller as = { <TextInput style = { styles.input }/> }
-    //       control = { control }
-    //       onChange = { onChange }
-    //       name = 'location'
-    //       rules = {{ required: true }}
-    //       defaultValue = { observationLocation }
-    //     />
-    //   </View>
-    //   { errors.location && <Text>Pakollinen kenttä.</Text> }
-    //   <View style={styles.inputContainer}>
-    //     <Text style= { styles.text }>Päivä</Text>
-    //     <Controller as = { <TextInput style = { styles.input }/> }
-    //       control = { control }
-    //       onChange = { onChange }
-    //       name = 'date'
-    //       rules = {{ required: true }}
-    //       defaultValue = { today }
-    //     />
-    //     { errors.date && <Text>Pakollinen kenttä.</Text> }
-    //   </View>
-
-    //   <View style={styles.inputContainer}>
-    //     <Text style={ styles.text }>Aika</Text>
-    //     <Controller as = { <TextInput style = { styles.input }/> }
-    //       control = { control }
-    //       onChange = { onChange }
-    //       name = 'time'
-    //       rules = {{ required: true }}
-    //       defaultValue = {now}
-    //     />
-    //     { errors.time && <Text>Pakollinen kenttä.</Text> }
-    //   </View>
-
-    //   <View style={styles.inputContainer}>
-    //     <Text style={ styles.text }>Lisätietoja</Text>
-    //     <Controller as = { <TextInput style = { styles.input }/> }
-    //       control = { control }
-    //       onChange = { onChange }
-    //       name = 'info'
-    //       defaultValue = ''
-    //     />
-    //   </View>
-    // </View>
