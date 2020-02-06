@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Button, Dimensions } from 'react-native'
+import { StyleSheet, View, Dimensions } from 'react-native'
 import MapComponent from '../components/MapComponent'
 import Colors from '../constants/colors'
 
