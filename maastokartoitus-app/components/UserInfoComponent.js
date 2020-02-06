@@ -28,6 +28,7 @@ const UserInfoComponent = (props) => {
       <View style={Cs.userInfoContainer}>
         <Text>{t('select language')}</Text>
         <Button title={t('finnish')} onPress={() => {i18n.changeLanguage('fi')}}/>
+        <Button title={t('swedish')}  onPress={() => { i18n.changeLanguage('sv')}} />
         <Button title={t('english')} onPress={() => {i18n.changeLanguage('en')}}/>
       </View>
       <View style={Cs.userInfoContainer}>

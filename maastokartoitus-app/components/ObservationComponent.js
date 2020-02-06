@@ -45,7 +45,7 @@ const ObservationComponent = (props) => {
           placeholder = {t('species')}
         />
       </View>
-      { errors.species && <Text style={styles.validationText}>Pakollinen kenttä.</Text> }
+      { errors.species && <Text style={styles.validationText}>{t('required field')}</Text> }
       <View style={ styles.inputContainer }>
         <Text style= { styles.text }>{t('location')}</Text>
         <Controller as = { <TextInput style = { styles.input }/> }
@@ -57,7 +57,7 @@ const ObservationComponent = (props) => {
           placeholder = {t('location')}
         />
       </View>
-      { errors.location && <Text style={styles.validationText}>Pakollinen kenttä.</Text> }
+      { errors.location && <Text style={styles.validationText}>{t('required field')}</Text> }
       <View style={styles.inputContainer}>
         <Text style= { styles.text }>{t('date')}</Text>
         <Controller as = { <TextInput style = { styles.input }/> }
@@ -69,7 +69,7 @@ const ObservationComponent = (props) => {
           placeholder = {t('date')}
         />
       </View>
-      { errors.date && <Text style={styles.validationText}>Pakollinen kenttä.</Text> }
+      { errors.date && <Text style={styles.validationText}>{t('required field')}</Text> }
       <View style={styles.inputContainer}>
         <Text style={ styles.text }>{t('time')}</Text>
         <Controller as = { <TextInput style = { styles.input }/> }
@@ -81,7 +81,7 @@ const ObservationComponent = (props) => {
           placeholder = {t('time')}
         />
       </View>
-      { errors.time && <Text style={styles.validationText}>Pakollinen kenttä.</Text> }
+      { errors.time && <Text style={styles.validationText}>{t('required field')}</Text> }
 
       <View style={styles.inputContainer}>
         <Text style={ styles.text }>{t('info')}</Text>
