@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
 import Colors from '../constants/colors'
 import LoginComponent from '../components/LoginComponent'
-<<<<<<< HEAD
-=======
-import { getForm } from '../controllers/Controllers'
->>>>>>> 39312ed97d3ba861d380c35bcd11754b28d48538
+import { getSchema } from '../controllers/formController'
 
 export default class LoginScreen extends Component {
   static navigationOptions = ({ screenProps: { t } }) => ({
@@ -16,10 +13,7 @@ export default class LoginScreen extends Component {
   })
 
   render() {
-<<<<<<< HEAD
-=======
-    getForm()
->>>>>>> 39312ed97d3ba861d380c35bcd11754b28d48538
+    getSchema()
     return (
       <LoginComponent onPress = { () => this.props.navigation.replace('Home') } />
     )
