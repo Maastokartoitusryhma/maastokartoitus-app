@@ -8,6 +8,10 @@ const ContainerStyles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 10
   },
+  languageContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
   buttonContainer: {
     padding: 10
   },

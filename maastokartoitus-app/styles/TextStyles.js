@@ -6,6 +6,10 @@ const TextStyles = StyleSheet.create({
     fontWeight: 'bold',
     padding: 10
   },
+  languageText: {
+    padding: 10,
+    color: Colors.white
+  },
   loginHeader: {
     fontSize: 25,
   },
