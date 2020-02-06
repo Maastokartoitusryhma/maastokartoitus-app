@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import MapView, { Marker, Polyline, UrlTile } from 'react-native-maps'
 import { connect } from 'react-redux'
-import { Button, View } from 'react-native'
+import { Button, View, Image } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 const urlTemplate = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
@@ -58,14 +58,19 @@ const MapComponent = props => {
   }
 
 
-  const locationOverlay = () => (props.location !== null ?
+  const locationOverlay = () => (props.location !== null ? (
     <Marker
       coordinate = {{
         latitude: props.location.coords.latitude,
         longitude: props.location.coords.longitude
       }}
-      zIndex = {3}
-    />
+      zIndex = {3}>
+      <Image source={require('../assets/userLocation.png')} style={{ height: 35, width: 35}} />
+     </Marker>
+
+    )
+    
+
     : null
   )
 
