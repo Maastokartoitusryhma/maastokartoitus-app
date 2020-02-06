@@ -15,7 +15,7 @@ const ContainerStyles = StyleSheet.create({
   buttonContainer: {
     padding: 10
   },
-  observationContainer: {
+  observationEventContainer: {
     width: '90%',
     backgroundColor: Colors.blueBackground
   },
@@ -53,6 +53,10 @@ const ContainerStyles = StyleSheet.create({
   logoutButtonContainer: {
     paddingTop: 10,
     paddingRight: 10
+  },
+  previousObservationsContainer: {
+    width: '90%',
+    paddingTop: 10
   }
 })
 

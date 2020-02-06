@@ -17,8 +17,8 @@ const HomeComponent = (props) => {
     <View>
       <UserInfoComponent onLogout={props.onLogout} />
       <View style={Cs.homeContainer}>
-        <View style={Cs.observationContainer}>
-          <Text style={Ts.observationTitle}>{t('observation event')}</Text>
+        <View style={Cs.observationEventContainer}>
+          <Text style={Ts.observationEventTitle}>{t('observation event')}</Text>
           <View style={Cs.pickerContainer}>
             <Text>{t('observation zone')}</Text>
             <Picker 
@@ -31,6 +31,9 @@ const HomeComponent = (props) => {
           <View style={Cs.buttonContainer}>
             <Button onPress = { props.onPressMap } style = { Bs.homeButton } title = {t('map')}></Button>
           </View>
+        </View>
+        <View style={Cs.previousObservationsContainer}>
+          <Text style={Ts.previousObservationsTitle}>Aiemmat havaintotapahtumasi</Text>
         </View>
       </View>
     </View>
