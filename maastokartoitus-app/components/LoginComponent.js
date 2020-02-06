@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { View, Button, Text, TextInput, StyleSheet, AsyncStorage } from 'react-native'
+import { View, Button, Text, TextInput, AsyncStorage } from 'react-native'
 import Colors from '../constants/colors'
 import userService from '../services/UserService'
+import { useTranslation } from 'react-i18next'
+import Cs from '../styles/ContainerStyles'
+import Bs from '../styles/ButtonStyles'
+import Ts from '../styles/TextStyles'
+import Os from '../styles/OtherStyles'
 
 const LoginComponent = (props) => {
 
   const [personToken, setPersonToken] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
+  const { t } = useTranslation()
 
   // Check if user has previously logged in, redirect to home screen if is
 
@@ -28,7 +34,7 @@ const LoginComponent = (props) => {
       setErrorMessage('')
       props.onPress()
     } else {
-      setErrorMessage('Virheellinen token')
+      setErrorMessage(t('incorrect token'))
     }
   }
 
@@ -47,59 +53,24 @@ const LoginComponent = (props) => {
 
   return (
     <View>
-      <View style={styles.container}>
-        <Text style={styles.header}>Kirjaudu sisään</Text>
-        <View style={styles.inputContainer}>
-          <Text style={styles.text}>Syötä henkilökohtainen tokenisi</Text>
+      <View style={Cs.loginContainer}>
+        <Text style={Ts.loginHeader}>{t('login')}</Text>
+        <View style={Cs.inputContainer}>
+          <Text style={Ts.loginText}>{t('personal token')}</Text>
           <TextInput
             placeholder='personToken'
-            style={styles.input}
+            style={Os.textInput}
             value={personToken}
             onChangeText={inputHandler}
           />
         </View>
-        <View style={styles.button}>
-          <Button onPress={login} title="Kirjaudu sisään" color={Colors.neutralColor} />
+        <View style={Bs.loginButton}>
+          <Button onPress={login} title={t('login')} color={Colors.neutralColor} />
         </View>
-        <Text style={styles.errorMessage}>{errorMessage}</Text>
+        <Text style={Ts.errorText}>{errorMessage}</Text>
       </View>
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: '45%'
-  },
-  header: {
-    fontSize: 25,
-  },
-  button: {
-    width: '50%',
-    padding: 10,
-  },
-  inputContainer: {
-    width: '90%',
-    alignItems: 'center',
-    justifyContent: 'space-between'
-  },
-  input: {
-    borderColor: Colors.inputBorder,
-    borderWidth: 1,
-    height: 40,
-    width: '80%',
-    padding: 10
-  },
-  text: {
-    textAlign: 'center',
-    padding: 10
-  },
-  errorMessage: {
-    color: Colors.negativeColor
-  }
-})
 
 export default LoginComponent

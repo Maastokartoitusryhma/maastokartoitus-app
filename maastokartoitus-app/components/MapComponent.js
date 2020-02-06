@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import MapView, { Marker, Polyline } from 'react-native-maps'
 import { connect } from 'react-redux'
-import { Text, Button, View } from 'react-native'
+import { Button, View } from 'react-native'
+import { useTranslation } from 'react-i18next'
 
 const MapComponent = props => {
   const [ regionState, setRegionState ] = useState({ latitude: 64, longitude: 24, latitudeDelta: 0.25, longitudeDelta: 0.25 })
   const [ centered, setCentered ] = useState(true)
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (centered && props.location) {
@@ -88,7 +90,7 @@ const MapComponent = props => {
           top: '80%',
           alignSelf: 'flex-end'
         }}>
-        <Button title = { 'Keskitä' } onPress = {() => centerMapAnim()}/>
+        <Button title = {t('center')} onPress = {() => centerMapAnim()}/>
       </View>
       <View
         style = {{
@@ -96,7 +98,7 @@ const MapComponent = props => {
           top: '90%',
           alignSelf: 'flex-end'
         }}>
-        <Button title = 'Havainto' onPress = { props.onPress1}/>
+        <Button title = {t('observation')} onPress = { props.onPress1}/>
       </View>
     </>
   )

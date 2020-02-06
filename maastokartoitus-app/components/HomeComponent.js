@@ -1,63 +1,43 @@
-import React from 'react'
-import { View, Text, Button, StyleSheet, Picker } from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, Button, Picker } from 'react-native'
 import UserInfoComponent from './UserInfoComponent'
-import Colors from '../constants/colors'
 import { useTranslation } from 'react-i18next'
+import Cs from '../styles/ContainerStyles'
+import Bs from '../styles/ButtonStyles'
+import Ts from '../styles/TextStyles'
+import { KumpulanKampus, KumpulanPuutarha } from '../constants/namedPlaces'
 
 const HomeComponent = (props) => {
-  const { t, i18n } = useTranslation()
+
+  const [selectedZone, setSelectedZone] = useState({KumpulanKampus})
+
+  const { t } = useTranslation()
+
   return (
     <View>
       <UserInfoComponent onLogout={props.onLogout} />
-      <View style={styles.container}>
-        <View style={styles.havaintoContainer}>
-          <Text style={styles.havaintoTitle}>{t('observation event')}</Text>
-          <View style={styles.pickerContainer}>
+      <View style={Cs.homeContainer}>
+        <View style={Cs.observationEventContainer}>
+          <Text style={Ts.observationEventTitle}>{t('observation event')}</Text>
+          <View style={Cs.pickerContainer}>
             <Text>{t('observation zone')}</Text>
-            <Picker>
-              <Picker.Item label = 'Kumpulan metsä'   value = '1'/>
-              <Picker.Item label = 'Suurmetsän metsä' value = '2'/>
-              <Picker.Item label = 'Puistolan metsä'  value = '3'/>
-              <Picker.Item label = 'Keskuspuisto'     value = '4'/>
+            <Picker 
+              selectedValue={selectedZone}
+              onValueChange={itemValue => setSelectedZone(itemValue)}>
+              <Picker.Item label={KumpulanKampus.name} value={KumpulanKampus} />
+              <Picker.Item label={KumpulanPuutarha.name} value={KumpulanPuutarha} />
             </Picker>
           </View>
-          <View style={styles.buttonContainer}>
-            <Button onPress = { props.onPressMap } style = { styles.button } title = 'Kartta'></Button>
+          <View style={Cs.buttonContainer}>
+            <Button onPress = { props.onPressMap } style = { Bs.homeButton } title = {t('map')}></Button>
           </View>
+        </View>
+        <View style={Cs.previousObservationsContainer}>
+          <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
         </View>
       </View>
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 10
-  },
-  buttonContainer: {
-    padding: 10
-  },
-  button: {
-    width: '20%',
-    padding: 10,
-  },
-  loggedIn: {
-    padding: 10,
-  },
-  havaintoContainer: {
-    width: '90%',
-    backgroundColor: Colors.blueBackground
-  },
-  havaintoTitle: {
-    fontWeight: 'bold',
-    padding: 10
-  },
-  pickerContainer: {
-    paddingLeft: 20
-  }
-})
 
 export default HomeComponent

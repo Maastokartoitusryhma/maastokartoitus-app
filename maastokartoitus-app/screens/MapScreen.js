@@ -1,16 +1,16 @@
 import React from 'react'
-import { StyleSheet, View, Button, Dimensions } from 'react-native';
+import { StyleSheet, View, Button, Dimensions } from 'react-native'
 import MapComponent from '../components/MapComponent'
 import Colors from '../constants/colors'
 
 export default class MapScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Kartta',
+  static navigationOptions = ({ screenProps: { t } }) => ({
+    title: t('map'),
     headerStyle: {
       backgroundColor: Colors.headerBackground,
     },
     headerTintColor: Colors.white,
-  }
+  })
 
   render() {
     const { navigate } = this.props.navigation
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   },
   mapStyle: {
     flex: 1,
-      width: Dimensions.get('window').width,
-      height: Dimensions.get('window').height,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   }
 })

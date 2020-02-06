@@ -1,17 +1,30 @@
-import React from 'react'
-import { View, Text, TextInput, StyleSheet, Alert } from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, TextInput, StyleSheet, Button } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { connect } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import Colors from '../constants/colors'
 import Form from 'react-native-jsonschema-form'
 import { getSchema, getUISchema } from '../controllers/formController'
 import { save, fetch, clear } from '../dao/DAO'
 
 const ObservationComponent = (props) => {
+
+  const { t } = useTranslation()
+
+  const [key, setKey] = useState('')
   const { control, handleSubmit, errors } = useForm()
-  //const onSubmit1 = data => save(data)
-  //const onSubmit2 = () => fetch()
-  //const onSubmit3 = () => clear()
+
+  const onSave = async data => {
+    DAO.save((data.date + '/' + data.time + '/' + data.species), JSON.stringify(data))
+    setKey(data.date + '/' + data.time + '/' + data.species)
+  }
+  const onFetch = async () => {
+    DAO.fetch(key)
+  }
+
+  const onReset = async () => DAO.clear()
+
   const onChange = args => {
     return {
       value: args[0].nativeEvent.text,
@@ -52,9 +65,6 @@ const ObservationComponent = (props) => {
   )
 }
 
-//<Button onPress = { handleSubmit(onSubmit1) } title = 'Tallenna' style = { styles.button }></Button>
-//<Button onPress = { handleSubmit(onSubmit2) } title = 'Hae'      style = { styles.button }></Button>
-//<Button onPress = { handleSubmit(onSubmit3) } title = 'Nollaa'   style = { styles.button }></Button>
 
 const styles = StyleSheet.create({
   container: {
@@ -78,13 +88,22 @@ const styles = StyleSheet.create({
   text: {
     fontWeight: 'bold'
   },
-  button: {
-    width: '50%',
+  buttonContainer: {
+    flex: 3,
     padding: 10,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-evenly'
   },
+<<<<<<< HEAD
   notch: {
     width: '100%',
     height: 15
+=======
+  validationText: {
+    padding: 10,
+    color: Colors.negativeColor
+>>>>>>> 39312ed97d3ba861d380c35bcd11754b28d48538
   }
 })
 

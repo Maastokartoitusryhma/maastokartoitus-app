@@ -1,8 +1,13 @@
 import React from 'react'
-import { Text, Button, View, StyleSheet, AsyncStorage } from 'react-native'
+import { Text, Button, View, AsyncStorage } from 'react-native'
 import Colors from '../constants/colors'
+import { useTranslation } from 'react-i18next'
+import Cs from '../styles/ContainerStyles'
+import Ts from '../styles/TextStyles'
 
 const UserInfoComponent = (props) => {
+
+  const { t } = useTranslation()
 
   const logout = () => {
     clearUserData()
@@ -19,29 +24,21 @@ const UserInfoComponent = (props) => {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.title}>
-        <Text style={styles.loggedIn}>Kirjautuneena: Tähän Tulee Nimi</Text>
+    <View>
+      <View style={Cs.userInfoContainer}>
+        <View style={Ts.userInfoTitle}>
+          <Text style={Ts.loggedIn}>{t('loggedin')}Tähän Tulee Nimi</Text>
+        </View>
+        <View style={Cs.logoutButtonContainer}>
+          <Button
+            color={Colors.negativeColor}
+            title={t('logout')}
+            onPress={logout}
+          />
+        </View>
       </View>
-      <Button
-        color={Colors.negativeColor}
-        title="Kirjaudu ulos"
-        onPress={logout}
-      />
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '90%',
-    padding: 10
-  },
-  title: {
-    padding: 10
-  },
-})
 
 export default UserInfoComponent
