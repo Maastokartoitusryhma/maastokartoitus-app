@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import MapView, { Marker, Polyline } from 'react-native-maps'
+import MapView, { Marker, Polyline, UrlTile } from 'react-native-maps'
 import { connect } from 'react-redux'
 import { Button, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
+
+const urlTemplate = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
 
 const MapComponent = props => {
   const [ regionState, setRegionState ] = useState({ latitude: 64, longitude: 24, latitudeDelta: 0.25, longitudeDelta: 0.25 })
@@ -55,6 +57,50 @@ const MapComponent = props => {
     setRegionState(region)
   }
 
+
+  const locationOverlay = () => (props.location !== null ?
+    <Marker
+      coordinate = {{
+        latitude: props.location.coords.latitude,
+        longitude: props.location.coords.longitude
+      }}
+      zIndex = {3}
+    />
+    : null
+  )
+
+  /** WIP
+  const targetOverlay  = () => (!centered ?
+    <Marker
+      coordinate = {{
+        latitude: regionState.latitude,
+        longitude: regionState.longitude
+      }}
+      zIndex = {4}
+    />
+    : null
+  )
+  */
+
+  const pathOverlay = () => (props.path.length !== 0 ?
+    <Polyline
+      coordinates = { props.path.map(location => ({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      }))}
+      strokeWidth = {2}
+      zIndex = {2}
+    />
+    : null
+  )
+
+  const tileOverlay = () => (
+    <UrlTile
+      urlTemplate = {urlTemplate}
+      zIndex = {1}
+    />
+  )
+
   return (
     <>
       <MapView
@@ -63,26 +109,12 @@ const MapComponent = props => {
         initialRegion = { regionState }
         onPanDrag = {() => onPanDrag()}
         onRegionChangeComplete = {(region) => onRegionChangeComplete(region)}
+        maxZoomLevel = {18}
+        minimumZoomLevel = {0}
       >
-        { props.location !== null ?
-          <Marker
-            coordinate = {{
-              latitude: props.location.coords.latitude,
-              longitude: props.location.coords.longitude
-            }}
-          />
-          : null
-        }
-        { props.path.length !== 0 ?
-          <Polyline
-            coordinates = { props.path.map(location => ({
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude,
-            }))}
-            strokeWidth = { 2 }
-          />
-          : null
-        }
+        {locationOverlay()}
+        {pathOverlay()}
+        {tileOverlay()}
       </MapView>
       <View
         style = {{
