@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, Button, Text, TextInput, AsyncStorage } from 'react-native'
-import Colors from '../constants/colors'
-import userService from '../services/UserService'
+import Colors from '../styles/Colors'
+import userController from '../controllers/userController'
 import { useTranslation } from 'react-i18next'
 import Cs from '../styles/ContainerStyles'
 import Bs from '../styles/ButtonStyles'
@@ -27,7 +27,7 @@ const LoginComponent = (props) => {
   }, [])
 
   const login = async () => {
-    const userObject = await userService.getUserByPersonToken(personToken)
+    const userObject = await userController.getUserByPersonToken(personToken)
     // If user is not found, a JSON object with key 'error' is returned, hence check if it exists
     if (userObject.error === undefined) {
       storeUserData(JSON.stringify(userObject))

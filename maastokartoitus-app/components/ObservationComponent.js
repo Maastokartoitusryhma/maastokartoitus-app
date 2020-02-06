@@ -3,12 +3,13 @@ import { View, Text, TextInput, StyleSheet, Button, Alert } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { connect } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import Colors from '../constants/colors'
+import Colors from '../styles/Colors'
 import Form from 'react-native-jsonschema-form'
 import { getSchema, getUISchema } from '../controllers/formController'
 import { save, fetch, clear } from '../dao/DAO'
 import schema from '../temporaryschema.json'
 import uischema from '../temporaryuischema.json'
+import storageController from '../controllers/storageController'
 
 const ObservationComponent = (props) => {
 
@@ -18,14 +19,14 @@ const ObservationComponent = (props) => {
   const { control, handleSubmit, errors } = useForm()
 
   const onSave = async data => {
-    DAO.save((data.date + '/' + data.time + '/' + data.species), JSON.stringify(data))
+    storageController.save((data.date + '/' + data.time + '/' + data.species), JSON.stringify(data))
     setKey(data.date + '/' + data.time + '/' + data.species)
   }
   const onFetch = async () => {
-    DAO.fetch(key)
+    storageController.fetch(key)
   }
 
-  const onReset = async () => DAO.clear()
+  const onReset = async () => storageController.clear()
 
   const onChange = args => {
     return {

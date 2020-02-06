@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Colors from '../constants/colors'
+import Colors from '../styles/Colors'
 import LoginComponent from '../components/LoginComponent'
 import { getSchema } from '../controllers/formController'
 

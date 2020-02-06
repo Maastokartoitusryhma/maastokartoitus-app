@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, Button, View, AsyncStorage } from 'react-native'
-import Colors from '../constants/colors'
+import Colors from '../styles/Colors'
 import { useTranslation } from 'react-i18next'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'

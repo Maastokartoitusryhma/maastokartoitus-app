@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View } from 'react-native'
-import Colors from '../constants/colors'
+import Colors from '../styles/Colors'
 import HomeComponent from '../components/HomeComponent'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
