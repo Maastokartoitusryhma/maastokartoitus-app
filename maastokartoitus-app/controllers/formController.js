@@ -22,8 +22,8 @@ export const getSchema = async () => {
   `
   try {
     const response = await client.query({ query })
-    console.log(response.data.form.schema)
-    return response.data.form.schema
+    console.log(JSON.stringify(response.data.form.schema, null, '  '))
+    return JSON.stringify(response.data.form.schema, null, '  ')
   } catch (error) {
     alert(error)
     return null

@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import Colors from '../styles/Colors'
 import Form from 'react-native-jsonschema-form'
 import { getSchema, getUISchema } from '../controllers/formController'
-import { save, fetch, clear } from '../dao/DAO'
 import schema from '../temporaryschema.json'
 import uischema from '../temporaryuischema.json'
 import storageController from '../controllers/storageController'
@@ -52,7 +51,7 @@ const ObservationComponent = (props) => {
     <View style={styles.container}>
       <View style={styles.notch}></View>
       <Form
-        schema={schema}
+        schema={fetchedSchema}
         //transformErrors={transformErrors}
         onSubmit={(submited) => {
           Alert.alert(
