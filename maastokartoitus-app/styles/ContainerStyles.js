@@ -8,10 +8,14 @@ const ContainerStyles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 10
   },
+  languageContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
   buttonContainer: {
     padding: 10
   },
-  observationContainer: {
+  observationEventContainer: {
     width: '90%',
     backgroundColor: Colors.blueBackground
   },
@@ -43,9 +47,17 @@ const ContainerStyles = StyleSheet.create({
   userInfoContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '90%',
-    padding: 10
+    paddingLeft: 10,
+    paddingRight: 10
   },
+  logoutButtonContainer: {
+    paddingTop: 10,
+    paddingRight: 10
+  },
+  previousObservationsContainer: {
+    width: '90%',
+    paddingTop: 10
+  }
 })
 
 export default ContainerStyles

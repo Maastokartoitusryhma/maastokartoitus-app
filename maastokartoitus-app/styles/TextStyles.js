@@ -2,9 +2,13 @@ import { StyleSheet } from 'react-native'
 import Colors from '../constants/colors'
 
 const TextStyles = StyleSheet.create({
-  observationTitle: {
+  observationEventTitle: {
     fontWeight: 'bold',
     padding: 10
+  },
+  languageText: {
+    padding: 10,
+    color: Colors.white
   },
   loginHeader: {
     fontSize: 25,
@@ -23,8 +27,11 @@ const TextStyles = StyleSheet.create({
     padding: 10,
   },
   userInfoTitle: {
-    padding: 10
+    paddingTop: 10
   },
+  previousObservationsTitle: {
+    fontWeight: 'bold',
+  }
 })
 
 export default TextStyles
