@@ -34,7 +34,8 @@ i18n
           'time': 'Aika',
           'info': 'Lisätietoja',
           'save': 'Tallenna',
-          'flying squirrel': 'Liito-orava'
+          'flying squirrel': 'Liito-orava',
+          'previous observation events': 'Aiemmat havaintotapahtumat'
         },
       },
       en: {
@@ -64,7 +65,8 @@ i18n
           'time': 'Time',
           'info': 'Info',
           'save': 'Save',
-          'flying squirrel': 'Flying squirrel'
+          'flying squirrel': 'Flying squirrel',
+          'previous observation events': 'Previous observation events'
         },
       },
       sv: {
@@ -94,7 +96,8 @@ i18n
           'time': 'Tid',
           'info': 'Information',
           'save': 'Spara',
-          'flying squirrel': 'Flygekorre'
+          'flying squirrel': 'Flygekorre',
+          'previous observation events': 'Tidigare observationshändelser'
         }
       }
     },

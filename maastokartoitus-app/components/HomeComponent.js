@@ -33,7 +33,7 @@ const HomeComponent = (props) => {
           </View>
         </View>
         <View style={Cs.previousObservationsContainer}>
-          <Text style={Ts.previousObservationsTitle}>Aiemmat havaintotapahtumasi</Text>
+          <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
         </View>
       </View>
     </View>
