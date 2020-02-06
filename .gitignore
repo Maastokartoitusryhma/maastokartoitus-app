@@ -13,3 +13,9 @@ coverage/
 
 # macOS
 .DS_Store
+
+# Jest
+.jest/
+
+# TypeScript build
+build/
