@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, View, Dimensions } from 'react-native'
 import MapComponent from '../components/MapComponent'
-import Colors from '../constants/colors'
+import Colors from '../styles/Colors'
 
 export default class MapScreen extends React.Component {
   static navigationOptions = ({ screenProps: { t } }) => ({

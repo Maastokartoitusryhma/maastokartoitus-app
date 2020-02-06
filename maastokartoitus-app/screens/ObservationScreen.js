@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import ObservationComponent from '../components/ObservationComponent'
-import Colors from '../constants/colors'
+import Colors from '../styles/Colors'
 
 export default class ObservationScreen extends Component {
 
