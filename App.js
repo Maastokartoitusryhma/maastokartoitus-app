@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
-import AppContainer from './navigator/MyNavigator'
+import AppContainer from './src/navigator/MyNavigator'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
-import { updateLocation, appendPath } from './actions/LocationActions'
-import locationReducer from './reducers/LocationReducer'
+import { updateLocation, appendPath } from './src/actions/LocationActions'
+import locationReducer from './src/reducers/LocationReducer'
 import * as TaskManager from 'expo-task-manager'
 import * as Permissions from 'expo-permissions'
 import * as Location from 'expo-location'
 import Platform from 'react-native'
-import './language/i18n'
+import './src/language/i18n'
 
 const store = createStore(locationReducer)
 const LOCATION_BACKGROUND_TASK = 'backgroundLocationHandler'

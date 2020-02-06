@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next'
 import Colors from '../styles/Colors'
 import Form from 'react-native-jsonschema-form'
 import { getSchema, getUISchema } from '../controllers/formController'
-import schema from '../temporaryschema.json'
-import uischema from '../temporaryuischema.json'
+import schema from '../../temporaryschema.json'
+import uischema from '../../temporaryuischema.json'
 import storageController from '../controllers/storageController'
 
 const ObservationComponent = (props) => {

@@ -5,6 +5,7 @@ import { Button, View, Image } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 const urlTemplate = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
+const userLocationPng = '../../assets/userLocation.png'
 
 const MapComponent = props => {
   const [ regionState, setRegionState ] = useState({ latitude: 64, longitude: 24, latitudeDelta: 0.25, longitudeDelta: 0.25 })
@@ -65,7 +66,7 @@ const MapComponent = props => {
         longitude: props.location.coords.longitude
       }}
       zIndex = {3}>
-      <Image source={require('../assets/userLocation.png')} style={{ height: 35, width: 35}} />
+      <Image source={require(userLocationPng)} style={{ height: 35, width: 35}} />
      </Marker>
 
     )
