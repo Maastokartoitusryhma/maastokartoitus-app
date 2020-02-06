@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, StyleSheet, Button } from 'react-native'
+import { View, Text, TextInput, StyleSheet, Button, Alert } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { connect } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -7,6 +7,8 @@ import Colors from '../constants/colors'
 import Form from 'react-native-jsonschema-form'
 import { getSchema, getUISchema } from '../controllers/formController'
 import { save, fetch, clear } from '../dao/DAO'
+import schema from '../temporaryschema.json'
+import uischema from '../temporaryuischema.json'
 
 const ObservationComponent = (props) => {
 
@@ -49,8 +51,7 @@ const ObservationComponent = (props) => {
     <View style={styles.container}>
       <View style={styles.notch}></View>
       <Form
-        schema={fetchedSchema}
-        uiSchema={fetchedUISchema}
+        schema={schema}
         //transformErrors={transformErrors}
         onSubmit={(submited) => {
           Alert.alert(
@@ -64,7 +65,7 @@ const ObservationComponent = (props) => {
     </View>
   )
 }
-
+//uiSchema={uischema.gatheringEvent}
 
 const styles = StyleSheet.create({
   container: {

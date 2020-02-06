@@ -1,0 +1,662 @@
+{
+  "ui:shortcuts": {
+    "alt": {
+      "fn": "help",
+      "delay": 1
+    },
+    "alt+F5": {
+      "fn": "revalidate"
+    },
+    "Enter": {
+      "fn": "navigate"
+    },
+    "shift+Enter": {
+      "fn": "navigate",
+      "reverse": true
+    },
+    "ctrl+Enter": {
+      "fn": "textareaRowInsert"
+    },
+    "alt+ ": {
+      "fn": "navigate"
+    },
+    "alt+shift+ ": {
+      "fn": "navigate",
+      "reverse": true
+    },
+    "alt+n": {
+      "fn": "navigateArray"
+    },
+    "alt+p": {
+      "fn": "navigateArray",
+      "reverse": true
+    }
+  },
+  "ui:order": [
+    "gatheringEvent",
+    "gatherings"
+  ],
+  "ui:field": "InjectField",
+  "ui:options": {
+    "injections": {
+      "fields": [
+        "editors",
+        "secureLevel",
+        "keywords"
+      ],
+      "target": "gatheringEvent"
+    }
+  },
+  "gatheringEvent": {
+    "ui:field": "NestField",
+    "classNames": "well well-sm",
+    "ui:order": [
+      "*",
+      "legPublic",
+      "secureLevel",
+      "eventTime",
+      "keywords"
+    ],
+    "ui:options": {
+      "nests": {
+        "legEditor": {
+          "fields": [
+            "leg",
+            "editors"
+          ],
+          "rootUiSchema": {
+            "ui:field": "NestField",
+            "ui:options": {
+              "nests": {
+                "_legEditor": {
+                  "fields": [
+                    "leg",
+                    "editors"
+                  ],
+                  "title": "",
+                  "rootUiSchema": {
+                    "ui:functions": [
+                      {
+                        "ui:field": "DependentBooleanField",
+                        "ui:options": {
+                          "booleanField": "editors",
+                          "booleanDefiner": "leg"
+                        }
+                      },
+                      {
+                        "ui:field": "ArrayCombinerField"
+                      }
+                    ],
+                    "ui:field": "TableField",
+                    "ui:options": {
+                      "specialRules": "legEditors",
+                      "ui:buttonsDesktopLayout": true
+                    },
+                    "items": {
+                      "ui:functions": {
+                        "ui:field": "ContextInjectionField",
+                        "ui:options": {
+                          "injections": {
+                            "/ui:options/rules/0/regexp": "/creator"
+                          }
+                        }
+                      },
+                      "ui:field": "DependentDisableField",
+                      "ui:options": {
+                        "rules": [
+                          {
+                            "disableDefiner": "leg",
+                            "disableField": "editors",
+                            "regexp": "creator is injected here",
+                            "inlineHelp": "You must be an editor.",
+                            "disabledValueToDisplay": true
+                          },
+                          {
+                            "disableDefiner": "leg",
+                            "disableField": "editors",
+                            "regexp": "^((?!(MA\\.\\d)).)*$"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "legEditorSizeFixer": {
+                  "fields": [
+                    "_legEditor"
+                  ],
+                  "title": "",
+                  "rootUiSchema": {
+                    "ui:grid": {
+                      "lg": 6,
+                      "md": 6,
+                      "sm": 9,
+                      "xs": 12
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "eventTime": {
+          "fields": [
+            "dateBegin",
+            "dateEnd"
+          ],
+          "title": "",
+          "rootUiSchema": {
+            "ui:grid": {
+              "lg": {
+                "dateBegin": 3,
+                "dateEnd": 2
+              },
+              "md": {
+                "dateBegin": 4,
+                "dateEnd": 2
+              },
+              "sm": {
+                "dateBegin": 5,
+                "dateEnd": 3
+              },
+              "xs": 12
+            }
+          }
+        }
+      }
+    },
+    "leg": {
+      "ui:widget": "AutosuggestWidget",
+      "ui:help": "@legHelp",
+      "ui:options": {
+        "autosuggestField": "friends",
+        "allowNonsuggestedValue": true,
+        "suggestionReceive": "key",
+        "preventTypingPattern": "^MA\\.\\d+$"
+      }
+    },
+    "dateBegin": {
+      "ui:widget": "DateTimeWidget",
+      "ui:options": {
+        "showButtons": true
+      }
+    },
+    "dateEnd": {
+      "ui:widget": "DateTimeWidget"
+    },
+    "legPublic": {
+      "ui:options": {
+        "allowUndefined": false
+      },
+      "ui:help": "You can hide the observer names if needed by selecting \"No\". The observer names are always available to authoritatives."
+    }
+  },
+  "editors": {
+    "ui:help": "If you report an identified user as an observer and the user has added you as a friend, you can give the user rights to edit this field trip report. Additionally observations from this field trip report are shown to this particular user among his/her own observations.",
+    "ui:options": {
+      "allowUndefined": false
+    }
+  },
+  "secureLevel": {
+    "ui:widget": "AnyToBooleanWidget",
+    "ui:help": "By selecting \"No\" the observations geographic information will be coarsened to a 10 x 10 km² square in public material. The geographic information will always be available to authoritatives in detail. Images attached to coarsened observations are public.",
+    "ui:options": {
+      "trueValue": "MX.secureLevelNone",
+      "falseValue": "MX.secureLevelKM10",
+      "allowUndefined": false
+    }
+  },
+  "keywords": {
+    "ui:field": "TagArrayField"
+  },
+  "gatherings": {
+    "items": {
+      "dateBegin": {
+        "ui:options": {
+          "showButtons": true
+        },
+        "ui:widget": "DateTimeWidget"
+      },
+      "dateEnd": {
+        "ui:widget": "DateTimeWidget"
+      },
+      "geometry": {
+        "ui:field": "HiddenField"
+      },
+      "images": {
+        "ui:field": "ImageArrayField",
+        "ui:options": {
+          "capturerVerbatimPath": "/gatheringEvent/leg"
+        }
+      },
+      "namedPlaceID": {
+        "ui:field": "HiddenField"
+      },
+      "taxonCensus": {
+        "items": {
+          "censusTaxonID": {
+            "ui:options": {
+              "allowNonsuggestedValue": true,
+              "autosuggestField": "taxon",
+              "suggestionReceive": "key"
+            },
+            "ui:widget": "AutosuggestWidget"
+          }
+        }
+      },
+      "ui:functions": [
+        {
+          "ui:field": "ConditionalUiSchemaField",
+          "ui:options": {
+            "cases": [
+              {
+                "rules": {
+                  "field": "gatheringType",
+                  "regexp": "MY.gatheringTypeBreedingAndRestingArea"
+                },
+                "operations": {
+                  "type": "merge",
+                  "uiSchema": {
+                    "ui:options": {
+                      "color": "#a9d18e"
+                    }
+                  }
+                }
+              },
+              {
+                "rules": {
+                  "field": "gatheringType",
+                  "regexp": "MY.gatheringTypeForagingArea"
+                },
+                "operations": {
+                  "type": "merge",
+                  "uiSchema": {
+                    "ui:options": {
+                      "color": "#ffc000"
+                    }
+                  }
+                }
+              },
+              {
+                "rules": {
+                  "field": "gatheringType",
+                  "regexp": "^$"
+                },
+                "operations": {
+                  "type": "merge",
+                  "uiSchema": {
+                    "ui:options": {
+                      "preselectMarker": true
+                    },
+                    "habitat": {
+                      "ui:widget": "HiddenWidget"
+                    },
+                    "notes": {
+                      "ui:widget": "HiddenWidget"
+                    }
+                  }
+                },
+                "else": {
+                  "type": "merge",
+                  "uiSchema": {
+                    "units": {
+                      "ui:field": "HiddenField"
+                    }
+                  }
+                }
+              },
+              {
+                "rules": {
+                  "field": "gatheringType",
+                  "regexp": "MY.gatheringTypeBreedingAndRestingArea|MY.gatheringTypeForagingArea"
+                },
+                "operations": {
+                  "type": "merge",
+                  "uiSchema": {
+                    "ui:options": {
+                      "mapOptions": {
+                        "marker": false,
+                        "circle": true,
+                        "polygon": true,
+                        "rectangle": true
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "rules": {
+                  "field": "gatheringType",
+                  "regexp": "MY.gatheringTypeCavityTree|MY.gatheringTypeNestTree|MY.gatheringTypeDroppingsTree"
+                },
+                "operations": {
+                  "type": "merge",
+                  "uiSchema": {
+                    "ui:options": {
+                      "preselectMarker": true
+                    },
+                    "gatheringType": {
+                      "ui:title": "Puun tyyppi",
+                      "ui:options": {
+                        "filterType": "whitelist",
+                        "filter": [
+                          "MY.gatheringTypeCavityTree",
+                          "MY.gatheringTypeNestTree",
+                          "MY.gatheringTypeDroppingsTree"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "else": {
+                  "type": "merge",
+                  "uiSchema": {
+                    "gatheringType": {
+                      "ui:field": "HiddenField"
+                    }
+                  }
+                }
+              },
+              {
+                "rules": {
+                  "field": "gatheringType",
+                  "regexp": "MY.gatheringTypeCavityTree"
+                },
+                "operations": {
+                  "type": "merge",
+                  "uiSchema": {
+                    "ui:title": "Kolopuu",
+                    "ui:options": {
+                      "color": "#9e713b"
+                    }
+                  }
+                }
+              },
+              {
+                "rules": {
+                  "field": "gatheringType",
+                  "regexp": "MY.gatheringTypeDroppingsTree"
+                },
+                "operations": {
+                  "type": "merge",
+                  "uiSchema": {
+                    "ui:title": "Papanapuu",
+                    "ui:options": {
+                      "color": "#b89220"
+                    }
+                  }
+                }
+              },
+              {
+                "rules": {
+                  "field": "gatheringType",
+                  "regexp": "MY.gatheringTypeNestTree"
+                },
+                "operations": {
+                  "type": "merge",
+                  "uiSchema": {
+                    "ui:title": "Pesäpuu",
+                    "ui:options": {
+                      "color": "#ff0000"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "ui:field": "ConditionalOnChangeField",
+          "ui:options": {
+            "rules": [
+              {
+                "transformations": {
+                  "units": []
+                },
+                "conditions": {
+                  "gatheringType": {
+                    "regexp": "MY.gatheringTypeCavityTree"
+                  }
+                }
+              },
+              {
+                "transformations": {
+                  "units": [
+                    {
+                      "identifications": [
+                        {
+                          "taxonID": "MX.48243"
+                        }
+                      ],
+                      "recordBasis": "MY.recordBasisHumanObservationIndirect",
+                      "breeding": true
+                    }
+                  ]
+                },
+                "conditions": {
+                  "gatheringType": {
+                    "regexp": "MY.gatheringTypeNestTree"
+                  }
+                }
+              },
+              {
+                "transformations": {
+                  "units": [
+                    {
+                      "identifications": [
+                        {
+                          "taxonID": "MX.48243"
+                        }
+                      ],
+                      "recordBasis": "MY.recordBasisHumanObservationIndirect"
+                    }
+                  ]
+                },
+                "conditions": {
+                  "gatheringType": {
+                    "regexp": "MY.gatheringTypeDroppingsTree"
+                  }
+                }
+              },
+              {
+                "transformations": {
+                  "units": [
+                    {
+                      "identifications": [
+                        {
+                          "taxonID": "MX.48243"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "conditions": {
+                  "gatheringType": {
+                    "regexp": "^$"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "ui:field": "LocationChooserField",
+      "ui:options": {
+        "preselectMarker": false,
+        "strategy": "lolife"
+      },
+      "units": {
+        "items": {
+          "ui:functions": [
+            {
+              "ui:field": "LocationChooserField",
+              "ui:options": {
+                "geometryField": "/unitGathering/geometry",
+                "strategy": "lolifeUnit"
+              }
+            }
+          ],
+          "identifications": {
+            "ui:field": "HiddenField"
+          },
+          "unitGathering": {
+            "ui:field": "HiddenField"
+          },
+          "taxonConfidence": {
+            "ui:widget": "AnyToBooleanWidget",
+            "ui:options": {
+              "trueValue": "MY.taxonConfidenceSure",
+              "falseValue": "MY.taxonConfidenceUnsure",
+              "allowUndefined": false
+            }
+          },
+          "ui:grid": {
+            "lg": {
+              "taxonConfidence": 1,
+              "count": 1,
+              "*": 2
+            },
+            "md": {
+              "taxonConfidence": 1,
+              "count": 1,
+              "*": 2
+            },
+            "sm": {
+              "taxonConfidence": 2,
+              "count": 1,
+              "*": 2
+            },
+            "xs": 12
+          },
+          "ui:order": [
+            "recordBasis",
+            "taxonConfidence",
+            "*"
+          ]
+        }
+      },
+      "ui:order": [
+        "gatheringType",
+        "*",
+        "units"
+      ],
+      "ui:settings": [
+        "%additionalFields/scopeField_gatherings"
+      ],
+      "title": "Havaintopaikan tiedot",
+      "ui:grid": {
+        "lg": 6,
+        "md": 6,
+        "sm": 6,
+        "xs": 12
+      }
+    },
+    "ui:field": "MapArrayField",
+    "ui:title": "",
+    "ui:options": {
+      "buttons": [
+        {
+          "glyph": "plus",
+          "fn": "addPredefined",
+          "label": "Lisääntymis- ja levähdyspaikka",
+          "default": {
+            "gatheringType": "MY.gatheringTypeBreedingAndRestingArea"
+          }
+        },
+        {
+          "glyph": "plus",
+          "fn": "addPredefined",
+          "key": "1",
+          "label": "Ruokailualue",
+          "default": {
+            "gatheringType": "MY.gatheringTypeForagingArea"
+          }
+        }
+      ],
+      "emptyHelp": "Aloita havaintojen ilmoittaminen piirtämällä havaintoalue kartalle",
+      "confirmDelete": true,
+      "headerFormatters": [
+        "units",
+        "namedPlace"
+      ],
+      "popupFields": [
+        {
+          "field": "/gatheringType",
+          "template": "title"
+        },
+        {
+          "text": "/gatheringType",
+          "template": "description",
+          "value": "Klikkaa vierittääksesi näkyville"
+        }
+      ],
+      "titleFormat": "%{Title} %{idx}",
+      "mapOptions": {
+        "controls": {
+          "draw": {
+            "clear": true,
+            "delete": true,
+            "redo": false,
+            "reverse": true,
+            "undo": false
+          }
+        }
+      },
+      "mapSizes": {
+        "lg": 8,
+        "md": 6,
+        "sm": 6,
+        "xs": 12
+      },
+      "minHeight": 435,
+      "propsToPassToInlineSchema": [
+        "formData"
+      ],
+      "resizeTimeout": 210,
+      "hasActive": false,
+      "geometryField": "geometry",
+      "geometryMapper": "lolife",
+      "nonRemovables": [
+        0
+      ],
+      "inlineUiSchemaRoot": {
+        "ui:functions": {
+          "ui:field": "FilterArrayField",
+          "ui:options": {
+            "rules": {
+              "idx": 0,
+              "complement": true
+            }
+          }
+        },
+        "ui:field": "SingleActiveArrayField",
+        "ui:options": {
+          "headerFormatters": "gatheringType",
+          "renderAdd": false
+        }
+      },
+      "belowUiSchemaRoot": {
+        "ui:field": "SingleItemArrayField",
+        "ui:options": {
+          "activeIdx": 0
+        }
+      },
+      "belowFields": [
+        "units"
+      ],
+      "passActiveIdxToBelow": false
+    },
+    "ui:grid": {
+      "lg": 2,
+      "md": 2,
+      "sm": 2,
+      "xs": 12
+    },
+    "ui:settings": [
+      "/mapOptions/tileLayerName",
+      "/mapOptions/overlayNames",
+      "/mapOptions/tileLayerOpacity",
+      "/mapOptions/tileLayers"
+    ]
+  }
+}
