@@ -12,7 +12,6 @@ export default class ObservationScreen extends Component {
   }
 
   render() {
-    
     return (
       <ObservationComponent />
     )
