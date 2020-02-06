@@ -2,10 +2,14 @@ import React, { useState } from 'react'
 import { View, Text, TextInput, StyleSheet, Button } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { connect } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import Colors from '../constants/colors'
 import DAO from '../dao/DAO'
 
 const ObservationComponent = (props) => {
+
+  const { t } = useTranslation()
+
   const [key, setKey] = useState('')
   const { control, handleSubmit, errors } = useForm()
 
@@ -31,62 +35,66 @@ const ObservationComponent = (props) => {
   return (
     <View style = { styles.container }>
       <View style={ styles.inputContainer }>
-        <Text style= { styles.text }>Laji</Text>
+        <Text style= { styles.text }>{t('species')}</Text>
         <Controller as = { <TextInput style = { styles.input }/> }
           control = { control }
           name = 'species'
           onChange = { onChange }
           rules = {{ required: true }}
-          defaultValue = 'Liito-orava'
-          placeholder = 'Laji'
+          defaultValue = {t('flying squirrel')}
+          placeholder = {t('species')}
         />
       </View>
       { errors.species && <Text style={styles.validationText}>Pakollinen kenttä.</Text> }
       <View style={ styles.inputContainer }>
-        <Text style= { styles.text }>Sijainti</Text>
+        <Text style= { styles.text }>{t('location')}</Text>
         <Controller as = { <TextInput style = { styles.input }/> }
           control = { control }
           onChange = { onChange }
           name = 'location'
           rules = {{ required: true }}
           defaultValue = { observationLocation }
+          placeholder = {t('location')}
         />
       </View>
       { errors.location && <Text style={styles.validationText}>Pakollinen kenttä.</Text> }
       <View style={styles.inputContainer}>
-        <Text style= { styles.text }>Päivä</Text>
+        <Text style= { styles.text }>{t('date')}</Text>
         <Controller as = { <TextInput style = { styles.input }/> }
           control = { control }
           onChange = { onChange }
           name = 'date'
           rules = {{ required: true }}
           defaultValue = { today }
+          placeholder = {t('date')}
         />
       </View>
       { errors.date && <Text style={styles.validationText}>Pakollinen kenttä.</Text> }
       <View style={styles.inputContainer}>
-        <Text style={ styles.text }>Aika</Text>
+        <Text style={ styles.text }>{t('time')}</Text>
         <Controller as = { <TextInput style = { styles.input }/> }
           control = { control }
           onChange = { onChange }
           name = 'time'
           rules = {{ required: true }}
           defaultValue = {now}
+          placeholder = {t('time')}
         />
       </View>
       { errors.time && <Text style={styles.validationText}>Pakollinen kenttä.</Text> }
 
       <View style={styles.inputContainer}>
-        <Text style={ styles.text }>Lisätietoja</Text>
+        <Text style={ styles.text }>{t('info')}</Text>
         <Controller as = { <TextInput style = { styles.input }/> }
           control = { control }
           onChange = { onChange }
           name = 'info'
           defaultValue = ''
+          placeholder = {t('info')}
         />
       </View>
       <View style={styles.buttonContainer}>
-        <Button onPress = { handleSubmit(onSave) } title = 'Tallenna'></Button>
+        <Button onPress = { handleSubmit(onSave) } title = {t('save')}></Button>
         <Button onPress = { handleSubmit(onFetch) } title = 'Hae'></Button>
         <Button onPress = { handleSubmit(onReset) } title = 'Nollaa'></Button>
       </View>

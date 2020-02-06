@@ -27,6 +27,13 @@ i18n
           'center': 'Keskitä',
           'home page': 'Etusivu',
           'add observation': 'Lisää havainto',
+          'species': 'Laji',
+          'location': 'Sijainti',
+          'date': 'Päivä',
+          'time': 'Aika',
+          'info': 'Lisätietoja',
+          'save': 'Tallenna',
+          'flying squirrel': 'Liito-orava'
         },
       },
       en: {
@@ -49,6 +56,13 @@ i18n
           'center': 'Center',
           'home page': 'Home page',
           'add observation': 'Add observation',
+          'species': 'Species',
+          'location': 'Location',
+          'date': 'Date',
+          'time': 'Time',
+          'info': 'Info',
+          'save': 'Save',
+          'flying squirrel': 'Flying squirrel'
         },
       },
     },
