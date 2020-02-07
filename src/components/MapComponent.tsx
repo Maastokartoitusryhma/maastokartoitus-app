@@ -9,13 +9,13 @@ const urlTemplate: string = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/ma
 const userLocationPng: string = '../../assets/userLocation.png'
 
 interface RootState {
-  location: LocationData
+  position: LocationData
   path: LocationData[]
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { location, path } = state
-  return { location, path }
+  const { position, path } = state
+  return { position, path }
 }
 
 const connector = connect(mapStateToProps)
@@ -29,7 +29,7 @@ const MapComponent = (props: Props) => {
   const { t } = useTranslation()
 
   useEffect(() => {
-    if (centered && props.location) {
+    if (centered && props.position) {
       followUser()
     }
   })
@@ -45,8 +45,8 @@ const MapComponent = (props: Props) => {
   }
 
   const getRegionFromCoords = () => {
-    if (props.location) {
-      const coords : LatLng = { ...props.location.coords }
+    if (props.position) {
+      const coords : LatLng = { ...props.position.coords }
 
       const region : Region = {
         latitude: coords.latitude,
@@ -80,11 +80,11 @@ const MapComponent = (props: Props) => {
   }
 
 
-  const locationOverlay = () => (props.location !== null ? (
+  const locationOverlay = () => (props.position !== null ? (
     <Marker
       coordinate = {{
-        latitude: props.location.coords.latitude,
-        longitude: props.location.coords.longitude
+        latitude: props.position.coords.latitude,
+        longitude: props.position.coords.longitude
       }}
       zIndex = {3}>
       <Image source={require(userLocationPng)} style={{ height: 35, width: 35}} />

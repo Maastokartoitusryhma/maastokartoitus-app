@@ -1,11 +1,10 @@
-import { combineReducers } from 'redux'
 import { locationActionTypes, 
          UPDATE_LOCATION,
          APPEND_PATH
         } from './types'
 
 
-const locationReducer = (state = null, action : locationActionTypes) => {
+const positionReducer = (state = null, action : locationActionTypes) => {
   switch (action.type) {
     case UPDATE_LOCATION:
       return action.payload
@@ -23,7 +22,4 @@ const pathReducer = (state = [], action : locationActionTypes) => {
   }
 }
 
-export default combineReducers({
-  location: locationReducer,
-  path: pathReducer,
-})
+export { positionReducer, pathReducer }

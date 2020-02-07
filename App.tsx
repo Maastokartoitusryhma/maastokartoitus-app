@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import AppContainer from './src/navigator/MyNavigator'
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
+import { createStore, combineReducers } from 'redux'
 import { updateLocation, appendPath } from './src/stores/position/actions'
-import locationReducer from './src/stores/position/reducers'
+import reducer from './src/stores/combinedReducer'
 import * as TaskManager from 'expo-task-manager'
 import * as Permissions from 'expo-permissions'
 import * as Location from 'expo-location'
@@ -11,7 +11,8 @@ import { LocationData } from 'expo-location'
 import { Platform } from 'react-native'
 import './src/language/i18n'
 
-const store = createStore(locationReducer)
+
+const store = createStore(reducer)
 const LOCATION_BACKGROUND_TASK = 'backgroundLocationHandler'
 
 export default class App extends Component {
