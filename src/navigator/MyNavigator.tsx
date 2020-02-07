@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
-import { withTranslation } from 'react-i18next'
+import { withTranslation, WithTranslation } from 'react-i18next'
 import HomeScreen from '../screens/HomeScreen'
 import MapScreen from '../screens/MapScreen'
 import ObservationScreen from '../screens/ObservationScreen'
@@ -15,13 +15,13 @@ const MainNavigator = createStackNavigator(
     Observation: ObservationScreen
   },
   {
-    initialRouteName: 'Login'
+    initialRouteName: 'Observation'
   }
 )
 
 const AppContainer = createAppContainer(MainNavigator)
 
-class AppNavigator extends Component {
+class AppNavigator extends Component<WithTranslation> {
   render() {
     const { t, i18n } = this.props
 
