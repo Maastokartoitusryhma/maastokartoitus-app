@@ -1,14 +1,30 @@
 import React, { useState, useEffect } from 'react'
-import MapView, { Marker, Polyline, UrlTile } from 'react-native-maps'
-import { connect } from 'react-redux'
+import MapView, { Marker, Polyline, UrlTile, Region, LatLng } from 'react-native-maps'
+import { connect, ConnectedProps } from 'react-redux'
 import { Button, View, Image } from 'react-native'
 import { useTranslation } from 'react-i18next'
+import { LocationData } from 'expo-location' 
 
-const urlTemplate = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
-const userLocationPng = '../../assets/userLocation.png'
+const urlTemplate: string = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
+const userLocationPng: string = '../../assets/userLocation.png'
 
-const MapComponent = props => {
-  const [ regionState, setRegionState ] = useState({ latitude: 64, longitude: 24, latitudeDelta: 0.25, longitudeDelta: 0.25 })
+interface RootState {
+  location: LocationData
+  path: LocationData[]
+}
+
+const mapStateToProps = (state: RootState) => {
+  const { location, path } = state
+  return { location, path }
+}
+
+const connector = connect(mapStateToProps)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+type Props = PropsFromRedux & { onPress1: any, mapStyle: any } 
+
+const MapComponent = (props: Props) => {
+  const [ regionState, setRegionState ] = useState<Region>({ latitude: 64, longitude: 24, latitudeDelta: 0.25, longitudeDelta: 0.25 })
   const [ centered, setCentered ] = useState(true)
   const { t } = useTranslation()
 
@@ -18,18 +34,21 @@ const MapComponent = props => {
     }
   })
 
-  let mapView = React.createRef()
+  let mapView : MapView | null
 
   const followUser = () => {
     const region = getRegionFromCoords()
-    mapView.animateToRegion(region, 500)
+
+    if (region && mapView) {
+      mapView.animateToRegion(region, 500)
+    }
   }
 
   const getRegionFromCoords = () => {
     if (props.location) {
-      const coords = { ...props.location.coords }
+      const coords : LatLng = { ...props.location.coords }
 
-      const region = {
+      const region : Region = {
         latitude: coords.latitude,
         longitude: coords.longitude,
         latitudeDelta: regionState.latitudeDelta,
@@ -38,6 +57,8 @@ const MapComponent = props => {
 
       return region
     }
+
+    return null
   }
 
   const centerMapAnim = () => {
@@ -54,7 +75,7 @@ const MapComponent = props => {
     centered ? setCentered(false) : null
   }
 
-  const onRegionChangeComplete = (region) => {
+  const onRegionChangeComplete = (region: Region) => {
     setRegionState(region)
   }
 
@@ -68,10 +89,7 @@ const MapComponent = props => {
       zIndex = {3}>
       <Image source={require(userLocationPng)} style={{ height: 35, width: 35}} />
      </Marker>
-
     )
-    
-
     : null
   )
 
@@ -90,7 +108,7 @@ const MapComponent = props => {
 
   const pathOverlay = () => (props.path.length !== 0 ?
     <Polyline
-      coordinates = { props.path.map(location => ({
+      coordinates = { props.path.map((location: LocationData) => ({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
       }))}
@@ -116,7 +134,7 @@ const MapComponent = props => {
         onPanDrag = {() => onPanDrag()}
         onRegionChangeComplete = {(region) => onRegionChangeComplete(region)}
         maxZoomLevel = {18}
-        minimumZoomLevel = {0}
+        minZoomLevel = {0}
       >
         {locationOverlay()}
         {pathOverlay()}
@@ -142,9 +160,4 @@ const MapComponent = props => {
   )
 }
 
-const mapStateToProps = (state) => {
-  const { location, path } = state
-  return { location, path }
-}
-
-export default connect(mapStateToProps)(MapComponent)
+export default connector(MapComponent)
