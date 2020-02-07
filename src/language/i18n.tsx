@@ -1,8 +1,8 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import finnish from './translations/finnish'
-import english from './translations/english'
-import swedish from './translations/swedish'
+import finnish from './translations/finnish.json'
+import english from './translations/english.json'
+import swedish from './translations/swedish.json'
 
 i18n
   .use(initReactI18next)

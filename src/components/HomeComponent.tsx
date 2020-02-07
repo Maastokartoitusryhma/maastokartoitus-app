@@ -3,7 +3,6 @@ import { View, Text, Button, Picker } from 'react-native'
 import UserInfoComponent from './UserInfoComponent'
 import { useTranslation } from 'react-i18next'
 import Cs from '../styles/ContainerStyles'
-import Bs from '../styles/ButtonStyles'
 import Ts from '../styles/TextStyles'
 import { KumpulanKampus, KumpulanPuutarha } from '../constants/namedPlaces'
 
@@ -29,7 +28,7 @@ const HomeComponent = (props) => {
             </Picker>
           </View>
           <View style={Cs.buttonContainer}>
-            <Button onPress = { props.onPressMap } style = { Bs.homeButton } title = {t('map')}></Button>
+            <Button onPress = { props.onPressMap }  title = {t('map')}></Button>
           </View>
         </View>
         <View style={Cs.previousObservationsContainer}>
