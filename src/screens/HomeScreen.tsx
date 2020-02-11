@@ -4,11 +4,18 @@ import Colors from '../styles/Colors'
 import HomeComponent from '../components/HomeComponent'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
+import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
 
-export default class HomeScreen extends Component {
+type Props  = {
+  navigation: NavigationStackProp
+}
 
-  static navigationOptions = ({ screenProps: { t, i18n } }) => ({
-    title: t('home page'),
+type ScreenProps = { screenProps: any}
+
+export default class HomeScreen extends Component<NavigationStackScreenProps<Props, ScreenProps>> {
+
+  static navigationOptions = ({ screenProps }: ScreenProps) =>  ({
+    title: screenProps.t('home page'),
     headerStyle: {
       backgroundColor: Colors.headerBackground,
     },
@@ -16,9 +23,9 @@ export default class HomeScreen extends Component {
     headerLeft: () => null,
     headerRight: () =>
       <View style={Cs.languageContainer}>
-        <Text style={Ts.languageText} onPress={() => {i18n.changeLanguage('fi')}}>FI</Text>
-        <Text style={Ts.languageText} onPress={() => {i18n.changeLanguage('sv')}}>SV</Text>
-        <Text style={Ts.languageText} onPress={() => {i18n.changeLanguage('en')}}>EN</Text>
+        <Text style={Ts.languageText} onPress={() => {screenProps.i18n.changeLanguage('fi')}}>FI</Text>
+        <Text style={Ts.languageText} onPress={() => {screenProps.i18n.changeLanguage('sv')}}>SV</Text>
+        <Text style={Ts.languageText} onPress={() => {screenProps.i18n.changeLanguage('en')}}>EN</Text>
       </View>
   })
 
