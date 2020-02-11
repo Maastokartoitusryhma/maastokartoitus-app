@@ -1,7 +1,8 @@
 import React from 'react'
-import { StyleSheet, View, Dimensions } from 'react-native'
+import { View } from 'react-native'
 import MapComponent from '../components/MapComponent'
 import Colors from '../styles/Colors'
+import Cs from '../styles/ContainerStyles'
 
 export default class MapScreen extends React.Component {
   static navigationOptions = ({ screenProps: { t } }) => ({
@@ -16,23 +17,11 @@ export default class MapScreen extends React.Component {
     const { navigate } = this.props.navigation
 
     return (
-      <View style = { styles.container }>
-        <MapComponent mapStyle = { styles.mapStyle } onPress1 = { () => navigate('Observation') } />
+      <View style = {Cs.mapContainer}>
+        <MapComponent 
+          onPress1 = {() => navigate('Observation')} 
+        />
       </View>
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  mapStyle: {
-    flex: 1,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-  }
-})

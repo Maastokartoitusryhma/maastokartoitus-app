@@ -57,7 +57,13 @@ const ContainerStyles = StyleSheet.create({
   previousObservationsContainer: {
     width: '90%',
     paddingTop: 10
-  }
+  },
+  mapContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 })
 
 export default ContainerStyles
