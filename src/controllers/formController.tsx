@@ -1,4 +1,5 @@
 import ApolloClient, { gql } from 'apollo-boost'
+import { Alert } from 'react-native'
 
 const client = new ApolloClient({
   uri: 'https://apitest.laji.fi/v0/graphql',
@@ -22,10 +23,9 @@ export const getSchema = async () => {
   `
   try {
     const response = await client.query({ query })
-    console.log(JSON.stringify(response.data.form.schema, null, '  '))
-    return JSON.stringify(response.data.form.schema, null, '  ')
+    return response.data.form.schema
   } catch (error) {
-    alert(error)
+    Alert.alert(error)
     return null
   }
 }
@@ -41,10 +41,9 @@ export const getUISchema = async () => {
   `
   try {
     const response = await client.query({ query })
-    console.log(response.data.form.uiSchema)
     return response.data.form.uiSchema
   } catch (error) {
-    alert(error)
+    Alert.alert(error)
     return null
   }
 }

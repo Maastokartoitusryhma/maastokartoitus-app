@@ -13,8 +13,7 @@ const ContainerStyles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   buttonContainer: {
-    width: '20%',
-    padding: 10
+    padding: 10,
   },
   observationEventContainer: {
     width: '90%',
