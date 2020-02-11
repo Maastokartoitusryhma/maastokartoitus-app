@@ -1,11 +1,18 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { StyleSheet, View, Dimensions } from 'react-native'
 import MapComponent from '../components/MapComponent'
 import Colors from '../styles/Colors'
+import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
 
-export default class MapScreen extends React.Component {
-  static navigationOptions = ({ screenProps: { t } }) => ({
-    title: t('map'),
+type Props  = {
+  navigation: NavigationStackProp
+}
+
+type ScreenProps = { screenProps: any}
+
+export default class MapScreen extends Component<NavigationStackScreenProps<Props, ScreenProps>> {
+  static navigationOptions = ({ screenProps }: ScreenProps) => ({
+    title: screenProps.t('map'),
     headerStyle: {
       backgroundColor: Colors.headerBackground,
     },
