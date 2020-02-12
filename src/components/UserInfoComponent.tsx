@@ -5,7 +5,11 @@ import { useTranslation } from 'react-i18next'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 
-const UserInfoComponent = (props) => {
+interface Props {
+  onLogout: () => void   
+}
+
+const UserInfoComponent = (props: Props) => {
 
   const { t } = useTranslation()
 
