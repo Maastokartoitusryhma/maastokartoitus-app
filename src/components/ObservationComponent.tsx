@@ -4,10 +4,11 @@ import { useForm, Controller } from 'react-hook-form'
 import { connect } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import Colors from '../styles/Colors'
-import Form from 'react-native-jsonschema-form'
+//import Form from 'react-native-jsonschema-form'
 import { getSchema, getUISchema } from '../controllers/formController'
 import storageController from '../controllers/storageController'
-
+import temporarySchema from '../../temporaryschema.json'
+import { parse } from '../../parser'
 
 const ObservationComponent = (props) => {
 
@@ -40,7 +41,7 @@ const ObservationComponent = (props) => {
     }
     return errors
   }
-
+/*
   const handleOnChange = (formData) => {
     //console.log('data here', formData)
   }
@@ -52,6 +53,7 @@ const ObservationComponent = (props) => {
   const handleError = (errors) => {
     console.log("I have", errors.length, "errors to fix")
   }
+  */
   
   // Check if schemas have been fetched
   if (schema == null || UISchema == null) {
@@ -59,11 +61,18 @@ const ObservationComponent = (props) => {
   } else {
     return (
       <View style={styles.container}>
+        {parse(schema)}
+      </View>
+    )
+  }
+  /*
+
+return (
+      <View style={styles.container}>
         <ScrollView>
         <Text style={styles.text}>{t('species')}: {t('flying squirrel')}</Text>
         <Form
-          schema={schema.properties.gatherings.items.properties.units.items}
-          uiSchema={UISchema.gatherings}
+          schema={schema}
           onChange={handleOnChange}
           onSubmit={handleSubmit}
           submitTitle='Submit'
@@ -76,8 +85,11 @@ const ObservationComponent = (props) => {
         
       </View>
     )
-  }
-  /*
+
+
+
+
+  schema={schema.properties.gatherings.items.properties.units.items}
 
   const [key, setKey] = useState('')
   const { control, handleSubmit, errors } = useForm()
@@ -103,6 +115,14 @@ const ObservationComponent = (props) => {
 
   const fetchedSchema = getSchema()
   const fetchedUISchema = getUISchema()
+
+  // const transformErrors = (errors) => {
+  //   let returnErrors = _.filter(errors, error => {
+  //     console.log('error', error.property)
+  //     return (error.message === 'is a required property')
+  //   })
+  //   return returnErrors
+  // }
 
   return (
 import console = require('console');
@@ -170,5 +190,8 @@ const mapStateToProps = (state) => {
   const { location } = state
   return { location }
 }
+
+
+
 
 export default connect(mapStateToProps)(ObservationComponent)
