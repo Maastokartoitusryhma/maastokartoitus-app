@@ -38,8 +38,7 @@ type Props = PropsFromRedux & { onPress1: () => void}
 const MapComponent = (props: Props) => {
   const [ regionState, setRegionState ] = useState<Region>({ latitude: 64, longitude: 24, latitudeDelta: 0.25, longitudeDelta: 0.25 })
   const [ centered, setCentered ] = useState(true)
-  const [ targeting, setTargeting ] = useState(false)
-  const [ mapType, setMapType ] = useState('standard')
+  const [ mapType, setMapType ] = useState('none')
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -86,9 +85,9 @@ const MapComponent = (props: Props) => {
   }
 
   const switchMap = () => {
-    mapType === 'standard' ? 
+    mapType === 'none' ? 
       setMapType('satellite')
-      : setMapType('standard')
+      : setMapType('none')
   }
 
   const onPanDrag = () => {
@@ -101,12 +100,10 @@ const MapComponent = (props: Props) => {
 
   const markObservation = (coordinate: LatLng) => {
     props.setObservationLocation(coordinate)
-    setTargeting(true)
   }
 
   const cancelObservation = () => {
     props.clearObservationLocation()
-    setTargeting(false)
   }
 
   const locationOverlay = () => (props.position !== null ? (
@@ -157,6 +154,7 @@ const MapComponent = (props: Props) => {
     <>
       <MapView
         ref = {map => {mapView = map}}
+        provider = {'google'}
         initialRegion = { regionState }
         onPanDrag = {() => onPanDrag()}
         onLongPress = {(event) => markObservation(event.nativeEvent.coordinate)}
@@ -172,7 +170,7 @@ const MapComponent = (props: Props) => {
         {locationOverlay()}
         {targetOverlay()}
         {pathOverlay()}
-        {mapType === 'standard' ? tileOverlay() : null}
+        {mapType === 'none' ? tileOverlay() : null}
       </MapView>
       <View
         style = {{
@@ -190,7 +188,7 @@ const MapComponent = (props: Props) => {
         }}>
         <Button title = {t('center')} onPress = {() => centerMapAnim()}/>
       </View>
-      { targeting ?
+      { props.observation ?
         <View
           style = {{
             position: 'absolute',
