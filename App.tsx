@@ -34,6 +34,7 @@ export default class App extends Component {
     }
 
     await Location.startLocationUpdatesAsync(LOCATION_BACKGROUND_TASK, {
+      accuracy: 6,
       distanceInterval: 10,
       timeInterval: 1000,
     })
@@ -47,6 +48,7 @@ export default class App extends Component {
     }
 
     await Location.watchPositionAsync({
+      accuracy: 6,
       distanceInterval: 10,
       timeInterval: 1000
     },
@@ -67,6 +69,7 @@ export default class App extends Component {
 
 TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({data, error }) => {
   const { locations } = data
+  console.log(locations)
   if (locations) {
     store.dispatch(updateLocation(locations[0]))
     store.dispatch(appendPath(locations))

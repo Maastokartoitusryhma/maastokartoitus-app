@@ -13,8 +13,7 @@ const ContainerStyles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   buttonContainer: {
-    width: '20%',
-    padding: 10
+    padding: 10,
   },
   observationEventContainer: {
     width: '90%',
@@ -58,7 +57,13 @@ const ContainerStyles = StyleSheet.create({
   previousObservationsContainer: {
     width: '90%',
     paddingTop: 10
-  }
+  },
+  mapContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 })
 
 export default ContainerStyles

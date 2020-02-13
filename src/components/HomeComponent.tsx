@@ -6,7 +6,12 @@ import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import { KumpulanKampus, KumpulanPuutarha } from '../constants/namedPlaces'
 
-const HomeComponent = (props) => {
+interface Props {
+  onLogout: () => void
+  onPressMap: () => void   
+}
+
+const HomeComponent = (props: Props) => {
 
   const [selectedZone, setSelectedZone] = useState({KumpulanKampus})
 

@@ -8,7 +8,11 @@ import Bs from '../styles/ButtonStyles'
 import Ts from '../styles/TextStyles'
 import Os from '../styles/OtherStyles'
 
-const LoginComponent = (props) => {
+interface Props {
+  onPress: () => void   
+}
+
+const LoginComponent = (props: Props) => {
 
   const [personToken, setPersonToken] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
@@ -39,7 +43,7 @@ const LoginComponent = (props) => {
   }
 
   // Save user data to storage
-  const storeUserData = async (userObject) => {
+  const storeUserData = async (userObject: string) => {
     try {
       await AsyncStorage.setItem('userData', userObject)
     } catch (e) {
@@ -47,7 +51,7 @@ const LoginComponent = (props) => {
     }
   }
 
-  const inputHandler = personToken => {
+  const inputHandler = (personToken: string) => {
     setPersonToken(personToken)
   }
 

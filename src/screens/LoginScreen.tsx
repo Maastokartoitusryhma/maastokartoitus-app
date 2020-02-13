@@ -2,10 +2,17 @@ import React, { Component } from 'react'
 import Colors from '../styles/Colors'
 import LoginComponent from '../components/LoginComponent'
 import { getSchema } from '../controllers/formController'
+import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
 
-export default class LoginScreen extends Component {
-  static navigationOptions = ({ screenProps: { t } }) => ({
-    title: t('mobile app'),
+type Props  = {
+  navigation: NavigationStackProp
+}
+
+type ScreenProps = { screenProps: any}
+
+export default class LoginScreen extends Component<NavigationStackScreenProps<Props, ScreenProps>>  {
+  static navigationOptions = ({ screenProps }: ScreenProps) => ({
+    title: screenProps.t('mobile app'),
     headerStyle: {
       backgroundColor: Colors.headerBackground
     },
