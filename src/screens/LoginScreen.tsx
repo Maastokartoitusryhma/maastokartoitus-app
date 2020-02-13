@@ -5,13 +5,11 @@ import { getSchema } from '../controllers/formController'
 import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
 
 type Props  = {
-  navigation: NavigationStackProp
+  navigation: NavigationStackProp<any, any>
 }
 
-type ScreenProps = { screenProps: any}
-
-export default class LoginScreen extends Component<NavigationStackScreenProps<Props, ScreenProps>>  {
-  static navigationOptions = ({ screenProps }: ScreenProps) => ({
+export default class LoginScreen extends Component<NavigationStackScreenProps<Props>>  {
+  static navigationOptions = ({ screenProps }: any) => ({
     title: screenProps.t('mobile app'),
     headerStyle: {
       backgroundColor: Colors.headerBackground

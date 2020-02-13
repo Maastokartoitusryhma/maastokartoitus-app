@@ -7,14 +7,12 @@ import Ts from '../styles/TextStyles'
 import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
 
 type Props  = {
-  navigation: NavigationStackProp
+  navigation: NavigationStackProp<any, any>
 }
 
-type ScreenProps = { screenProps: any}
+export default class HomeScreen extends Component<NavigationStackScreenProps<Props>> {
 
-export default class HomeScreen extends Component<NavigationStackScreenProps<Props, ScreenProps>> {
-
-  static navigationOptions = ({ screenProps }: ScreenProps) =>  ({
+  static navigationOptions = ({ screenProps }: any) =>  ({
     title: screenProps.t('home page'),
     headerStyle: {
       backgroundColor: Colors.headerBackground,
