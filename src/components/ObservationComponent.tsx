@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import Colors from '../styles/Colors'
 import { getSchema, getUISchema } from '../controllers/formController'
 import storageController from '../controllers/storageController'
-import { getKeys } from '../parsing/JSONParser'
 import { parse } from '../../parser'
 
 
