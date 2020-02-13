@@ -4,14 +4,12 @@ import Colors from '../styles/Colors'
 import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
 
 type Props  = {
-  navigation: NavigationStackProp
+  navigation: NavigationStackProp<any, any>
 }
 
-type ScreenProps = { screenProps: any}
+export default class ObservationScreen extends Component<NavigationStackScreenProps<Props>>  {
 
-export default class ObservationScreen extends Component<NavigationStackScreenProps<Props, ScreenProps>>  {
-
-  static navigationOptions = ({ screenProps }: ScreenProps) => ({
+  static navigationOptions = ({ screenProps }: any) => ({
     title: screenProps.t('add observation'),
     headerStyle: {
       backgroundColor: Colors.headerBackground
