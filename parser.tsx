@@ -1,9 +1,13 @@
 import React from 'react'
 import { TextInput, Text, View, Picker } from 'react-native'
 
-let dict = {}
+interface MyObject{
+  [key: string]: any
+}
 
-export const parse = (data: object) => {
+let dict: { [key: string]: any } = {}
+
+export const parse = (data: MyObject = {}) => {
   const toReturn = []
   Object.keys(data).forEach(key => {
     if (typeof(data[key]) === 'object') { // Check if key has other keys nested inside, aka is of type object
@@ -15,7 +19,7 @@ export const parse = (data: object) => {
   return toReturn
 } 
 
-const parseNested = (data: object, objectTitle: string, parentObjectTitle: string) => {
+const parseNested = (data: MyObject = {}, objectTitle: string, parentObjectTitle: string) => {
   //console.log('DATA:', data, 'OBJECT TITLE:', objectTitle, 'PARENTTITLE:', parentObjectTitle)
   if (objectTitle === 'enum') {
     createNewDictKey(parentObjectTitle) // create new dictionary object inside dict
@@ -63,7 +67,7 @@ const parseNested = (data: object, objectTitle: string, parentObjectTitle: strin
   
 }
 
-const arrayFunc = (data: object) => {
+const arrayFunc = (data: MyObject = {}) => {
   let type = null
   let title = null
   let required = null
@@ -101,7 +105,7 @@ const arrayFunc = (data: object) => {
   
 }
 
-const setEnumKeys = (data: object, dictKey: string) => {
+const setEnumKeys = (data: MyObject = {}, dictKey: string) => {
   const dictObject = dict[dictKey]
   Object.keys(data).forEach(key => {
     dictObject[data[key]] = ""
