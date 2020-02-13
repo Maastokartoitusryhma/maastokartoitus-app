@@ -23,6 +23,7 @@ const parseNested = (data: MyObject = {}, objectTitle: string, parentObjectTitle
     let type = null
     let defaultValue = null
     let includesEnum = false
+    let arrayObject = null
     Object.keys(data).forEach(key => {
       if (key === 'enum') {
         includesEnum = true
@@ -31,13 +32,12 @@ const parseNested = (data: MyObject = {}, objectTitle: string, parentObjectTitle
     
       } else if (key === 'enumNames') {
         setEnumValues(data[key], objectTitle) // set values to previously created dictionary object
-        return [<Text>{objectTitle}</Text>, createPicker(objectTitle)] // return picker
 
       } else if (typeof(data[key]) === 'object') { // Check if key has other keys nested inside, aka is of type object
         parseNested(data[key], key, objectTitle)
 
       } else if (key === 'type' && data[key] === 'array') {
-        return arrayFunc(data)
+        arrayObject = arrayFunc(data[key])
 
       } else {
         if (key === 'type') {
@@ -50,28 +50,26 @@ const parseNested = (data: MyObject = {}, objectTitle: string, parentObjectTitle
       }
     })
     // All keys in subtree are looped
+
+    if (arrayObject !== null) { 
+      return arrayObject
+    }
+
     if (title !== null && type !== null && !includesEnum) {
       return createInputElement(title, type)
     } else if (title !== null && type !== null && includesEnum) {
       return [<Text>{title}</Text>, createPicker(parentObjectTitle)]
     } 
-
-  
 }
 
 const arrayFunc = (data: MyObject = {}) => {
   let type = null
   let title = null
-  let required = null
-  console.log('ARRAYFUNC ITEMS:', data['items'])
-
-  /*
-
+  let defaultValue = null
   Object.keys(data).forEach(key => {
     if (typeof(data[key]) === 'object') {
       arrayFunc(data[key])
     } else {
-      
       if (key === 'title') {
         title = data[key]
       } else if (key === 'type') {
@@ -79,15 +77,17 @@ const arrayFunc = (data: MyObject = {}) => {
       } else if (key === 'default') {
         defaultValue = data[key]
       }
+
       console.log('title:', title, 'type:', type, 'default:', defaultValue)
 
     }
   })
+
   if (type !== null && title !== null) {
-    toReturn.push(createInputElement(title, type))
+    return createInputElement(title, type)
+  } else {
+    return <Text>array elements should be here</Text>
   }
-  return toReturn*/
-  
 }
 
 const createNewDictKey = (name: string) => {
@@ -95,7 +95,6 @@ const createNewDictKey = (name: string) => {
 }
 
 const setEnumKeys = (data: MyObject = {}, dictKey: string) => {
-  console.log('SETENUMKEYS, DATA:', data)
   const dictObject = dict[dictKey]
   Object.keys(data).forEach(key => {
     dictObject[data[key]] = ""
@@ -103,7 +102,6 @@ const setEnumKeys = (data: MyObject = {}, dictKey: string) => {
 }
 
 const setEnumValues = (data: MyObject = {}, dictKey: string) => {
-  console.log('SETENUMVALUES, DATA:', data)
   const dictObject = dict[dictKey]
   const array = Object.values(data)
   for (const key in dictObject) {
@@ -126,7 +124,7 @@ const createInputElement = (title: string, type: string) => {
   if (type === 'string') {
     return <View><Text>{title}</Text><TextInput style={{ borderColor: '#DEDEDE', borderWidth: 1 }} placeholder={title}/></View>
   } else {
-    return <View><Text>nuthing</Text></View>
+    return <View><Text>not of type string</Text></View>
   }
   
 }
