@@ -1,6 +1,7 @@
 export default {
   headerBackground: '#3498DB',
   white: '#FFFFFF',
+  red: '#FF0000',
   neutralColor: '#1D76B2',
   positiveColor: '#5cb85c',
   negativeColor: '#d9534f',

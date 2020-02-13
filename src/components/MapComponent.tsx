@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import MapView, { Marker, Polyline, UrlTile, Region, LatLng } from 'react-native-maps'
 import { connect, ConnectedProps } from 'react-redux'
-import { Button, View, Image } from 'react-native'
+import { Button, View, Image, Dimensions } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { LocationData } from 'expo-location' 
+import { LocationData } from 'expo-location'
+import { setObservationLocation, clearObservationLocation } from '../stores/observation/actions' 
+import Cl from '../styles/Colors'
 
 const urlTemplate: string = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
 const userLocationPng: string = '../../assets/userLocation.png'
@@ -11,21 +13,32 @@ const userLocationPng: string = '../../assets/userLocation.png'
 interface RootState {
   position: LocationData
   path: LocationData[]
+  observation: LatLng
+  zone: LatLng[]
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path } = state
-  return { position, path }
+  const { position, path, observation, zone } = state
+  return { position, path, observation, zone }
 }
 
-const connector = connect(mapStateToProps)
+const mapDispatchToProps = {
+  setObservationLocation,
+  clearObservationLocation,
+}
+
+const connector = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)
 
 type PropsFromRedux = ConnectedProps<typeof connector>
-type Props = PropsFromRedux & { onPress1: any, mapStyle: any } 
+type Props = PropsFromRedux & { onPress1: () => void} 
 
 const MapComponent = (props: Props) => {
   const [ regionState, setRegionState ] = useState<Region>({ latitude: 64, longitude: 24, latitudeDelta: 0.25, longitudeDelta: 0.25 })
   const [ centered, setCentered ] = useState(true)
+  const [ mapType, setMapType ] = useState('none')
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -71,6 +84,12 @@ const MapComponent = (props: Props) => {
     }
   }
 
+  const switchMap = () => {
+    mapType === 'none' ? 
+      setMapType('satellite')
+      : setMapType('none')
+  }
+
   const onPanDrag = () => {
     centered ? setCentered(false) : null
   }
@@ -79,6 +98,13 @@ const MapComponent = (props: Props) => {
     setRegionState(region)
   }
 
+  const markObservation = (coordinate: LatLng) => {
+    props.setObservationLocation(coordinate)
+  }
+
+  const cancelObservation = () => {
+    props.clearObservationLocation()
+  }
 
   const locationOverlay = () => (props.position !== null ? (
     <Marker
@@ -88,23 +114,21 @@ const MapComponent = (props: Props) => {
       }}
       zIndex = {3}>
       <Image source={require(userLocationPng)} style={{ height: 35, width: 35}} />
-     </Marker>
+    </Marker>
     )
     : null
   )
 
-  /** WIP
-  const targetOverlay  = () => (!centered ?
+  const targetOverlay  = () => (props.observation ?
     <Marker
       coordinate = {{
-        latitude: regionState.latitude,
-        longitude: regionState.longitude
+        latitude: props.observation.latitude,
+        longitude: props.observation.longitude
       }}
       zIndex = {4}
     />
     : null
   )
-  */
 
   const pathOverlay = () => (props.path.length !== 0 ?
     <Polyline
@@ -112,7 +136,8 @@ const MapComponent = (props: Props) => {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
       }))}
-      strokeWidth = {2}
+      strokeWidth = {5}
+      strokeColor = {Cl.red}
       zIndex = {2}
     />
     : null
@@ -129,33 +154,64 @@ const MapComponent = (props: Props) => {
     <>
       <MapView
         ref = {map => {mapView = map}}
-        style = { props.mapStyle }
+        provider = {'google'}
         initialRegion = { regionState }
         onPanDrag = {() => onPanDrag()}
+        onLongPress = {(event) => markObservation(event.nativeEvent.coordinate)}
         onRegionChangeComplete = {(region) => onRegionChangeComplete(region)}
         maxZoomLevel = {18}
         minZoomLevel = {0}
+        mapType = {mapType}
+        style = {{
+          width: Dimensions.get('window').width,
+          height: Dimensions.get('window').height,
+        }}
       >
         {locationOverlay()}
+        {targetOverlay()}
         {pathOverlay()}
-        {tileOverlay()}
+        {mapType === 'none' ? tileOverlay() : null}
       </MapView>
       <View
         style = {{
           position: 'absolute',
-          top: '80%',
+          top: '0%',
           alignSelf: 'flex-end'
         }}>
-        <Button title = {t('center')} onPress = {() => centerMapAnim()}/>
+        <Button title = {t('sat')} onPress = {() => switchMap()}/>
       </View>
       <View
         style = {{
           position: 'absolute',
-          top: '90%',
+          top: '10%',
           alignSelf: 'flex-end'
         }}>
-        <Button title = {t('observation')} onPress = { props.onPress1}/>
+        <Button title = {t('center')} onPress = {() => centerMapAnim()}/>
       </View>
+      { props.observation ?
+        <View
+          style = {{
+            position: 'absolute',
+            width: '100%',
+            bottom: '0%',
+            flexDirection: 'row',
+            justifyContent: 'space-between'
+          }}>
+          <View
+            style={{
+              alignSelf: 'flex-start',
+            }}>
+            <Button title = {t('cancel')} onPress = {() => cancelObservation()}/>
+          </View>
+          <View
+            style={{
+              alignSelf: 'flex-end',       
+            }}>
+            <Button title = {t('observation')} onPress = {props.onPress1}/>
+          </View>
+        </View>
+        : null
+      }
     </>
   )
 }

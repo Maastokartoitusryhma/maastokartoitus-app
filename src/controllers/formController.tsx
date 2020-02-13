@@ -41,6 +41,7 @@ export const getUISchema = async () => {
   `
   try {
     const response = await client.query({ query })
+    //console.log(response.data.form.uiSchema)
     return response.data.form.uiSchema
   } catch (error) {
     Alert.alert(error)

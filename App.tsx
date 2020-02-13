@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import AppContainer from './src/navigator/MyNavigator'
 import { Provider } from 'react-redux'
-import { createStore, combineReducers } from 'redux'
+import { createStore } from 'redux'
 import { updateLocation, appendPath } from './src/stores/position/actions'
 import reducer from './src/stores/combinedReducer'
 import * as TaskManager from 'expo-task-manager'
@@ -34,7 +34,8 @@ export default class App extends Component {
     }
 
     await Location.startLocationUpdatesAsync(LOCATION_BACKGROUND_TASK, {
-      distanceInterval: 10,
+      accuracy: 6,
+      distanceInterval: 1,
       timeInterval: 1000,
     })
   }
@@ -47,7 +48,8 @@ export default class App extends Component {
     }
 
     await Location.watchPositionAsync({
-      distanceInterval: 10,
+      accuracy: 6,
+      distanceInterval: 1,
       timeInterval: 1000
     },
     location => {
@@ -67,6 +69,7 @@ export default class App extends Component {
 
 TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({data, error }) => {
   const { locations } = data
+  console.log(locations)
   if (locations) {
     store.dispatch(updateLocation(locations[0]))
     store.dispatch(appendPath(locations))
