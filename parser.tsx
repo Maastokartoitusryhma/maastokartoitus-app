@@ -5,37 +5,37 @@ let dict = {}
 
 export const parse = (data: object) => {
   const toReturn = []
-  Object.keys(data).forEach(key => {
+  Object.keys(data).forEach((key: string) => {
     if (typeof(data[key]) === 'object') { // Check if key has other keys nested inside, aka is of type object
       console.log('GO TO PARSE NESTED')
       toReturn.push(parseNested(data[key], key, key))
     }
   })
-  toReturn.push(createPicker('recordBasis'))
   return toReturn
 } 
 
 const parseNested = (data: object, objectTitle: string, parentObjectTitle: string) => {
-  //console.log('DATA:', data, 'OBJECT TITLE:', objectTitle, 'PARENTTITLE:', parentObjectTitle)
-  if (objectTitle === 'enum') {
-    createNewDictKey(parentObjectTitle) // create new dictionary object inside dict
-    setEnumKeys(data, parentObjectTitle) // set keys to created dictionary object
-  } else if (objectTitle === 'enumNames') {
-    setEnumValues(data, parentObjectTitle) // set values to previously created dictionary object
-    return [<Text>{objectTitle}</Text>, createPicker(parentObjectTitle)] // return picker
-  } else { // 
     let title = null 
     let type = null
     let defaultValue = null
+    let includesEnum = false
     Object.keys(data).forEach(key => {
-      
-      if (typeof(data[key]) === 'object') { // Check if key has other keys nested inside, aka is of type object
-        console.log('INSIDE PARSE NESTED')
+      if (key === 'enum') {
+        includesEnum = true
+        createNewDictKey(objectTitle) // create new dictionary object inside dict
+        setEnumKeys(data[key], objectTitle) // set keys to created dictionary object
+    
+      } else if (key === 'enumNames') {
+        setEnumValues(data[key], objectTitle) // set values to previously created dictionary object
+        return [<Text>{objectTitle}</Text>, createPicker(objectTitle)] // return picker
+
+      } else if (typeof(data[key]) === 'object') { // Check if key has other keys nested inside, aka is of type object
         parseNested(data[key], key, objectTitle)
+
       } else if (key === 'type' && data[key] === 'array') {
         return arrayFunc(data)
+
       } else {
-        console.log('KEY:', key, '\tVALUE:', data[key])
         if (key === 'type') {
           type = data[key]
         } else if (key === 'title') {
@@ -43,65 +43,52 @@ const parseNested = (data: object, objectTitle: string, parentObjectTitle: strin
         } else if (key === 'default') {
           defaultValue = data[key]
         }
-/*
-        if (type === 'array') {
-          return arrayFunc(data)
-        }*/
       }
     })
-
     // All keys in subtree are looped
-    if (title !== null && type !== null && defaultValue === null) {
+    if (title !== null && type !== null && !includesEnum) {
       return createInputElement(title, type)
-    } else if (title !== null && type !== null && defaultValue !== null) {
+    } else if (title !== null && type !== null && includesEnum) {
       return [<Text>{title}</Text>, createPicker(parentObjectTitle)]
     } 
-
-  }
-
 
   
 }
 
 const arrayFunc = (data: object) => {
-  let type = null
-  let title = null
-  let required = null
-  console.log('ARRAYFUNC ITEMS:', data['items'])
-
-  /*
-
+  const toReturn = []
+  let type: string|null = null
+  let title: string|null = null
+  let defaultValue: string|null = null
   Object.keys(data).forEach(key => {
     if (typeof(data[key]) === 'object') {
       arrayFunc(data[key])
     } else {
+      
       if (key === 'title') {
         title = data[key]
-      }
-      if (key === 'type') {
+      } else if (key === 'type') {
         type = data[key]
+      } else if (key === 'default') {
+        defaultValue = data[key]
       }
-      if (key === 'required') {
-        required = data[key]
-      }
+      console.log('title:', title, 'type:', type, 'default:', defaultValue)
 
-      if (type !== null && title !== null) {
-        return createInputElement(title, type)
-      }
-    
     }
-    
-  })*/
+  })
   if (type !== null && title !== null) {
-    return createInputElement(title, type)
-  } else {
-    return <Text>array here</Text>
+    toReturn.push(createInputElement(title, type))
   }
-
+  return toReturn
   
 }
 
+const createNewDictKey = (name: string) => {
+  dict[name] = {}
+}
+
 const setEnumKeys = (data: object, dictKey: string) => {
+  console.log('SETENUMKEYS, DATA:', data)
   const dictObject = dict[dictKey]
   Object.keys(data).forEach(key => {
     dictObject[data[key]] = ""
@@ -109,16 +96,13 @@ const setEnumKeys = (data: object, dictKey: string) => {
 }
 
 const setEnumValues = (data: object, dictKey: string) => {
+  console.log('SETENUMVALUES, DATA:', data)
   const dictObject = dict[dictKey]
   const array = Object.values(data)
   for (const key in dictObject) {
     const value = array.shift()
     dictObject[key] = value
   }
-}
-
-const createNewDictKey = (name: string) => {
-  dict[name] = {}
 }
 
 // Creates a picker component with items, takes JSON schema item label as parameter
