@@ -18,19 +18,7 @@ export const parse = (data: MyObject = {}) => {
   return toReturn
 } 
 
-<<<<<<< HEAD
-const parseNested = (data: object, objectTitle: string, parentObjectTitle: string) => {
-=======
 const parseNested = (data: MyObject = {}, objectTitle: string, parentObjectTitle: string) => {
-  //console.log('DATA:', data, 'OBJECT TITLE:', objectTitle, 'PARENTTITLE:', parentObjectTitle)
-  if (objectTitle === 'enum') {
-    createNewDictKey(parentObjectTitle) // create new dictionary object inside dict
-    setEnumKeys(data, parentObjectTitle) // set keys to created dictionary object
-  } else if (objectTitle === 'enumNames') {
-    setEnumValues(data, parentObjectTitle) // set values to previously created dictionary object
-    return [<Text>{objectTitle}</Text>, createPicker(parentObjectTitle)] // return picker
-  } else { // 
->>>>>>> 4ed2d1cc0a70ca39078059cc3a27e1acb8043d47
     let title = null 
     let type = null
     let defaultValue = null
@@ -71,13 +59,6 @@ const parseNested = (data: MyObject = {}, objectTitle: string, parentObjectTitle
   
 }
 
-<<<<<<< HEAD
-const arrayFunc = (data: object) => {
-  const toReturn = []
-  let type: string|null = null
-  let title: string|null = null
-  let defaultValue: string|null = null
-=======
 const arrayFunc = (data: MyObject = {}) => {
   let type = null
   let title = null
@@ -86,7 +67,6 @@ const arrayFunc = (data: MyObject = {}) => {
 
   /*
 
->>>>>>> 4ed2d1cc0a70ca39078059cc3a27e1acb8043d47
   Object.keys(data).forEach(key => {
     if (typeof(data[key]) === 'object') {
       arrayFunc(data[key])
@@ -106,27 +86,23 @@ const arrayFunc = (data: MyObject = {}) => {
   if (type !== null && title !== null) {
     toReturn.push(createInputElement(title, type))
   }
-  return toReturn
+  return toReturn*/
   
 }
 
-<<<<<<< HEAD
 const createNewDictKey = (name: string) => {
   dict[name] = {}
 }
 
-const setEnumKeys = (data: object, dictKey: string) => {
-  console.log('SETENUMKEYS, DATA:', data)
-=======
 const setEnumKeys = (data: MyObject = {}, dictKey: string) => {
->>>>>>> 4ed2d1cc0a70ca39078059cc3a27e1acb8043d47
+  console.log('SETENUMKEYS, DATA:', data)
   const dictObject = dict[dictKey]
   Object.keys(data).forEach(key => {
     dictObject[data[key]] = ""
   })
 }
 
-const setEnumValues = (data: object, dictKey: string) => {
+const setEnumValues = (data: MyObject = {}, dictKey: string) => {
   console.log('SETENUMVALUES, DATA:', data)
   const dictObject = dict[dictKey]
   const array = Object.values(data)
