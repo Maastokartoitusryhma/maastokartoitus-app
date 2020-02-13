@@ -23,7 +23,8 @@ export const getSchema = async () => {
   `
   try {
     const response = await client.query({ query })
-    return response.data.form.schema
+    //console.log(JSON.stringify(response.data.form.schema, null, '  '))
+    return JSON.stringify(response.data.form.schema, null, '  ')
   } catch (error) {
     Alert.alert(error)
     return null
@@ -41,6 +42,7 @@ export const getUISchema = async () => {
   `
   try {
     const response = await client.query({ query })
+    //console.log(response.data.form.uiSchema)
     return response.data.form.uiSchema
   } catch (error) {
     Alert.alert(error)

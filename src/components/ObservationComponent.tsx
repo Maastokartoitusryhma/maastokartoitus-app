@@ -4,9 +4,9 @@ import { useForm, Controller } from 'react-hook-form'
 import { connect } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import Colors from '../styles/Colors'
-import Form from 'react-native-jsonschema-form'
 import { getSchema, getUISchema } from '../controllers/formController'
 import storageController from '../controllers/storageController'
+import { getKeys } from '../parsing/JSONParser'
 
 
 const ObservationComponent = (props) => {
@@ -124,7 +124,6 @@ import console = require('console');
   )
   */
 }
-//uiSchema={uischema.gatheringEvent}
 
 const styles = StyleSheet.create({
   container: {
