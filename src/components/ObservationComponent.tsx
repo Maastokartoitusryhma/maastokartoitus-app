@@ -4,11 +4,11 @@ import { useForm, Controller } from 'react-hook-form'
 import { connect } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import Colors from '../styles/Colors'
-import Form from 'react-native-jsonschema-form'
 import { getSchema, getUISchema } from '../controllers/formController'
 import schema from '../../temporaryschema.json'
 import uischema from '../../temporaryuischema.json'
 import storageController from '../controllers/storageController'
+import { getKeys } from '../parsing/JSONParser'
 
 const ObservationComponent = (props) => {
 
@@ -39,33 +39,12 @@ const ObservationComponent = (props) => {
   const fetchedSchema = getSchema()
   const fetchedUISchema = getUISchema()
 
-  // const transformErrors = (errors) => {
-  //   let returnErrors = _.filter(errors, error => {
-  //     console.log('error', error.property)
-  //     return (error.message === 'is a required property')
-  //   })
-  //   return returnErrors
-  // }
-
   return (
     <View style={styles.container}>
       <View style={styles.notch}></View>
-      <Form
-        schema={fetchedSchema}
-        //transformErrors={transformErrors}
-        onSubmit={(submited) => {
-          Alert.alert(
-            'Submitted',
-            JSON.stringify(submited.formData))
-        }}
-        noValidate={false}
-        liveValidate={true}
-        showErrorList={false}
-      />
     </View>
   )
 }
-//uiSchema={uischema.gatheringEvent}
 
 const styles = StyleSheet.create({
   container: {
