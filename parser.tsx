@@ -11,7 +11,6 @@ export const parse = (data: MyObject = {}) => {
   const toReturn = []
   Object.keys(data).forEach((key: string) => {
     if (typeof(data[key]) === 'object') { // Check if key has other keys nested inside, aka is of type object
-      console.log('GO TO PARSE NESTED')
       toReturn.push(parseNested(data[key], key, key))
     }
   })
@@ -37,7 +36,7 @@ const parseNested = (data: MyObject = {}, objectTitle: string, parentObjectTitle
         parseNested(data[key], key, objectTitle)
 
       } else if (key === 'type' && data[key] === 'array') {
-        arrayObject = arrayFunc(data[key])
+        arrayObject = arrayFunc(data)
 
       } else {
         if (key === 'type') {
@@ -63,27 +62,32 @@ const parseNested = (data: MyObject = {}, objectTitle: string, parentObjectTitle
 }
 
 const arrayFunc = (data: MyObject = {}) => {
+  console.log(Object.keys(data))
   let type = null
   let title = null
   let defaultValue = null
+
   Object.keys(data).forEach(key => {
     if (typeof(data[key]) === 'object') {
-      arrayFunc(data[key])
-    } else {
+      console.log('OBJECT!! New recursion. key: ', key)
+      return arrayFunc(data[key])
+    }
       if (key === 'title') {
         title = data[key]
       } else if (key === 'type') {
         type = data[key]
       } else if (key === 'default') {
         defaultValue = data[key]
+      } else {
+        console.log('Other field: '+ key, ": ", data[key])
       }
 
       console.log('title:', title, 'type:', type, 'default:', defaultValue)
 
-    }
   })
 
   if (type !== null && title !== null) {
+    console.log('RENDER ', title, ' ', type)
     return createInputElement(title, type)
   } else {
     return <Text>array elements should be here</Text>
