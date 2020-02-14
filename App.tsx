@@ -37,11 +37,11 @@ export default class App extends Component {
       accuracy: 6,
       distanceInterval: 1,
       timeInterval: 1000,
-      foregroundService: {
-        notificationTitle: 'Maastokartoitus-App',
-        notificationBody: 'Geotracking running',
-        notificationColor: Colors.headerBackground
-      }
+      //foregroundService: {
+      //  notificationTitle: 'Maastokartoitus-App',
+      //  notificationBody: 'Geotracking running',
+      //  notificationColor: Colors.headerBackground
+      //}
     })
   }
 
@@ -74,7 +74,6 @@ export default class App extends Component {
 
 TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({data, error }) => {
   const { locations } = data
-  console.log(locations)
   if (locations) {
     store.dispatch(updateLocation(locations[locations.length - 1]))
     store.dispatch(appendPath(locations))
