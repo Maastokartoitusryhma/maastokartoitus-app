@@ -23,8 +23,7 @@ export const getSchema = async () => {
   `
   try {
     const response = await client.query({ query })
-    //console.log(JSON.stringify(response.data.form.schema, null, '  '))
-    return JSON.stringify(response.data.form.schema, null, '  ')
+    return response.data.form.schema.properties.gatherings.items.properties.units.items.properties
   } catch (error) {
     Alert.alert(error)
     return null
