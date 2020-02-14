@@ -7,8 +7,8 @@ import reducer from './src/stores/combinedReducer'
 import * as TaskManager from 'expo-task-manager'
 import * as Permissions from 'expo-permissions'
 import * as Location from 'expo-location'
-import { LocationData } from 'expo-location'
 import { Platform } from 'react-native'
+import Colors from './src/styles/Colors'
 import './src/language/i18n'
 
 
@@ -37,6 +37,11 @@ export default class App extends Component {
       accuracy: 6,
       distanceInterval: 1,
       timeInterval: 1000,
+      foregroundService: {
+        notificationTitle: 'Maastokartoitus-App',
+        notificationBody: 'Geotracking running',
+        notificationColor: Colors.headerBackground
+      }
     })
   }
 
@@ -71,7 +76,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TASK, async ({data, error }) => {
   const { locations } = data
   console.log(locations)
   if (locations) {
-    store.dispatch(updateLocation(locations[0]))
+    store.dispatch(updateLocation(locations[locations.length - 1]))
     store.dispatch(appendPath(locations))
   }
 })

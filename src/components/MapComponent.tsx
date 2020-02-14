@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import MapView, { Marker, Polyline, UrlTile, Region, LatLng } from 'react-native-maps'
 import { connect, ConnectedProps } from 'react-redux'
-import { Button, View, Image, Dimensions } from 'react-native'
+import { Button, View, Image, Dimensions, TouchableHighlight } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { LocationData } from 'expo-location'
 import { setObservationLocation, clearObservationLocation } from '../stores/observation/actions' 
-import Cl from '../styles/Colors'
+import Colors from '../styles/Colors'
+import { MaterialIcons } from '@expo/vector-icons'
+
 
 const urlTemplate: string = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
 const userLocationPng: string = '../../assets/userLocation.png'
@@ -33,10 +35,10 @@ const connector = connect(
 )
 
 type PropsFromRedux = ConnectedProps<typeof connector>
-type Props = PropsFromRedux & { onPress1: () => void} 
+type Props = PropsFromRedux & { onPress1: () => void } 
 
 const MapComponent = (props: Props) => {
-  const [ regionState, setRegionState ] = useState<Region>({ latitude: 64, longitude: 24, latitudeDelta: 0.25, longitudeDelta: 0.25 })
+  const [ regionState, setRegionState ] = useState<Region>({ latitude: 60, longitude: 24, latitudeDelta: 0.25, longitudeDelta: 0.25 })
   const [ centered, setCentered ] = useState(true)
   const [ mapType, setMapType ] = useState('none')
   const { t } = useTranslation()
@@ -113,7 +115,10 @@ const MapComponent = (props: Props) => {
         longitude: props.position.coords.longitude
       }}
       zIndex = {3}>
-      <Image source={require(userLocationPng)} style={{ height: 35, width: 35}} />
+      <MaterialIcons 
+        name='directions-walk' 
+        size={50}
+      />
     </Marker>
     )
     : null
@@ -137,7 +142,7 @@ const MapComponent = (props: Props) => {
         longitude: location.coords.longitude,
       }))}
       strokeWidth = {5}
-      strokeColor = {Cl.red}
+      strokeColor = {Colors.red}
       zIndex = {2}
     />
     : null
@@ -178,7 +183,12 @@ const MapComponent = (props: Props) => {
           top: '0%',
           alignSelf: 'flex-end'
         }}>
-        <Button title = {t('sat')} onPress = {() => switchMap()}/>
+        <TouchableHighlight onPress = {() => switchMap()}>
+          <MaterialIcons
+            name='layers'
+            size={50}
+          />
+        </TouchableHighlight>
       </View>
       <View
         style = {{
@@ -186,7 +196,12 @@ const MapComponent = (props: Props) => {
           top: '10%',
           alignSelf: 'flex-end'
         }}>
-        <Button title = {t('center')} onPress = {() => centerMapAnim()}/>
+        <TouchableHighlight onPress = {() => centerMapAnim()}>
+          <MaterialIcons
+            name='my-location'
+            size={50}
+          />
+        </TouchableHighlight>
       </View>
       { props.observation ?
         <View

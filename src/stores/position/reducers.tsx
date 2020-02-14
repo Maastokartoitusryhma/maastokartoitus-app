@@ -1,3 +1,4 @@
+import { LocationData } from 'expo-location'
 import { locationActionTypes, 
          UPDATE_LOCATION,
          APPEND_PATH
@@ -16,7 +17,12 @@ const positionReducer = (state = null, action : locationActionTypes) => {
 const pathReducer = (state = [], action : locationActionTypes) => {
   switch (action.type) {
     case APPEND_PATH:
-      return [...action.payload, ...state]
+      if (action.payload.length === 1) {
+
+      }
+      const path = action.payload.reverse()
+
+      return [...path, ...state]
     default:
       return state
   }
