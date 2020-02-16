@@ -8,7 +8,7 @@ interface MyObject{
 let dict: { [key: string]: any } = {}
 
 export const parse = (data: MyObject = {}) => {
-  const toReturn = []
+  const toReturn: Array<any> = []
   Object.keys(data).forEach((key: string) => {
     if (typeof(data[key]) === 'object') { // Check if key has other keys nested inside, aka is of type object
       toReturn.push(parseNested(data[key], key, key))
@@ -63,9 +63,9 @@ const parseNested = (data: MyObject = {}, objectTitle: string, parentObjectTitle
 
 const arrayFunc = (data: MyObject = {}) => {
   console.log(Object.keys(data))
-  let type = null
-  let title = null
-  let defaultValue = null
+  let type: string | null = null
+  let title: string | null = null
+  let defaultValue: string | null = null
 
   Object.keys(data).forEach(key => {
     if (typeof(data[key]) === 'object') {

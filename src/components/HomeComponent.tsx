@@ -1,23 +1,47 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, Button, Picker } from 'react-native'
 import UserInfoComponent from './UserInfoComponent'
 import { useTranslation } from 'react-i18next'
+import regionController from '../controllers/regionController'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
-import { KumpulanKampus, KumpulanPuutarha } from '../constants/namedPlaces'
 
 interface Props {
   onLogout: () => void
   onPressMap: () => void   
 }
 
+interface RegionObject {
+  name: string
+  id: string
+}
+
 const HomeComponent = (props: Props) => {
 
-  const [selectedZone, setSelectedZone] = useState({KumpulanKampus})
+  const [selectedRegion, setSelectedRegion] = useState('')
+  const [regions, setRegions] = useState<RegionObject[]>([])
+
+  useEffect(() => {
+    const loadRegions = async () => {
+      const response = await regionController.getRegions()
+      if (response !== null) {
+        setRegions(response.results)
+        setSelectedRegion(response.results[0].name)
+      }
+    }
+
+    loadRegions()
+  }, [])
+
+  const createRegionsList = () => {
+    return regions.map(region => 
+      <Picker.Item key={region.id} label={region.name} value={region.id}/>)
+  }
 
   const { t } = useTranslation()
 
   return (
+
     <View>
       <UserInfoComponent onLogout={props.onLogout} />
       <View style={Cs.homeContainer}>
@@ -26,10 +50,9 @@ const HomeComponent = (props: Props) => {
           <View style={Cs.pickerContainer}>
             <Text>{t('observation zone')}</Text>
             <Picker 
-              selectedValue={selectedZone}
-              onValueChange={itemValue => setSelectedZone(itemValue)}>
-              <Picker.Item label={KumpulanKampus.name} value={KumpulanKampus} />
-              <Picker.Item label={KumpulanPuutarha.name} value={KumpulanPuutarha} />
+              selectedValue={selectedRegion}
+              onValueChange={itemValue => setSelectedRegion(itemValue)}>
+                {createRegionsList()}
             </Picker>
           </View>
           <View style={Cs.buttonContainer}>
