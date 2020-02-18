@@ -9,8 +9,14 @@ import storageController from '../controllers/storageController'
 import { parse } from '../../parser'
 import tempSchema from '../../temporaryschema.json'
 
-
 const ObservationComponent = (props) => {
+  //For react-hook-form
+  const { control, handleSubmit, errors } = useForm()
+  const onChange = args => {
+    return {
+      value: args[0].nativeEvent.text,
+    }
+  }
 
   const { t } = useTranslation()
 
