@@ -11,7 +11,7 @@ import tempSchema from '../../temporaryschema.json'
 
 const ObservationComponent = (props) => {
   //For react-hook-form
-  const { control, handleSubmit, errors } = useForm()
+  const { control, handleSubmit, errors, register } = useForm()
   const onChange = args => {
     return {
       value: args[0].nativeEvent.text,

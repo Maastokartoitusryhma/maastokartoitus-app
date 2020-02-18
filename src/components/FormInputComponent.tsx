@@ -6,7 +6,7 @@ import { composeInitialProps } from 'react-i18next'
 
 const FormInputComponent = (props) => {
   //For react-hook-form
-  const { control, handleSubmit, errors } = useForm()
+  const { control, handleSubmit, errors, register } = useForm()
   const onChange = args => {
     return {
       value: args[0].nativeEvent.text,
@@ -17,7 +17,7 @@ const FormInputComponent = (props) => {
     <View>
       <Text>{props.title}</Text>
       <Controller
-        as={<TextInput />}
+        as={<TextInput ref={register} />}
         control={control}
         name={props.title}
         onChange={onChange}

@@ -4,7 +4,7 @@ import { useForm, Controller } from 'react-hook-form'
 
 const FormPickerComponent = (props) => {
   //For react-hook-form
-  const { control, handleSubmit, errors } = useForm()
+  const { control, handleSubmit, errors, register } = useForm()
   const onChange = args => {
     return {
       value: args[0].nativeEvent.text,
@@ -13,7 +13,7 @@ const FormPickerComponent = (props) => {
 
   return (
     <Controller
-        as={<Picker>
+        as={<Picker ref={register}>
           {props.pickerItems}
         </Picker>}
         control={control}
