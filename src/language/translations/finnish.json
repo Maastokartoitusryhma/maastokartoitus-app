@@ -24,5 +24,7 @@
   "info": "Lisätietoja",
   "save": "Tallenna",
   "flying squirrel": "Liito-orava",
-  "previous observation events": "Aiemmat havaintotapahtumat"
+  "previous observation events": "Aiemmat havaintotapahtumat",
+  "beginObservation": "Aloita havaintotapahtuma",
+  "cancelObservation": "Lopeta havaintotapahtuma"
 }

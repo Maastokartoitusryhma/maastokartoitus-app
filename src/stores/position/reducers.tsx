@@ -1,4 +1,3 @@
-import { LocationData } from 'expo-location'
 import { locationActionTypes, 
          UPDATE_LOCATION,
          APPEND_PATH

@@ -5,10 +5,43 @@ import { useTranslation } from 'react-i18next'
 import regionController from '../controllers/regionController'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
+import Color from '../styles/Colors'
+import { LocationData } from 'expo-location'
+import { LatLng } from 'react-native-maps'
+import { startObserving, stopObserving } from '../stores/observation/actions'
+import { updateLocation, appendPath } from '../stores/position/actions'
+import { connect, ConnectedProps } from 'react-redux'
+import {watchLocationAsync, stopLocationAsync } from '../geolocation/geolocation'
 
-interface Props {
+interface RootState {
+  position: LocationData
+  path: LocationData[]
+  observing: boolean
+  observation: LatLng
+  zone: LatLng[]
+}
+
+const mapStateToProps = (state: RootState) => {
+  const { position, path, observing, observation, zone } = state
+  return { position, path, observing, observation, zone }
+}
+
+const mapDispatchToProps = {
+  updateLocation,
+  appendPath,
+  startObserving,
+  stopObserving,
+}
+
+const connector = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+type Props = PropsFromRedux & {   
   onLogout: () => void
-  onPressMap: () => void   
+  onPressMap: () => void 
 }
 
 interface RegionObject {
@@ -40,8 +73,18 @@ const HomeComponent = (props: Props) => {
 
   const { t } = useTranslation()
 
-  return (
+  const beginObservationEvent = () => {
+    props.startObserving()
+    watchLocationAsync(props.updateLocation, props.appendPath)
+    props.onPressMap()
+  }
 
+  const finishObservationEvent = () => {
+    props.stopObserving()
+    stopLocationAsync()
+  }
+
+  return (
     <View>
       <UserInfoComponent onLogout={props.onLogout} />
       <View style={Cs.homeContainer}>
@@ -56,7 +99,14 @@ const HomeComponent = (props: Props) => {
             </Picker>
           </View>
           <View style={Cs.buttonContainer}>
-            <Button onPress = { props.onPressMap }  title = {t('map')}></Button>
+            { props.observing ?
+              <>
+                <Button onPress = {() => props.onPressMap() } title = {t('map')}></Button>
+                <Button onPress = {() => finishObservationEvent()} title = {t('cancelObservation')} color = {Color.negativeButton}></Button>
+              </>
+            :
+              <Button onPress = {() => beginObservationEvent()}  title = {t('beginObservation')}></Button>
+            }
           </View>
         </View>
         <View style={Cs.previousObservationsContainer}>
@@ -67,4 +117,4 @@ const HomeComponent = (props: Props) => {
   )
 }
 
-export default HomeComponent
+export default connector(HomeComponent)

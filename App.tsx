@@ -10,59 +10,11 @@ import * as Location from 'expo-location'
 import { Platform } from 'react-native'
 import Colors from './src/styles/Colors'
 import './src/language/i18n'
-
+import {LOCATION_BACKGROUND_TASK} from './src/constants/tasks'
 
 const store = createStore(reducer)
-const LOCATION_BACKGROUND_TASK = 'backgroundLocationHandler'
 
 export default class App extends Component {
-  constructor() {
-    super()
-
-    if (Platform.OS === 'ios') {
-      this.watchLocationAsynciOS()
-    } else {
-      this.watchLocationAsyncAndroid()
-    }
-  }
-
-  watchLocationAsyncAndroid = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION)
-
-    if (status !== 'granted') {
-      store.dispatch(updateLocation(null))
-    }
-
-    await Location.startLocationUpdatesAsync(LOCATION_BACKGROUND_TASK, {
-      accuracy: 6,
-      distanceInterval: 1,
-      timeInterval: 1000,
-      //foregroundService: {
-      //  notificationTitle: 'Maastokartoitus-App',
-      //  notificationBody: 'Geotracking running',
-      //  notificationColor: Colors.headerBackground
-      //}
-    })
-  }
-
-  watchLocationAsynciOS = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION)
-
-    if (status !== 'granted') {
-      store.dispatch(updateLocation(null))
-    }
-
-    await Location.watchPositionAsync({
-      accuracy: 6,
-      distanceInterval: 1,
-      timeInterval: 1000
-    },
-    location => {
-      store.dispatch(updateLocation(location))
-      store.dispatch(appendPath([location]))
-    })
-  }
-
   render() {
     return  (
       <Provider store={ store }>
