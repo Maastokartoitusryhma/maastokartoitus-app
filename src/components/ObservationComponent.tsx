@@ -7,6 +7,7 @@ import Colors from '../styles/Colors'
 import { getSchema, getUISchema } from '../controllers/formController'
 import storageController from '../controllers/storageController'
 import { parse } from '../../parser'
+import tempSchema from '../../temporaryschema.json'
 
 
 const ObservationComponent = (props) => {
@@ -60,7 +61,9 @@ const ObservationComponent = (props) => {
   } else {
     return (
       <View style={styles.container}>
-        {parse(schema)}
+        <ScrollView>
+          {parse(schema)}
+        </ScrollView>
       </View>
     )
   }

@@ -1,5 +1,8 @@
 import React from 'react'
-import { TextInput, Text, View, Picker } from 'react-native'
+import { Text, Button } from 'react-native'
+import FormInputComponent from './src/components/FormInputComponent'
+import FormPickerItemComponent from './src/components/FormPickerItemComponent'
+import FormPickerComponent from './src/components/FormPickerComponent'
 
 interface MyObject{
   [key: string]: any
@@ -11,32 +14,31 @@ export const parse = (data: MyObject = {}) => {
   const toReturn: Array<any> = []
   Object.keys(data).forEach((key: string) => {
     if (typeof(data[key]) === 'object') { // Check if key has other keys nested inside, aka is of type object
-      toReturn.push(parseNested(data[key], key, key))
+      toReturn.push(parseNested(data[key], key))
     }
   })
+  toReturn.push(<Button title='ADD'></Button>)
   return toReturn
 } 
 
-const parseNested = (data: MyObject = {}, objectTitle: string, parentObjectTitle: string) => {
-    let title = null 
-    let type = null
-    let defaultValue = null
+const parseNested = (data: MyObject = {}, objectTitle: string) => {
+    let toReturn = []
+    let type: string|null = null
+    let title: string|null = null 
+    let defaultValue: string|null = null
     let includesEnum = false
-    let arrayObject = null
+    
     Object.keys(data).forEach(key => {
       if (key === 'enum') {
         includesEnum = true
-        createNewDictKey(objectTitle) // create new dictionary object inside dict
-        setEnumKeys(data[key], objectTitle) // set keys to created dictionary object
+        createNewDictKey(objectTitle) // Create new dictionary object inside dict
+        setEnumKeys(data[key], objectTitle) // Set keys to created dictionary object
     
       } else if (key === 'enumNames') {
-        setEnumValues(data[key], objectTitle) // set values to previously created dictionary object
+        setEnumValues(data[key], objectTitle) // Set values to previously created dictionary object
 
       } else if (typeof(data[key]) === 'object') { // Check if key has other keys nested inside, aka is of type object
-        parseNested(data[key], key, objectTitle)
-
-      } else if (key === 'type' && data[key] === 'array') {
-        arrayObject = arrayFunc(data)
+        toReturn.push(parseNested(data[key], key))
 
       } else {
         if (key === 'type') {
@@ -44,54 +46,18 @@ const parseNested = (data: MyObject = {}, objectTitle: string, parentObjectTitle
         } else if (key === 'title') {
           title = data[key]
         } else if (key === 'default') {
-          defaultValue = data[key]
+          defaultValue = data[key] 
         }
       }
     })
     // All keys in subtree are looped
-
-    if (arrayObject !== null) { 
-      return arrayObject
-    }
-
-    if (title !== null && type !== null && !includesEnum) {
-      return createInputElement(title, type)
-    } else if (title !== null && type !== null && includesEnum) {
-      return [<Text>{title}</Text>, createPicker(parentObjectTitle)]
+    if (includesEnum) {
+      toReturn.push([<Text>{title}</Text>, createPicker(objectTitle)])
+    } else {
+      toReturn.push(createInputElement(title, type, defaultValue))
     } 
-}
 
-const arrayFunc = (data: MyObject = {}) => {
-  console.log(Object.keys(data))
-  let type: string | null = null
-  let title: string | null = null
-  let defaultValue: string | null = null
-
-  Object.keys(data).forEach(key => {
-    if (typeof(data[key]) === 'object') {
-      console.log('OBJECT!! New recursion. key: ', key)
-      return arrayFunc(data[key])
-    }
-      if (key === 'title') {
-        title = data[key]
-      } else if (key === 'type') {
-        type = data[key]
-      } else if (key === 'default') {
-        defaultValue = data[key]
-      } else {
-        console.log('Other field: '+ key, ": ", data[key])
-      }
-
-      console.log('title:', title, 'type:', type, 'default:', defaultValue)
-
-  })
-
-  if (type !== null && title !== null) {
-    console.log('RENDER ', title, ' ', type)
-    return createInputElement(title, type)
-  } else {
-    return <Text>array elements should be here</Text>
-  }
+    return toReturn
 }
 
 const createNewDictKey = (name: string) => {
@@ -114,21 +80,19 @@ const setEnumValues = (data: MyObject = {}, dictKey: string) => {
   }
 }
 
-// Creates a picker component with items, takes JSON schema item label as parameter
-const createPicker = (keyName: string) => {
+const createPicker = (keyName: string) => { // Creates a picker component with items, takes JSON schema item label as parameter
   const dictObject = dict[keyName]
   const pickerItems = []
   for (const key in dictObject) {
-    pickerItems.push(<Picker.Item key={key} label={dictObject[key]} value={key} />)
+    pickerItems.push(<FormPickerItemComponent key={key} label={dictObject[key]} value={key} />)
   }
-  return <Picker>{pickerItems}</Picker>
+  return <FormPickerComponent pickerItems={pickerItems} />
 }
 
-const createInputElement = (title: string, type: string) => {
+const createInputElement = (title: string, type: string, defaultValue: string | null) => {
   if (type === 'string') {
-    return <View><Text>{title}</Text><TextInput style={{ borderColor: '#DEDEDE', borderWidth: 1 }} placeholder={title}/></View>
-  } else {
-    return <View><Text>not of type string</Text></View>
+    return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='default' />
+  } else if (type === 'integer') {
+    return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='numeric' />    
   }
-  
 }
