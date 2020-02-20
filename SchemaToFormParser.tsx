@@ -1,6 +1,7 @@
 import React from 'react'
-import { Text, Button } from 'react-native'
+import { Button } from 'react-native'
 import FormInputComponent from './src/components/FormInputComponent'
+import FormArrayComponent from './src/components/FormArrayComponent'
 import FormPickerItemComponent from './src/components/FormPickerItemComponent'
 import FormPickerComponent from './src/components/FormPickerComponent'
 
@@ -14,19 +15,23 @@ export const parse = (data: MyObject = {}) => {
   const toReturn: Array<any> = []
   Object.keys(data).forEach((key: string) => {
     if (typeof(data[key]) === 'object') { // Check if key has other keys nested inside, aka is of type object
-      toReturn.push(parseNested(data[key], key))
+      toReturn.push(parseNested(data[key], key, false))
     }
   })
-  toReturn.push(<Button title='ADD'></Button>)
+  toReturn.push(<Button onPress={() => {
+    console.log('ADD NEW OBSERVATION')
+    console.log('TORETURN ARRAY:', toReturn)
+  }} title='ADD'></Button>)
   return toReturn
 } 
 
-const parseNested = (data: MyObject = {}, objectTitle: string) => {
+const parseNested = (data: MyObject = {}, objectTitle: string, arrayBoolean: boolean) => {
     let toReturn = []
-    let type: string|null = null
-    let title: string|null = null 
-    let defaultValue: string|null = null
+    let type: string = ''
+    let title: string = ''
+    let defaultValue: string = ''
     let includesEnum = false
+    let isArray = arrayBoolean
     
     Object.keys(data).forEach(key => {
       if (key === 'enum') {
@@ -38,10 +43,13 @@ const parseNested = (data: MyObject = {}, objectTitle: string) => {
         setEnumValues(data[key], objectTitle) // Set values to previously created dictionary object
 
       } else if (typeof(data[key]) === 'object') { // Check if key has other keys nested inside, aka is of type object
-        toReturn.push(parseNested(data[key], key))
+        toReturn.push(parseNested(data[key], key, isArray))
 
       } else {
         if (key === 'type') {
+          if (data[key] === 'array') {
+            isArray = true
+          }
           type = data[key]
         } else if (key === 'title') {
           title = data[key]
@@ -52,10 +60,12 @@ const parseNested = (data: MyObject = {}, objectTitle: string) => {
     })
     // All keys in subtree are looped
     if (includesEnum) {
-      toReturn.push([<Text>{title}</Text>, createPicker(objectTitle)])
-    } else {
+      toReturn.push(createPicker(title, objectTitle, defaultValue))
+    } else if (title !== '' && type !== '' && isArray) {
+      toReturn.push(createArray(title, type, defaultValue))
+    } else if (title !== '' && type !== '') {
       toReturn.push(createInputElement(title, type, defaultValue))
-    } 
+    }
 
     return toReturn
 }
@@ -80,19 +90,30 @@ const setEnumValues = (data: MyObject = {}, dictKey: string) => {
   }
 }
 
-const createPicker = (keyName: string) => { // Creates a picker component with items, takes JSON schema item label as parameter
+// Creates a picker component with items, takes JSON schema item label as parameter
+const createPicker = (title: string, keyName: string, defaultValue: string) => {
   const dictObject = dict[keyName]
   const pickerItems = []
   for (const key in dictObject) {
     pickerItems.push(<FormPickerItemComponent key={key} label={dictObject[key]} value={key} />)
   }
-  return <FormPickerComponent pickerItems={pickerItems} />
+
+  if (defaultValue !== null) {
+    return <FormPickerComponent title={title} pickerItems={pickerItems} selectedValue={defaultValue} />
+  } else {
+    return <FormPickerComponent title={title} pickerItems={pickerItems} selectedValue={null}/>
+  }
 }
 
-const createInputElement = (title: string, type: string, defaultValue: string | null) => {
+const createArray = (title: string, type: string, defaultValue: string) => {
+  const inputElements = [createInputElement('', type, defaultValue)]
+  return <FormArrayComponent title={title} inputType={type} inputElements={inputElements} />
+}
+
+const createInputElement = (title: string, type: string, defaultValue: string) => {
   if (type === 'string') {
     return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='default' />
   } else if (type === 'integer') {
     return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='numeric' />    
   }
-}
+} 

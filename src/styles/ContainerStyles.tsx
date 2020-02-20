@@ -33,10 +33,10 @@ const ContainerStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between'
   },
-  observationContainer2: {
+  observationContainer: {
     flex: 1,
     flexDirection: 'column',
-    paddingTop: 10,
+    padding: 10,
   },
   inputContainer2: {
     flexDirection: 'row',
@@ -64,6 +64,14 @@ const ContainerStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  formInputContainer: {
+    padding: 10
+  },
+  formPickerContainer: {
+    borderColor: Colors.inputBorder,
+    borderWidth: 1,
+    width: '100%'
+  }
 })
 
 export default ContainerStyles

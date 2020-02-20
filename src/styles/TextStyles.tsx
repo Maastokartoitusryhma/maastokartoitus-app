@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native'
 import Colors from './Colors'
 
 const TextStyles = StyleSheet.create({
-  observationEventTitle: {
+  speciesText: {
     fontWeight: 'bold',
     padding: 10
   },

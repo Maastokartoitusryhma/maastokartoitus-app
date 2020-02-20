@@ -1,11 +1,28 @@
-import React from 'react'
-import { Picker } from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, Picker } from 'react-native'
+import Cs from '../styles/ContainerStyles'
 
-const FormPickerComponent = (props) => {
+interface Props {
+  title: string
+  selectedValue: string|null
+  pickerItems: Array<Object>
+}
+
+const FormPickerComponent = (props: Props) => {
+
+  const [selected, setSelected] = useState(props.selectedValue)
+
   return (
-    <Picker>
-      {props.pickerItems}
-    </Picker>
+    <View>
+      <Text>{props.title}</Text>
+      <View style={Cs.formPickerContainer}>
+        <Picker
+          selectedValue={selected}
+          onValueChange={itemValue => setSelected(itemValue)}>
+            {props.pickerItems}
+        </Picker>
+      </View>
+    </View>
   )
 }
 

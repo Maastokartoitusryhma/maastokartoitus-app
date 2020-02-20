@@ -6,7 +6,7 @@ const OtherStyles = StyleSheet.create({
     borderColor: Colors.inputBorder,
     borderWidth: 1,
     height: 40,
-    width: '80%',
+    width: '100%',
     padding: 10
   },
   observationTextInput: {
@@ -15,7 +15,7 @@ const OtherStyles = StyleSheet.create({
     width: '80%',
     paddingHorizontal: 10,
     textAlign: 'justify'
-  },
+  }
 })
 
 export default OtherStyles

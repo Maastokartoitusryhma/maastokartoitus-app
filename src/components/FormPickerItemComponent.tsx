@@ -1,7 +1,13 @@
 import React from 'react'
 import { Picker } from 'react-native'
 
-const FormPickerItemComponent = (props) => {
+interface Props {
+  key: string
+  label: string
+  value: string
+}
+
+const FormPickerItemComponent = (props: Props) => {
   return <Picker.Item key={props.key} label={props.label} value={props.value} />
 }
 
