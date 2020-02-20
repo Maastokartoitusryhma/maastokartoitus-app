@@ -1,47 +1,49 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import { View, Button, Text, ScrollView } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { connect } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import Colors from '../styles/Colors'
-import { getSchema, getUISchema } from '../controllers/formController'
+import { getSingleObservationSchema, getUISchema } from '../controllers/formController'
 import storageController from '../controllers/storageController'
-import { parse } from '../../SchemaToFormParser'
+import { parseSchemaToForm } from '../../SchemaToFormParser'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 
-
 const ObservationComponent = (props) => {
+
   //For react-hook-form
   const { control, handleSubmit, errors, register } = useForm()
   const onChange = args => {
     return {
-      value: args[0].nativeEvent.text,
+      value: args[0].nativeEvent.text, 
     }
   }
 
   const { t } = useTranslation()
 
-  const [schema, setSchema] = useState(null)
+  const [singleObservationSchema, setSingleObservationSchema] = useState(null)
   const [UISchema, setUISchema] = useState(null)
 
   // Fetch schemas
   useEffect(() => {
-    const loadSchema = async () => {
-      const fetchedSchema = await getSchema()
-      if (fetchedSchema !== null) {
-        setSchema(fetchedSchema)
-      }
+    loadSingleObservationSchema()
+    //loadUISchema()
+  }, [])
+
+  const loadSingleObservationSchema = async () => {
+    const fetchedSchema = await getSingleObservationSchema() 
+    if (fetchedSchema !== null) {
+      setSingleObservationSchema(fetchedSchema) 
     }
+  }
+  /*
     const loadUISchema = async () => {
       const fetchedUISchema = await getUISchema()
       if (fetchedUISchema !== null) {
         setUISchema(fetchedUISchema)
       }
-    }
-    loadSchema()
-    loadUISchema()
-  }, [])
+    }*/
 
   const validate = (formData, errors) => {
     if (formData.count === undefined) {
@@ -51,7 +53,7 @@ const ObservationComponent = (props) => {
   }
 
   // Check if schemas have been fetched
-  if (schema == null || UISchema == null) {
+  if (singleObservationSchema == null) {
     return <View><Text>Ladataan...</Text></View>
   } else {
     return (
@@ -59,7 +61,8 @@ const ObservationComponent = (props) => {
         <ScrollView>
           <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
           <View>
-            {parse(schema)}
+            {parseSchemaToForm(singleObservationSchema)}
+            <Button onPress={() => console.log('ADD NEW OBSERVATION')} title='ADD'></Button>
           </View>
         </ScrollView>
       </View>

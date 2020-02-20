@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Colors from '../styles/Colors'
 import LoginComponent from '../components/LoginComponent'
-import { getSchema } from '../controllers/formController'
+import { getSingleObservationSchema } from '../controllers/formController'
 import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
 
 type Props  = {
@@ -18,7 +18,7 @@ export default class LoginScreen extends Component<NavigationStackScreenProps<Pr
   })
 
   render() {
-    getSchema()
+    //getSingleObservationSchema()
     return (
       <LoginComponent onPress = { () => this.props.navigation.replace('Home') } />
     )

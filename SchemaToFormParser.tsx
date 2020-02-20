@@ -1,5 +1,4 @@
 import React from 'react'
-import { Button } from 'react-native'
 import FormInputComponent from './src/components/FormInputComponent'
 import FormArrayComponent from './src/components/FormArrayComponent'
 import FormPickerItemComponent from './src/components/FormPickerItemComponent'
@@ -11,17 +10,14 @@ interface MyObject{
 
 let dict: { [key: string]: any } = {}
 
-export const parse = (data: MyObject = {}) => {
+
+export const parseSchemaToForm = (data: MyObject = {}) => {
   const toReturn: Array<any> = []
   Object.keys(data).forEach((key: string) => {
     if (typeof(data[key]) === 'object') { // Check if key has other keys nested inside, aka is of type object
       toReturn.push(parseNested(data[key], key, false))
     }
   })
-  toReturn.push(<Button onPress={() => {
-    console.log('ADD NEW OBSERVATION')
-    console.log('TORETURN ARRAY:', toReturn)
-  }} title='ADD'></Button>)
   return toReturn
 } 
 
@@ -95,7 +91,7 @@ const createPicker = (title: string, keyName: string, defaultValue: string) => {
   const dictObject = dict[keyName]
   const pickerItems = []
   for (const key in dictObject) {
-    pickerItems.push(<FormPickerItemComponent key={key} label={dictObject[key]} value={key} title={key} />)
+    pickerItems.push(<FormPickerItemComponent key={key} label={dictObject[key]} value={key} />)
   }
 
   if (defaultValue !== null) {
