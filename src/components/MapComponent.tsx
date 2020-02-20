@@ -158,36 +158,39 @@ const MapComponent = (props: Props) => {
 
   return (
     <>
-      <MapView
-        ref = {map => {mapView = map}}
-        provider = {'google'}
-        initialRegion = { regionState }
-        onPanDrag = {() => onPanDrag()}
-        onLongPress = {(event) => markObservation(event.nativeEvent.coordinate)}
-        onRegionChangeComplete = {(region) => onRegionChangeComplete(region)}
-        maxZoomLevel = {18}
-        minZoomLevel = {0}
-        mapType = {mapType}
-        style = {{
-          width: Dimensions.get('window').width,
-          height: Dimensions.get('window').height,
-        }}
-      >
-        {locationOverlay()}
-        {targetOverlay()}
-        {pathOverlay()}
-        {tileOverlay()}
-      </MapView>
+      <View>
+        <MapView
+          ref = {map => {mapView = map}}
+          provider = {'google'}
+          initialRegion = { regionState }
+          onPanDrag = {() => onPanDrag()}
+          onLongPress = {(event) => markObservation(event.nativeEvent.coordinate)}
+          onRegionChangeComplete = {(region) => onRegionChangeComplete(region)}
+          maxZoomLevel = {18}
+          minZoomLevel = {0}
+          mapType = {mapType}
+          style = {{
+            width: Dimensions.get('window').width,
+            height: Dimensions.get('window').height,
+          }}
+        >
+          {locationOverlay()}
+          {targetOverlay()}
+          {pathOverlay()}
+          {tileOverlay()}
+        </MapView>
+      </View>
       <View
         style = {{
           position: 'absolute',
-          top: '0%',
+          top: '1%',
           alignSelf: 'flex-end'
         }}>
-        <TouchableHighlight onPress = {() => switchMap()}>
+        <TouchableHighlight onPress = {() => switchMap()} style = {{backgroundColor: Colors.headerBackground, borderRadius: 5}}>
           <MaterialIcons
             name='layers'
             size={50}
+            color='white'
           />
         </TouchableHighlight>
       </View>
@@ -197,10 +200,11 @@ const MapComponent = (props: Props) => {
           top: '10%',
           alignSelf: 'flex-end'
         }}>
-        <TouchableHighlight onPress = {() => centerMapAnim()}>
+        <TouchableHighlight onPress = {() => centerMapAnim()} style = {{backgroundColor: Colors.headerBackground, borderRadius: 5}}>
           <MaterialIcons
             name='my-location'
             size={50}
+            color='white'
           />
         </TouchableHighlight>
       </View>
