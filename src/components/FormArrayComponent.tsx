@@ -14,7 +14,7 @@ const FormArrayComponent = (props: Props) => {
 
   const addInputElement = () => {
     const elements = [...inputElements]
-    elements.push(createInputElement('', props.inputType, ''))
+    elements.push(createInputElement('', props.inputType, '', props.setValue, props.errors, props.register))
     setInputElements(elements)
   }
 
@@ -37,11 +37,11 @@ const FormArrayComponent = (props: Props) => {
   )
 }
 
-const createInputElement = (title: string, type: string, defaultValue: string) => {
+const createInputElement = (title: string, type: string, defaultValue: string, setValue, errors, register) => {
   if (type === 'string') {
-    return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='default' />
+    return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='default' setValue={setValue} errors={errors} register={register} />
   } else if (type === 'integer') {
-    return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='numeric' />    
+    return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='numeric' setValue={setValue} errors={errors} register={register}/>    
   }
 } 
 

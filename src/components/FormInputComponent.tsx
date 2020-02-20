@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 import { Text, TextInput, View } from 'react-native'
-import { useForm, Controller } from 'react-hook-form'
-import { composeInitialProps } from 'react-i18next'
 import Os from '../styles/OtherStyles'
 import Cs from '../styles/ContainerStyles'
 
@@ -16,7 +14,11 @@ interface Props {
 
 const FormInputComponent = (props: Props) => {
 
-  //const [value, setValue] = useState(props.defaultValue)
+  const [inputValue, setInputValue] = useState(props.defaultValue)
+
+  if (inputValue !== null) {
+    props.setValue(props.title, inputValue)
+  }
 
   return (
     <View style={Cs.formInputContainer}>
@@ -28,7 +30,11 @@ const FormInputComponent = (props: Props) => {
         style={Os.textInput}
         keyboardType={props.keyboardType}
         placeholder={props.title}
-        onChangeText={text => props.setValue(props.title, text)}
+        value={inputValue}
+        onChangeText={text => {
+          setInputValue(text)
+          props.setValue(props.title, text)}
+        }
         ref={props.register({ name: props.title})}
       />
     </View>

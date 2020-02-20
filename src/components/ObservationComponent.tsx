@@ -3,7 +3,6 @@ import { View, Text, ScrollView, Button } from 'react-native'
 import { useForm } from 'react-hook-form'
 import { connect } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import Colors from '../styles/Colors'
 import { getSingleObservationSchema, getUISchema } from '../controllers/formController'
 import storageController from '../controllers/storageController'
 import { parseSchemaToForm } from '../../SchemaToFormParser'
@@ -14,18 +13,13 @@ const ObservationComponent = (props) => {
 
   //For react-hook-form
   const { handleSubmit, setValue, errors, register } = useForm()
-  const onChange = args => {
-    return {
-      value: args[0].nativeEvent.text, 
-    }
-  }
 
   const { t } = useTranslation()
 
   const [singleObservationSchema, setSingleObservationSchema] = useState(null)
   const [UISchema, setUISchema] = useState(null)
 
-  const onSubmit = data => console.log(data)
+  const onSubmit = data => console.log('REGISTER DATA:', data)
 
   // Fetch schemas
   useEffect(() => {

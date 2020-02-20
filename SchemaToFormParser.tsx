@@ -56,7 +56,7 @@ const parseNested = (data: MyObject = {}, objectTitle: string, arrayBoolean: boo
     })
     // All keys in subtree are looped
     if (includesEnum) {
-      toReturn.push(createPicker(title, objectTitle, defaultValue))
+      toReturn.push(createPicker(title, objectTitle, defaultValue, setValue, errors, register))
     } else if (title !== '' && type !== '' && isArray) {
       toReturn.push(createArray(title, type, defaultValue, setValue, errors, register))
     } else if (title !== '' && type !== '') {
@@ -87,7 +87,7 @@ const setEnumValues = (data: MyObject = {}, dictKey: string) => {
 }
 
 // Creates a picker component with items, takes JSON schema item label as parameter
-const createPicker = (title: string, keyName: string, defaultValue: string) => {
+const createPicker = (title: string, keyName: string, defaultValue: string, setValue, errors, register) => {
   const dictObject = dict[keyName]
   const pickerItems = []
   for (const key in dictObject) {
@@ -95,19 +95,18 @@ const createPicker = (title: string, keyName: string, defaultValue: string) => {
   }
 
   if (defaultValue !== null) {
-    return <FormPickerComponent title={title} pickerItems={pickerItems} selectedValue={defaultValue} />
+    return <FormPickerComponent title={title} pickerItems={pickerItems} selectedValue={defaultValue} setValue={setValue} errors={errors} register={register} />
   } else {
-    return <FormPickerComponent title={title} pickerItems={pickerItems} selectedValue={null}/>
+    return <FormPickerComponent title={title} pickerItems={pickerItems} selectedValue={null} setValue={setValue} errors={errors} register={register} />
   }
 }
 
 const createArray = (title: string, type: string, defaultValue: string, setValue, errors, register) => {
   const inputElements = [createInputElement('', type, defaultValue, setValue, errors, register)]
-  return <FormArrayComponent title={title} inputType={type} inputElements={inputElements} />
+  return <FormArrayComponent title={title} inputType={type} inputElements={inputElements} setValue={setValue} errors={errors} register={register} />
 }
 
 const createInputElement = (title: string, type: string, defaultValue: string, setValue, errors, register) => {
-  console.log('title ', title, 'setValue ', setValue, ' errors ', errors, ' register ', register)
   if (type === 'string') {
     return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='default' setValue={setValue} errors={errors} register={register} />
   } else if (type === 'integer') {
