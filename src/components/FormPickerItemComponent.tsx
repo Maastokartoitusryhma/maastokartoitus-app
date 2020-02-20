@@ -19,17 +19,6 @@ const FormPickerItemComponent = (props: Props) => {
 }
 
   return <Picker.Item key={props.key} label={props.label} value={props.value} />
-  /*
-  return(
-    <Controller
-        as={<Picker.Item key={props.key} label={props.label} value={props.value} />}
-        control={control}
-        name={props.title}
-        onChange={onChange}
-        rules={{ required: false }}
-        defaultValue=""
-      />
-  )*/
 }
 
 export default FormPickerItemComponent

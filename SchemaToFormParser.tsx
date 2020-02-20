@@ -11,11 +11,12 @@ interface MyObject{
 
 let dict: { [key: string]: any } = {}
 
-export const parse = (data: MyObject = {}) => {
+export const parse = (data: MyObject = {}, setValue, errors, register) => {
+  
   const toReturn: Array<any> = []
   Object.keys(data).forEach((key: string) => {
     if (typeof(data[key]) === 'object') { // Check if key has other keys nested inside, aka is of type object
-      toReturn.push(parseNested(data[key], key, false))
+      toReturn.push(parseNested(data[key], key, false, setValue, errors, register))
     }
   })
   toReturn.push(<Button onPress={() => {
@@ -25,7 +26,7 @@ export const parse = (data: MyObject = {}) => {
   return toReturn
 } 
 
-const parseNested = (data: MyObject = {}, objectTitle: string, arrayBoolean: boolean) => {
+const parseNested = (data: MyObject = {}, objectTitle: string, arrayBoolean: boolean, setValue, errors, register) => {
     let toReturn = []
     let type: string = ''
     let title: string = ''
@@ -43,7 +44,7 @@ const parseNested = (data: MyObject = {}, objectTitle: string, arrayBoolean: boo
         setEnumValues(data[key], objectTitle) // Set values to previously created dictionary object
 
       } else if (typeof(data[key]) === 'object') { // Check if key has other keys nested inside, aka is of type object
-        toReturn.push(parseNested(data[key], key, isArray))
+        toReturn.push(parseNested(data[key], key, isArray, setValue, errors, register))
 
       } else {
         if (key === 'type') {
@@ -62,9 +63,9 @@ const parseNested = (data: MyObject = {}, objectTitle: string, arrayBoolean: boo
     if (includesEnum) {
       toReturn.push(createPicker(title, objectTitle, defaultValue))
     } else if (title !== '' && type !== '' && isArray) {
-      toReturn.push(createArray(title, type, defaultValue))
+      toReturn.push(createArray(title, type, defaultValue, setValue, errors, register))
     } else if (title !== '' && type !== '') {
-      toReturn.push(createInputElement(title, type, defaultValue))
+      toReturn.push(createInputElement(title, type, defaultValue, setValue, errors, register))
     }
 
     return toReturn
@@ -105,15 +106,16 @@ const createPicker = (title: string, keyName: string, defaultValue: string) => {
   }
 }
 
-const createArray = (title: string, type: string, defaultValue: string) => {
-  const inputElements = [createInputElement('', type, defaultValue)]
+const createArray = (title: string, type: string, defaultValue: string, setValue, errors, register) => {
+  const inputElements = [createInputElement('', type, defaultValue, setValue, errors, register)]
   return <FormArrayComponent title={title} inputType={type} inputElements={inputElements} />
 }
 
-const createInputElement = (title: string, type: string, defaultValue: string) => {
+const createInputElement = (title: string, type: string, defaultValue: string, setValue, errors, register) => {
+  console.log('title ', title, 'setValue ', setValue, ' errors ', errors, ' register ', register)
   if (type === 'string') {
-    return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='default' />
+    return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='default' setValue={setValue} errors={errors} register={register} />
   } else if (type === 'integer') {
-    return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='numeric' />    
+    return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='numeric' setValue={setValue} errors={errors} register={register} />    
   }
 } 

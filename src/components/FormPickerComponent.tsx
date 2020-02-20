@@ -33,19 +33,6 @@ const FormPickerComponent = (props: Props) => {
       </View>
     </View>
   )
-  /*
-  return (
-    <Controller
-        as={<Picker ref={register}>
-          {props.pickerItems}
-        </Picker>}
-        control={control}
-        name={props.title}
-        onChange={onChange}
-        rules={{ required: false }}
-        defaultValue=""
-      />
-  )*/
 }
 
 export default FormPickerComponent

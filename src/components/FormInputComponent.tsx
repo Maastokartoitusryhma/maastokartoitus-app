@@ -9,19 +9,14 @@ interface Props {
   title: string
   keyboardType: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'visible-password' | 'ascii-capable' | 'numbers-and-punctuation' | 'url' | 'number-pad' | 'name-phone-pad' | 'decimal-pad' | 'twitter' | 'web-search' | undefined
   defaultValue: string|undefined
+  setValue: any
+  errors: any
+  register: any
 }
 
 const FormInputComponent = (props: Props) => {
 
-  //For react-hook-form
-  const { control, handleSubmit, errors, register } = useForm()
-  const onChange = args => {
-    return {
-      value: args[0].nativeEvent.text,
-    }
-  }
-
-  const [value, setValue] = useState(props.defaultValue)
+  //const [value, setValue] = useState(props.defaultValue)
 
   return (
     <View style={Cs.formInputContainer}>
@@ -33,21 +28,11 @@ const FormInputComponent = (props: Props) => {
         style={Os.textInput}
         keyboardType={props.keyboardType}
         placeholder={props.title}
-        value={value}
-        onChangeText={text => setValue(text)}
+        onChangeText={text => props.setValue(props.title, text)}
+        ref={props.register({ name: props.title})}
       />
     </View>
   )
-  /*
-  <Controller
-        as={<TextInput ref={register} />}
-        control={control}
-        name={props.title}
-        onChange={onChange}
-        rules={{ required: false }}
-        defaultValue=""
-      />
-      */
 }
 
 export default FormInputComponent

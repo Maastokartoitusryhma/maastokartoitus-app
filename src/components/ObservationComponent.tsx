@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, ScrollView } from 'react-native'
-import { useForm, Controller } from 'react-hook-form'
+import { View, Text, ScrollView, Button } from 'react-native'
+import { useForm } from 'react-hook-form'
 import { connect } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import Colors from '../styles/Colors'
@@ -13,7 +13,7 @@ import Ts from '../styles/TextStyles'
 
 const ObservationComponent = (props) => {
   //For react-hook-form
-  const { control, handleSubmit, errors, register } = useForm()
+  const { handleSubmit, setValue, errors, register } = useForm()
   const onChange = args => {
     return {
       value: args[0].nativeEvent.text,
@@ -24,6 +24,8 @@ const ObservationComponent = (props) => {
 
   const [schema, setSchema] = useState(null)
   const [UISchema, setUISchema] = useState(null)
+
+  const onSubmit = data => console.log(data)
 
   // Fetch schemas
   useEffect(() => {
@@ -59,8 +61,9 @@ const ObservationComponent = (props) => {
         <ScrollView>
           <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
           <View>
-            {parse(schema)}
+            {parse(schema, setValue, errors, register)}
           </View>
+          <Button title='testi!' onPress={handleSubmit(onSubmit)} />
         </ScrollView>
       </View>
     )
