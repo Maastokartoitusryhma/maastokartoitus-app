@@ -31,6 +31,9 @@ const TextStyles = StyleSheet.create({
   },
   previousObservationsTitle: {
     fontWeight: 'bold',
+  },
+  observationEventTitle: {
+    padding: 10
   }
 })
 

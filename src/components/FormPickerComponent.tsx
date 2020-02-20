@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, Picker } from 'react-native'
+import { useForm, Controller } from 'react-hook-form'
 import Cs from '../styles/ContainerStyles'
 
 interface Props {
@@ -9,6 +10,14 @@ interface Props {
 }
 
 const FormPickerComponent = (props: Props) => {
+
+  //For react-hook-form
+  const { control, handleSubmit, errors, register } = useForm()
+  const onChange = args => {
+    return {
+      value: args[0].nativeEvent.text,
+    }
+  }
 
   const [selected, setSelected] = useState(props.selectedValue)
 
@@ -24,6 +33,19 @@ const FormPickerComponent = (props: Props) => {
       </View>
     </View>
   )
+  /*
+  return (
+    <Controller
+        as={<Picker ref={register}>
+          {props.pickerItems}
+        </Picker>}
+        control={control}
+        name={props.title}
+        onChange={onChange}
+        rules={{ required: false }}
+        defaultValue=""
+      />
+  )*/
 }
 
 export default FormPickerComponent

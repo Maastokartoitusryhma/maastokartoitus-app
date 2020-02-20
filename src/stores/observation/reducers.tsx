@@ -3,6 +3,8 @@ import { observationActionTypes,
         CLEAR_OBSERVATION,
         SET_OBS_ZONE,
         CLEAR_OBS_ZONE,
+        START_OBSERVING,
+        STOP_OBSERVING,
         } from './types'
 
 const observationReducer = (state = null, action : observationActionTypes) => {
@@ -27,4 +29,14 @@ const zoneReducer = (state = [], action : observationActionTypes) => {
   }
 }
 
-export { observationReducer, zoneReducer }
+const observingReducer = (state = false, action : observationActionTypes) => {
+  switch (action.type) {
+    case START_OBSERVING:
+      return true
+    case STOP_OBSERVING:
+      return false
+    default:
+      return state
+  }
+}
+export { observationReducer, zoneReducer, observingReducer }

@@ -10,18 +10,18 @@ import { MaterialIcons } from '@expo/vector-icons'
 
 
 const urlTemplate: string = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
-const userLocationPng: string = '../../assets/userLocation.png'
 
 interface RootState {
   position: LocationData
   path: LocationData[]
+  observing: boolean
   observation: LatLng
   zone: LatLng[]
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, observation, zone } = state
-  return { position, path, observation, zone }
+  const { position, path, observing, observation, zone } = state
+  return { position, path, observing, observation, zone }
 }
 
 const mapDispatchToProps = {

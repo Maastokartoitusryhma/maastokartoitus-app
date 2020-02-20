@@ -25,5 +25,7 @@
   "info": "Info",
   "save": "Save",
   "flying squirrel": "Flying squirrel",
-  "previous observation events": "Previous observation events"
+  "previous observation events": "Previous observation events",
+  "beginObservation": "Begin observation",
+  "cancelObservation": "Stop observation"
 }

@@ -95,7 +95,7 @@ const createPicker = (title: string, keyName: string, defaultValue: string) => {
   const dictObject = dict[keyName]
   const pickerItems = []
   for (const key in dictObject) {
-    pickerItems.push(<FormPickerItemComponent key={key} label={dictObject[key]} value={key} />)
+    pickerItems.push(<FormPickerItemComponent key={key} label={dictObject[key]} value={key} title={key} />)
   }
 
   if (defaultValue !== null) {

@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { Text, TextInput, View } from 'react-native'
+import { useForm, Controller } from 'react-hook-form'
+import { composeInitialProps } from 'react-i18next'
 import Os from '../styles/OtherStyles'
 import Cs from '../styles/ContainerStyles'
 
@@ -10,6 +12,14 @@ interface Props {
 }
 
 const FormInputComponent = (props: Props) => {
+
+  //For react-hook-form
+  const { control, handleSubmit, errors, register } = useForm()
+  const onChange = args => {
+    return {
+      value: args[0].nativeEvent.text,
+    }
+  }
 
   const [value, setValue] = useState(props.defaultValue)
 
@@ -28,7 +38,16 @@ const FormInputComponent = (props: Props) => {
       />
     </View>
   )
-
+  /*
+  <Controller
+        as={<TextInput ref={register} />}
+        control={control}
+        name={props.title}
+        onChange={onChange}
+        rules={{ required: false }}
+        defaultValue=""
+      />
+      */
 }
 
 export default FormInputComponent
