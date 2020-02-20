@@ -38,7 +38,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & { onPress1: () => void } 
 
 const MapComponent = (props: Props) => {
-  const [ regionState, setRegionState ] = useState<Region>({ latitude: 60, longitude: 24, latitudeDelta: 0.25, longitudeDelta: 0.25 })
+  const [ regionState, setRegionState ] = useState<Region>({ latitude: 60.171, longitude: 24.931, latitudeDelta: 0.25, longitudeDelta: 0.25 })
   const [ centered, setCentered ] = useState(true)
   const [ mapType, setMapType ] = useState('none')
   const { t } = useTranslation()
@@ -135,7 +135,7 @@ const MapComponent = (props: Props) => {
     : null
   )
 
-  const pathOverlay = () => (props.path.length !== 0 ?
+  const pathOverlay = () => (props.path.length !== 1 ?
     <Polyline
       coordinates = { props.path.map((location: LocationData) => ({
         latitude: location.coords.latitude,
@@ -148,11 +148,12 @@ const MapComponent = (props: Props) => {
     : null
   )
 
-  const tileOverlay = () => (
-    <UrlTile
-      urlTemplate = {urlTemplate}
-      zIndex = {1}
-    />
+  const tileOverlay = () => (mapType === 'none' ?
+      <UrlTile
+        urlTemplate = {urlTemplate}
+        zIndex = {1}
+      />
+    : null
   )
 
   return (
@@ -175,7 +176,7 @@ const MapComponent = (props: Props) => {
         {locationOverlay()}
         {targetOverlay()}
         {pathOverlay()}
-        {mapType === 'none' ? tileOverlay() : null}
+        {tileOverlay()}
       </MapView>
       <View
         style = {{
@@ -216,7 +217,7 @@ const MapComponent = (props: Props) => {
             style={{
               alignSelf: 'flex-start',
             }}>
-            <Button title = {t('cancel')} onPress = {() => cancelObservation()}/>
+            <Button title = {t('remove')} onPress = {() => cancelObservation()} color = {Colors.negativeButton}/>
           </View>
           <View
             style={{

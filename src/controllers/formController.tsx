@@ -12,7 +12,25 @@ const client = new ApolloClient({
   }
 })
 
-export const getSchema = async () => {
+export const getObservationEventSchema = async () => {
+  const query = gql`
+    query {
+      form(id: "MHL.45") {
+        id
+        schema
+      }
+    }
+  `
+  try {
+    const response = await client.query({ query })
+    return response.data.form.schema
+  } catch (error) {
+    Alert.alert(error)
+    return null
+  }
+}
+
+export const getSingleObservationSchema = async () => {
   const query = gql`
     query {
       form(id: "MHL.45") {

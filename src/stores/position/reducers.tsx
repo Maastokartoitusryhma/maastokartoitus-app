@@ -17,7 +17,7 @@ const pathReducer = (state = [], action : locationActionTypes) => {
   switch (action.type) {
     case APPEND_PATH:
       if (action.payload.length === 1) {
-
+        return [...action.payload, ...state]
       }
       const path = action.payload.reverse()
 
