@@ -18,12 +18,12 @@ const observationReducer = (state = null, action : observationActionTypes) => {
   }
 }
 
-const zoneReducer = (state = [], action : observationActionTypes) => {
+const zoneReducer = (state = null, action : observationActionTypes) => {
   switch (action.type) {
     case SET_OBS_ZONE:
       return action.payload
     case CLEAR_OBS_ZONE:
-      return []
+      return null
     default:
       return state
   }

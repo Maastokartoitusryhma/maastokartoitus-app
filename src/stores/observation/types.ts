@@ -1,4 +1,5 @@
 import { LatLng } from 'react-native-maps'
+import { GeometryCollection } from 'geojson'
 
 export const SET_OBSERVATION = 'SET_OBSERVATION'
 export const CLEAR_OBSERVATION = 'CLEAR_OBSERVATION'
@@ -18,7 +19,7 @@ interface clearObservationLocation {
 
 interface setObservationZone {
   type : typeof SET_OBS_ZONE
-  payload: LatLng[]
+  payload: GeometryCollection
 }
 
 interface clearObservationZone {

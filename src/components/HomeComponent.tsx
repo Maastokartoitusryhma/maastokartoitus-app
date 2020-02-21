@@ -8,17 +8,18 @@ import Ts from '../styles/TextStyles'
 import Color from '../styles/Colors'
 import { LocationData } from 'expo-location'
 import { LatLng } from 'react-native-maps'
-import { startObserving, stopObserving } from '../stores/observation/actions'
+import { startObserving, stopObserving, setObservationZone, clearObservationZone } from '../stores/observation/actions'
 import { updateLocation, appendPath } from '../stores/position/actions'
 import { connect, ConnectedProps } from 'react-redux'
-import {watchLocationAsync, stopLocationAsync } from '../geolocation/geolocation'
+import { watchLocationAsync, stopLocationAsync } from '../geolocation/geolocation'
+import { GeometryCollection } from 'geojson'
 
 interface RootState {
   position: LocationData
   path: LocationData[]
   observing: boolean
   observation: LatLng
-  zone: LatLng[]
+  zone: GeometryCollection
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -29,6 +30,8 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = {
   updateLocation,
   appendPath,
+  setObservationZone,
+  clearObservationZone,
   startObserving,
   stopObserving,
 }
@@ -47,6 +50,7 @@ type Props = PropsFromRedux & {
 interface RegionObject {
   name: string
   id: string
+  geometry: GeometryCollection
 }
 
 const HomeComponent = (props: Props) => {
@@ -60,6 +64,7 @@ const HomeComponent = (props: Props) => {
       if (response !== null) {
         setRegions(response.results)
         setSelectedRegion(response.results[0].name)
+        setSelectedObservationZone(response.results[0].id)
       }
     }
 
@@ -84,6 +89,14 @@ const HomeComponent = (props: Props) => {
     stopLocationAsync()
   }
 
+  const setSelectedObservationZone = (id: string) => {
+    const region: RegionObject | undefined = regions.find(region => region.id === id)              
+    
+    if (region) {
+      props.setObservationZone(region.geometry)
+    }
+  }
+
   return (
     <View>
       <UserInfoComponent onLogout={props.onLogout} />
@@ -94,8 +107,11 @@ const HomeComponent = (props: Props) => {
             <Text>{t('observation zone')}</Text>
             <Picker 
               selectedValue={selectedRegion}
-              onValueChange={itemValue => setSelectedRegion(itemValue)}>
-                {createRegionsList()}
+              onValueChange={itemValue => {
+                setSelectedRegion(itemValue)
+                setSelectedObservationZone(itemValue) 
+              }}>
+              {createRegionsList()}
             </Picker>
           </View>
           <View style={Cs.buttonContainer}>
