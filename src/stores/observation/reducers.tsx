@@ -3,8 +3,9 @@ import { observationActionTypes,
         CLEAR_OBSERVATION,
         SET_OBS_ZONE,
         CLEAR_OBS_ZONE,
-        START_OBSERVING,
-        STOP_OBSERVING,
+        TOGGLE_OBSERVING,
+        TOGGLE_CENTERED,
+        TOGGLE_MAPTYPE,
         } from './types'
 
 const observationReducer = (state = null, action : observationActionTypes) => {
@@ -31,12 +32,32 @@ const zoneReducer = (state = null, action : observationActionTypes) => {
 
 const observingReducer = (state = false, action : observationActionTypes) => {
   switch (action.type) {
-    case START_OBSERVING:
-      return true
-    case STOP_OBSERVING:
-      return false
+    case TOGGLE_OBSERVING:
+      const newState = !state
+      return newState
     default:
       return state
   }
 }
-export { observationReducer, zoneReducer, observingReducer }
+
+const centeringReducer = (state = true, action : observationActionTypes) => {
+  switch (action.type) {
+    case TOGGLE_CENTERED: 
+      const newState = !state
+      return newState
+    default:
+      return state
+  }
+}
+
+const maptypeReducer = (state: 'topographic' | 'satellite' = 'topographic', action : observationActionTypes) => {
+  switch (action.type) {
+    case TOGGLE_MAPTYPE: 
+      const newState = state === 'topographic' ? 'satellite' : 'topographic'
+      return newState
+    default:
+      return state
+  } 
+}
+
+export { observationReducer, zoneReducer, observingReducer, centeringReducer, maptypeReducer }

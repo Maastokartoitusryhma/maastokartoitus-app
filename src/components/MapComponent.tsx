@@ -4,32 +4,39 @@ import { connect, ConnectedProps } from 'react-redux'
 import { Button, View, Dimensions, TouchableHighlight } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { LocationData } from 'expo-location'
-import { FeatureCollection, GeometryCollection } from 'geojson'
+import { GeometryCollection } from 'geojson'
 import { convertGC2FC } from '../converters/geoJSONConverters'
 import Geojson from 'react-native-typescript-geojson'
-import { setObservationLocation, clearObservationLocation } from '../stores/observation/actions' 
+import { 
+  setObservationLocation, 
+  clearObservationLocation, 
+  toggleCentered, 
+  toggleMaptype 
+} from '../stores/observation/actions' 
 import Colors from '../styles/Colors'
 import { MaterialIcons } from '@expo/vector-icons'
-
 
 const urlTemplate: string = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
 
 interface RootState {
   position: LocationData
   path: LocationData[]
-  observing: boolean
   observation: LatLng
   zone: GeometryCollection
+  centered: boolean
+  maptype: 'topographic' | 'satellite'
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, observing, observation, zone } = state
-  return { position, path, observing, observation, zone }
+  const { position, path, zone, centered, maptype } = state
+  return { position, path, zone, centered, maptype }
 }
 
 const mapDispatchToProps = {
   setObservationLocation,
   clearObservationLocation,
+  toggleCentered,
+  toggleMaptype,
 }
 
 const connector = connect(
@@ -41,18 +48,18 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & { onPress1: () => void } 
 
 const MapComponent = (props: Props) => {
-  const [ regionState, setRegionState ] = useState<Region>({ latitude: 60.171, longitude: 24.931, latitudeDelta: 0.25, longitudeDelta: 0.25 })
-  const [ centered, setCentered ] = useState(true)
-  const [ mapType, setMapType ] = useState('none')
+  const [ regionState, setRegionState ] = useState<Region>({ 
+    latitude: 60.171, longitude: 24.931, latitudeDelta: 0.25, longitudeDelta: 0.25 
+  })
   const { t } = useTranslation()
 
   useEffect(() => {
-    if (centered && props.position) {
+    if (props.centered && props.position) {
       followUser()
     }
   })
 
-  let mapView : MapView | null
+  let mapView: MapView | null = null
 
   const followUser = () => {
     const region = getRegionFromCoords()
@@ -80,7 +87,7 @@ const MapComponent = (props: Props) => {
   }
 
   const centerMapAnim = () => {
-    centered ? null : setCentered(true)
+    props.centered ? null : props.toggleCentered()
 
     const region = getRegionFromCoords()
 
@@ -89,14 +96,8 @@ const MapComponent = (props: Props) => {
     }
   }
 
-  const switchMap = () => {
-    mapType === 'none' ? 
-      setMapType('satellite')
-      : setMapType('none')
-  }
-
   const onPanDrag = () => {
-    centered ? setCentered(false) : null
+    props.centered ? props.toggleCentered() : null
   }
 
   const onRegionChangeComplete = (region: Region) => {
@@ -162,7 +163,7 @@ const MapComponent = (props: Props) => {
     : null
   )
 
-  const tileOverlay = () => (mapType === 'none' ?
+  const tileOverlay = () => (props.maptype === 'topographic' ?
       <UrlTile
         urlTemplate = {urlTemplate}
         zIndex = {-1}
@@ -172,36 +173,35 @@ const MapComponent = (props: Props) => {
 
   return (
     <>
-      <View>
-        <MapView
-          ref = {map => {mapView = map}}
-          provider = {'google'}
-          initialRegion = { regionState }
-          onPanDrag = {() => onPanDrag()}
-          onLongPress = {(event) => markObservation(event.nativeEvent.coordinate)}
-          onRegionChangeComplete = {(region) => onRegionChangeComplete(region)}
-          maxZoomLevel = {18}
-          minZoomLevel = {0}
-          mapType = {mapType}
-          style = {{
-            width: Dimensions.get('window').width,
-            height: Dimensions.get('window').height,
-          }}
-        >
-          {locationOverlay()}
-          {targetOverlay()}
-          {pathOverlay()}
-          {zoneOverlay()}
-          {tileOverlay()}
-        </MapView>
-      </View>
+      <MapView
+        ref = {map => {mapView = map}}
+        provider = {'google'}
+        initialRegion = { regionState }
+        onPanDrag = {() => onPanDrag()}
+        onLongPress = {(event) => markObservation(event.nativeEvent.coordinate)}
+        onRegionChangeComplete = {(region) => onRegionChangeComplete(region)}
+        maxZoomLevel = {18}
+        minZoomLevel = {0}
+        mapType = {props.maptype === 'topographic' ? 'none' : props.maptype}
+        rotateEnabled = {false}
+        style = {{
+          width: Dimensions.get('window').width,
+          height: Dimensions.get('window').height,
+        }}
+      >
+        {locationOverlay()}
+        {targetOverlay()}
+        {pathOverlay()}
+        {zoneOverlay()}
+        {tileOverlay()}
+      </MapView>
       <View
         style = {{
           position: 'absolute',
           top: '1%',
           alignSelf: 'flex-end'
         }}>
-        <TouchableHighlight onPress = {() => switchMap()} style = {{backgroundColor: Colors.headerBackground, borderRadius: 5}}>
+        <TouchableHighlight onPress = {() => props.toggleMaptype()} style = {{backgroundColor: Colors.headerBackground, borderRadius: 5}}>
           <MaterialIcons
             name='layers'
             size={50}

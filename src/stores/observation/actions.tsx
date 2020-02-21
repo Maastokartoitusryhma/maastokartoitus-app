@@ -5,8 +5,9 @@ import { observationActionTypes,
         CLEAR_OBSERVATION,
         SET_OBS_ZONE,
         CLEAR_OBS_ZONE,
-        STOP_OBSERVING,
-        START_OBSERVING
+        TOGGLE_OBSERVING,
+        TOGGLE_CENTERED,
+        TOGGLE_MAPTYPE,
         } from './types'
 
 export const setObservationLocation = (location : LatLng | null) : observationActionTypes => ({
@@ -27,10 +28,14 @@ export const clearObservationZone = () : observationActionTypes => ({
   type: CLEAR_OBS_ZONE
 })
 
-export const startObserving = () : observationActionTypes => ({
-  type: START_OBSERVING
+export const toggleObserving = () : observationActionTypes => ({
+  type: TOGGLE_OBSERVING
 })
 
-export const stopObserving = () : observationActionTypes => ({
-  type: STOP_OBSERVING
+export const toggleCentered = () : observationActionTypes => ({
+  type: TOGGLE_CENTERED
+})
+
+export const toggleMaptype = () : observationActionTypes => ({
+  type: TOGGLE_MAPTYPE
 })
