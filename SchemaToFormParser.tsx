@@ -3,6 +3,7 @@ import FormInputComponent from './src/components/FormInputComponent'
 import FormArrayComponent from './src/components/FormArrayComponent'
 import FormPickerItemComponent from './src/components/FormPickerItemComponent'
 import FormPickerComponent from './src/components/FormPickerComponent'
+//import uuid from 'react-native-uuid'
 
 interface MyObject{
   [key: string]: any
