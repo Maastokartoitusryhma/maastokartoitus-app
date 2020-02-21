@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import MapView, { Marker, Polyline, UrlTile, Region, LatLng } from 'react-native-maps'
 import { connect, ConnectedProps } from 'react-redux'
-import { Button, View, Image, Dimensions, TouchableHighlight } from 'react-native'
+import { Button, View, Dimensions, TouchableHighlight } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { LocationData } from 'expo-location'
+import { FeatureCollection, GeometryCollection } from 'geojson'
+import { convertGC2FC } from '../converters/geoJSONConverters'
+import Geojson from 'react-native-typescript-geojson'
 import { setObservationLocation, clearObservationLocation } from '../stores/observation/actions' 
 import Colors from '../styles/Colors'
 import { MaterialIcons } from '@expo/vector-icons'
@@ -16,7 +19,7 @@ interface RootState {
   path: LocationData[]
   observing: boolean
   observation: LatLng
-  zone: LatLng[]
+  zone: GeometryCollection
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -130,7 +133,7 @@ const MapComponent = (props: Props) => {
         latitude: props.observation.latitude,
         longitude: props.observation.longitude
       }}
-      zIndex = {4}
+      zIndex = {2}
     />
     : null
   )
@@ -143,7 +146,18 @@ const MapComponent = (props: Props) => {
       }))}
       strokeWidth = {5}
       strokeColor = {Colors.red}
-      zIndex = {2}
+      zIndex = {1}
+    />
+    : null
+  )
+
+  const zoneOverlay = () => (props.zone ?
+    <Geojson 
+      geojson = {convertGC2FC(props.zone)}
+      fillColor = "#f002"
+      pinColor = "#f00"
+      strokeColor = "#f00"
+      strokeWidth = {4}
     />
     : null
   )
@@ -151,7 +165,7 @@ const MapComponent = (props: Props) => {
   const tileOverlay = () => (mapType === 'none' ?
       <UrlTile
         urlTemplate = {urlTemplate}
-        zIndex = {1}
+        zIndex = {-1}
       />
     : null
   )
@@ -177,6 +191,7 @@ const MapComponent = (props: Props) => {
           {locationOverlay()}
           {targetOverlay()}
           {pathOverlay()}
+          {zoneOverlay()}
           {tileOverlay()}
         </MapView>
       </View>

@@ -1,4 +1,5 @@
 import { LatLng } from 'react-native-maps'
+import { GeometryCollection } from 'geojson'
 import { observationActionTypes,
         SET_OBSERVATION,
         CLEAR_OBSERVATION,
@@ -17,9 +18,9 @@ export const clearObservationLocation = () : observationActionTypes => ({
   type: CLEAR_OBSERVATION
 })
 
-export const setObservationZone = ( polygon : LatLng[] ) : observationActionTypes => ({
+export const setObservationZone = ( zone : GeometryCollection ) : observationActionTypes => ({
   type: SET_OBS_ZONE,
-  payload: polygon
+  payload: zone
 })
 
 export const clearObservationZone = () : observationActionTypes => ({
