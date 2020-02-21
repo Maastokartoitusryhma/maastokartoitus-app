@@ -10,6 +10,7 @@ interface Props {
   setValue: any
   errors: any
   register: any
+  isArrayItem: boolean
 }
 
 const FormInputComponent = (props: Props) => {
@@ -24,7 +25,7 @@ const FormInputComponent = (props: Props) => {
 
   return (
     <View style={Cs.formInputContainer}>
-      {props.title !== ''
+      {(props.title !== '' && !props.isArrayItem)
         ? <Text>{props.title}</Text>
         : null
       }

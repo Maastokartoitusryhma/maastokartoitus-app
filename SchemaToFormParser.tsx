@@ -61,7 +61,7 @@ const parseNested = (data: MyObject = {}, objectTitle: string, arrayBoolean: boo
     } else if (title !== '' && type !== '' && isArray) {
       toReturn.push(createArray(title, type, defaultValue, setValue, errors, register))
     } else if (title !== '' && type !== '') {
-      toReturn.push(createInputElement(title, type, defaultValue, setValue, errors, register))
+      toReturn.push(createInputElement(title, type, defaultValue, setValue, errors, register, false))
     }
 
     return toReturn
@@ -103,14 +103,14 @@ const createPicker = (title: string, keyName: string, defaultValue: string, setV
 }
 
 const createArray = (title: string, type: string, defaultValue: string, setValue, errors, register) => {
-  const inputElements = [createInputElement(title + '_' + uuid.v4(), type, defaultValue, setValue, errors, register)]
+  const inputElements = [createInputElement(title + '_' + uuid.v4(), type, defaultValue, setValue, errors, register, true)]
   return <FormArrayComponent title={title} inputType={type} inputElements={inputElements} setValue={setValue} errors={errors} register={register} />
 }
 
-const createInputElement = (title: string, type: string, defaultValue: string, setValue, errors, register) => {
+const createInputElement = (title: string, type: string, defaultValue: string, setValue, errors, register, isArrayItem) => {
   if (type === 'string') {
-    return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='default' setValue={setValue} errors={errors} register={register} />
+    return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='default' setValue={setValue} errors={errors} register={register} isArrayItem={isArrayItem} />
   } else if (type === 'integer') {
-    return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='numeric' setValue={setValue} errors={errors} register={register} />    
+    return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='numeric' setValue={setValue} errors={errors} register={register} isArrayItem={isArrayItem} />    
   }
 } 
