@@ -5,8 +5,9 @@ export const SET_OBSERVATION = 'SET_OBSERVATION'
 export const CLEAR_OBSERVATION = 'CLEAR_OBSERVATION'
 export const SET_OBS_ZONE = 'SET_OBS_ZONE'
 export const CLEAR_OBS_ZONE = 'CLEAR_OBS_ZONE'
-export const START_OBSERVING = 'START_OBSERVING'
-export const STOP_OBSERVING = 'STOP_OBSERVING'
+export const TOGGLE_OBSERVING = 'TOGGLE_OBSERVING'
+export const TOGGLE_CENTERED = 'TOGGLE_CENTERED'
+export const TOGGLE_MAPTYPE = 'TOGGLE_MAPTYPE'
 
 interface setObservationLocation {
   type: typeof SET_OBSERVATION
@@ -26,12 +27,22 @@ interface clearObservationZone {
   type: typeof CLEAR_OBS_ZONE
 }
 
-interface startObserving {
-  type : typeof START_OBSERVING
+interface toggleObserving {
+  type: typeof TOGGLE_OBSERVING
 }
 
-interface stopObserving {
-  type : typeof STOP_OBSERVING
+interface toggleCentered {
+  type: typeof TOGGLE_CENTERED
 }
 
-export type observationActionTypes = setObservationLocation | clearObservationLocation | setObservationZone | clearObservationZone | startObserving | stopObserving
+interface toggleMaptype {
+  type: typeof TOGGLE_MAPTYPE
+}
+
+export type observationActionTypes = setObservationLocation | 
+                                     clearObservationLocation | 
+                                     setObservationZone | 
+                                     clearObservationZone | 
+                                     toggleObserving | 
+                                     toggleCentered |
+                                     toggleMaptype
