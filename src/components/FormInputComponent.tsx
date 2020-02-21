@@ -15,8 +15,10 @@ interface Props {
 const FormInputComponent = (props: Props) => {
 
   const [inputValue, setInputValue] = useState(props.defaultValue)
+  console.log('default ', inputValue, ' from ', props.title)
 
   if (inputValue !== null) {
+    console.log('set value ', inputValue, ' into ', props.title)
     props.setValue(props.title, inputValue)
   }
 
@@ -30,11 +32,11 @@ const FormInputComponent = (props: Props) => {
         style={Os.textInput}
         keyboardType={props.keyboardType}
         placeholder={props.title}
-        value={inputValue}
         onChangeText={text => {
           setInputValue(text)
           props.setValue(props.title, text)}
         }
+        value={inputValue}
         ref={props.register({ name: props.title})}
       />
     </View>

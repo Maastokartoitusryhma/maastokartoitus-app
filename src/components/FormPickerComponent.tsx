@@ -7,6 +7,9 @@ interface Props {
   title: string
   selectedValue: string|null
   pickerItems: Array<Object>
+  setValue: any
+  errors: any
+  register: any
 }
 
 const FormPickerComponent = (props: Props) => {

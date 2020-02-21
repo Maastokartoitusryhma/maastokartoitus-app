@@ -3,7 +3,7 @@ import FormInputComponent from './src/components/FormInputComponent'
 import FormArrayComponent from './src/components/FormArrayComponent'
 import FormPickerItemComponent from './src/components/FormPickerItemComponent'
 import FormPickerComponent from './src/components/FormPickerComponent'
-//import uuid from 'react-native-uuid'
+import uuid from 'react-native-uuid'
 
 interface MyObject{
   [key: string]: any
@@ -103,7 +103,7 @@ const createPicker = (title: string, keyName: string, defaultValue: string, setV
 }
 
 const createArray = (title: string, type: string, defaultValue: string, setValue, errors, register) => {
-  const inputElements = [createInputElement('', type, defaultValue, setValue, errors, register)]
+  const inputElements = [createInputElement(title + '_' + uuid.v4(), type, defaultValue, setValue, errors, register)]
   return <FormArrayComponent title={title} inputType={type} inputElements={inputElements} setValue={setValue} errors={errors} register={register} />
 }
 
