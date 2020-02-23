@@ -1,0 +1,49 @@
+{
+  "id": "",
+  "editors": [],
+  "secureLevel": "MX.secureLevelNone",
+  "gatheringEvent": {
+    "leg": [],
+    "legPublic": false,
+    "dateBegin": "",
+    "dateEnd": ""
+  },
+  "keywords": [],
+  "gatherings": [
+    {
+      "geometry": {},
+      "locality": "",
+      "notes": "",
+      "habitat": [],
+      "images": [],
+      "gatheringType": "",
+      "units": [
+        {
+          "count": "",
+          "taxonConfidence": "MY.taxonConfidenceSure",
+          "notes": "",
+          "identifications": [
+            {
+              "taxonID": "MX.48243"
+            }
+          ],
+          "recordBasis": "",
+          "nestType": "",
+          "nestNotes": "",
+          "nestCount": 0,
+          "indirectObservationType": "",
+          "lifeStage": "MY.lifeStageAlive",
+          "unitGathering": {
+            "geometry": {}
+          },
+          "unitFact": {
+            "lolifeDroppingsType": "",
+            "lolifeDroppingsCount": "",
+            "lolifeDroppingsQuality": ""
+          },
+          "images": []
+        }
+      ]
+    }
+  ]
+}

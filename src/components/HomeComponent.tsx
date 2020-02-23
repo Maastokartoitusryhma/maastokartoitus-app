@@ -8,11 +8,13 @@ import Ts from '../styles/TextStyles'
 import Color from '../styles/Colors'
 import { LocationData } from 'expo-location'
 import { LatLng } from 'react-native-maps'
-import { toggleObserving, setObservationZone, clearObservationZone } from '../stores/observation/actions'
+import { toggleObserving, setObservationZone, clearObservationZone, newObservationEvent } from '../stores/observation/actions'
 import { updateLocation, appendPath } from '../stores/position/actions'
 import { connect, ConnectedProps } from 'react-redux'
 import { watchLocationAsync, stopLocationAsync } from '../geolocation/geolocation'
 import { GeometryCollection } from 'geojson'
+import testForm from '../../temporaryForm.json'
+import uuid from 'react-native-uuid'
 
 interface RootState {
   position: LocationData
@@ -33,6 +35,7 @@ const mapDispatchToProps = {
   setObservationZone,
   clearObservationZone,
   toggleObserving,
+  newObservationEvent
 }
 
 const connector = connect(
@@ -78,6 +81,9 @@ const HomeComponent = (props: Props) => {
   const { t } = useTranslation()
 
   const beginObservationEvent = () => {
+    const observationForm = testForm
+    observationForm.id = 'observatioEvent_' + uuid.v4
+    props.newObservationEvent(observationForm)
     props.toggleObserving()
     watchLocationAsync(props.updateLocation, props.appendPath)
     props.onPressMap()

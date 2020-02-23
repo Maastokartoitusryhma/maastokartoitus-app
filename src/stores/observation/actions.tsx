@@ -8,6 +8,7 @@ import { observationActionTypes,
         TOGGLE_OBSERVING,
         TOGGLE_CENTERED,
         TOGGLE_MAPTYPE,
+        NEW_OBSERVATION_EVENT
         } from './types'
 
 export const setObservationLocation = (location : LatLng | null) : observationActionTypes => ({
@@ -38,4 +39,9 @@ export const toggleCentered = () : observationActionTypes => ({
 
 export const toggleMaptype = () : observationActionTypes => ({
   type: TOGGLE_MAPTYPE
+})
+
+export const newObservationEvent = (observation : object) : observationActionTypes => ({
+  type: NEW_OBSERVATION_EVENT,
+  payload: observation
 })

@@ -12,7 +12,7 @@ import Ts from '../styles/TextStyles'
 const ObservationComponent = (props) => {
 
   //For react-hook-form
-  const { handleSubmit, setValue, errors, register } = useForm()
+  const { handleSubmit, setValue, errors, register, control } = useForm()
 
   const { t } = useTranslation()
 

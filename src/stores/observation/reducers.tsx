@@ -6,6 +6,7 @@ import { observationActionTypes,
         TOGGLE_OBSERVING,
         TOGGLE_CENTERED,
         TOGGLE_MAPTYPE,
+        NEW_OBSERVATION_EVENT
         } from './types'
 
 const observationReducer = (state = null, action : observationActionTypes) => {
@@ -60,4 +61,13 @@ const maptypeReducer = (state: 'topographic' | 'satellite' = 'topographic', acti
   } 
 }
 
-export { observationReducer, zoneReducer, observingReducer, centeringReducer, maptypeReducer }
+const observationEventsReducer = (state = [], action : observationActionTypes) => {
+  switch (action.type) {
+    case NEW_OBSERVATION_EVENT:
+      return [...state, action.payload]
+    default:
+      return state
+  }
+}
+
+export { observationReducer, zoneReducer, observingReducer, centeringReducer, maptypeReducer, observationEventsReducer }
