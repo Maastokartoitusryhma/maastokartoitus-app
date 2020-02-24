@@ -32,12 +32,12 @@ const FormInputComponent = (props: Props) => {
       <TextInput
         style={Os.textInput}
         keyboardType={props.keyboardType}
-        placeholder={props.title}
         onChangeText={text => {
           setInputValue(text)
           props.setValue(props.title, text)}
         }
         value={inputValue}
+        defaultValue={''}
         ref={props.register({ name: props.title})}
       />
     </View>
