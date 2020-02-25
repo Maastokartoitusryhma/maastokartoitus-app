@@ -28,8 +28,8 @@ interface RootState {
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, zone, centered, maptype } = state
-  return { position, path, zone, centered, maptype }
+  const { position, path, observation, zone, centered, maptype } = state
+  return { position, path, observation, zone, centered, maptype }
 }
 
 const mapDispatchToProps = {
