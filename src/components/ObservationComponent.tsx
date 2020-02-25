@@ -9,11 +9,12 @@ import { newObservationEvent } from '../stores/observation/actions'
 import { parseSchemaToForm } from '../../SchemaToFormParser'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
+import Colors from '../styles/Colors';
 
 const ObservationComponent = (props) => {
 
   //For react-hook-form
-  const { handleSubmit, setValue, errors, register, control } = useForm()
+  const { handleSubmit, setValue, unregister, errors, register, control } = useForm()
   const { t } = useTranslation()
   const [form, setForm] = useState()
 
@@ -40,7 +41,7 @@ const ObservationComponent = (props) => {
   const loadSchemaAndSetForm = async () => {
     const fetchedSchema = await getSingleObservationSchema() 
     if (fetchedSchema !== null) {
-      setForm(parseSchemaToForm(fetchedSchema, setValue, errors, register))
+      setForm(parseSchemaToForm(fetchedSchema, setValue, unregister, errors, register))
     }
   }
 
@@ -52,11 +53,14 @@ const ObservationComponent = (props) => {
       <View style={Cs.observationContainer}>
         <ScrollView>
           <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
-          <View>
+          <View style={Cs.formContainer}>
             {form}
-            <Button onPress={() => console.log('ADD NEW OBSERVATION')} title='ADD'></Button>
           </View>
-          <Button title='testi!' onPress={handleSubmit(onSubmit)} />
+          <View style={Cs.formSaveButtonContainer}>
+            <Button onPress={() => console.log('ADD NEW OBSERVATION')} title='SAVE NEW OBSERVATION' color={Colors.positiveButton}></Button>
+            <Button title='testi!' onPress={handleSubmit(onSubmit)} />
+          </View>
+          
         </ScrollView>
       </View>
     )

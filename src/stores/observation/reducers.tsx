@@ -6,8 +6,25 @@ import { observationActionTypes,
         TOGGLE_OBSERVING,
         TOGGLE_CENTERED,
         TOGGLE_MAPTYPE,
-        NEW_OBSERVATION_EVENT
+        NEW_OBSERVATION_EVENT,
+        SET_REGION,
+        CLEAR_REGION
         } from './types'
+
+const initialRegion = { 
+  latitude: 60.171, longitude: 24.931, latitudeDelta: 0.25, longitudeDelta: 0.25 
+}
+
+const regionReducer = (state = initialRegion, action: observationActionTypes) => {
+  switch (action.type) {
+    case SET_REGION:
+      return action.payload
+    case CLEAR_REGION:
+      return initialRegion
+    default:
+      return state
+  }
+}
 
 const observationReducer = (state = null, action : observationActionTypes) => {
   switch (action.type) {
@@ -70,4 +87,11 @@ const observationEventsReducer = (state = [], action : observationActionTypes) =
   }
 }
 
-export { observationReducer, zoneReducer, observingReducer, centeringReducer, maptypeReducer, observationEventsReducer }
+export { 
+  regionReducer, 
+  observationReducer, 
+  zoneReducer, 
+  observingReducer, 
+  centeringReducer, 
+  maptypeReducer,
+  observationEventsReducer }
