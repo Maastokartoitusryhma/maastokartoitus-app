@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { getSingleObservationSchema, getUISchema } from '../controllers/formController'
 import storageController from '../controllers/storageController'
+import { newObservationEvent } from '../stores/observation/actions'
 import { parseSchemaToForm } from '../../SchemaToFormParser'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
@@ -16,7 +17,20 @@ const ObservationComponent = (props) => {
   const { t } = useTranslation()
   const [form, setForm] = useState()
 
-  const onSubmit = data => console.log('REGISTER DATA:', data)
+  const onSubmit = data => {
+    console.log('EVENT BEFORE:', props.observationEvent)
+    const event = props.observationEvent.pop()
+    console.log('EVENT OBJECT BEFORE: ', event)
+    const changedEvent = {
+      ...event
+    }
+    event.gatherings[0].units.push(data)
+    console.log('EVENT OBJECT AFTER: ', event)
+    props.newObservationEvent(event)
+
+    console.log('REGISTER DATA:', data)
+    console.log('EVENT AFTER:', props.observationEvent)
+  }
 
   // Fetch schemas
   useEffect(() => {
@@ -50,8 +64,17 @@ const ObservationComponent = (props) => {
 }
 
 const mapStateToProps = (state) => {
-  const { location } = state
-  return { location }
+  const { location, observationEvent } = state
+  return { location, observationEvent }
 }
 
-export default connect(mapStateToProps)(ObservationComponent)
+const mapDispatchToProps = {
+  newObservationEvent
+}
+
+const connector = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)
+
+export default connector(ObservationComponent)
