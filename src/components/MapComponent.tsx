@@ -4,10 +4,11 @@ import { connect, ConnectedProps } from 'react-redux'
 import { Button, View, Dimensions, TouchableHighlight } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { LocationData } from 'expo-location'
-import { GeometryCollection } from 'geojson'
-import { convertGC2FC } from '../converters/geoJSONConverters'
+import { GeometryCollection, Point } from 'geojson'
+import { wrapGeometryInFC, convertGC2FC, convertLatLngToPoint } from '../converters/geoJSONConverters'
 import Geojson from 'react-native-typescript-geojson'
 import { 
+  setRegion,
   setObservationLocation, 
   clearObservationLocation, 
   toggleCentered, 
@@ -21,18 +22,20 @@ const urlTemplate: string = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/ma
 interface RootState {
   position: LocationData
   path: LocationData[]
-  observation: LatLng
+  region: Region
+  observation: Point
   zone: GeometryCollection
   centered: boolean
   maptype: 'topographic' | 'satellite'
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, observation, zone, centered, maptype } = state
-  return { position, path, observation, zone, centered, maptype }
+  const { position, path, region, observation, zone, centered, maptype } = state
+  return { position, path, region, observation, zone, centered, maptype }
 }
 
 const mapDispatchToProps = {
+  setRegion,
   setObservationLocation,
   clearObservationLocation,
   toggleCentered,
@@ -48,25 +51,27 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & { onPress1: () => void } 
 
 const MapComponent = (props: Props) => {
-  const [ regionState, setRegionState ] = useState<Region>({ 
-    latitude: 60.171, longitude: 24.931, latitudeDelta: 0.25, longitudeDelta: 0.25 
-  })
   const { t } = useTranslation()
 
   useEffect(() => {
     if (props.centered && props.position) {
       followUser()
+    } else {
+
     }
   })
 
   let mapView: MapView | null = null
 
-  const followUser = () => {
-    const region = getRegionFromCoords()
-
+  const moveToRegion = (region: Region | null) => {
     if (region && mapView) {
       mapView.animateToRegion(region, 500)
     }
+  }
+
+  const followUser = () => {
+    const region = getRegionFromCoords()
+    moveToRegion(region)
   }
 
   const getRegionFromCoords = () => {
@@ -76,8 +81,8 @@ const MapComponent = (props: Props) => {
       const region : Region = {
         latitude: coords.latitude,
         longitude: coords.longitude,
-        latitudeDelta: regionState.latitudeDelta,
-        longitudeDelta: regionState.longitudeDelta,
+        latitudeDelta: props.region.latitudeDelta,
+        longitudeDelta: props.region.longitudeDelta,
       }
 
       return region
@@ -90,10 +95,7 @@ const MapComponent = (props: Props) => {
     props.centered ? null : props.toggleCentered()
 
     const region = getRegionFromCoords()
-
-    if (mapView && region) {
-      mapView.animateToRegion(region, 500)
-    }
+    moveToRegion(region)
   }
 
   const onPanDrag = () => {
@@ -101,11 +103,13 @@ const MapComponent = (props: Props) => {
   }
 
   const onRegionChangeComplete = (region: Region) => {
-    setRegionState(region)
+    props.setRegion(region)
   }
 
   const markObservation = (coordinate: LatLng) => {
-    props.setObservationLocation(coordinate)
+    const point = convertLatLngToPoint(coordinate)
+
+    props.setObservationLocation(point)
   }
 
   const cancelObservation = () => {
@@ -128,17 +132,6 @@ const MapComponent = (props: Props) => {
     : null
   )
 
-  const targetOverlay  = () => (props.observation ?
-    <Marker
-      coordinate = {{
-        latitude: props.observation.latitude,
-        longitude: props.observation.longitude
-      }}
-      zIndex = {2}
-    />
-    : null
-  )
-
   const pathOverlay = () => (props.path.length !== 1 ?
     <Polyline
       coordinates = { props.path.map((location: LocationData) => ({
@@ -148,6 +141,13 @@ const MapComponent = (props: Props) => {
       strokeWidth = {5}
       strokeColor = {Colors.red}
       zIndex = {1}
+    />
+    : null
+  )
+
+  const targetOverlay  = () => (props.observation ?
+    <Geojson 
+      geojson = {wrapGeometryInFC(props.observation)}
     />
     : null
   )
@@ -176,7 +176,7 @@ const MapComponent = (props: Props) => {
       <MapView
         ref = {map => {mapView = map}}
         provider = {'google'}
-        initialRegion = { regionState }
+        initialRegion = { props.region }
         onPanDrag = {() => onPanDrag()}
         onLongPress = {(event) => markObservation(event.nativeEvent.coordinate)}
         onRegionChangeComplete = {(region) => onRegionChangeComplete(region)}

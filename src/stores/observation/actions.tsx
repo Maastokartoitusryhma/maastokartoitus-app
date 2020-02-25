@@ -1,5 +1,5 @@
-import { LatLng } from 'react-native-maps'
-import { GeometryCollection } from 'geojson'
+import { LatLng, Region } from 'react-native-maps'
+import { GeometryCollection, Point  } from 'geojson'
 import { observationActionTypes,
         SET_OBSERVATION,
         CLEAR_OBSERVATION,
@@ -8,12 +8,23 @@ import { observationActionTypes,
         TOGGLE_OBSERVING,
         TOGGLE_CENTERED,
         TOGGLE_MAPTYPE,
-        NEW_OBSERVATION_EVENT
+        NEW_OBSERVATION_EVENT,
+        SET_REGION,
+        CLEAR_REGION
         } from './types'
 
-export const setObservationLocation = (location : LatLng | null) : observationActionTypes => ({
+export const setRegion = (region: Region) : observationActionTypes => ({
+  type: SET_REGION,
+  payload: region,
+})
+
+export const clearRegion = () :observationActionTypes => ({
+  type: CLEAR_REGION
+})
+
+export const setObservationLocation = (point : Point | null) : observationActionTypes => ({
   type: SET_OBSERVATION,
-  payload: location,
+  payload: point,
 })
 
 export const clearObservationLocation = () : observationActionTypes => ({
