@@ -15,7 +15,7 @@ const MainNavigator = createStackNavigator(
     Observation: ObservationScreen
   },
   {
-    initialRouteName: 'Login'
+    initialRouteName: 'Observation'
   }
 )
 

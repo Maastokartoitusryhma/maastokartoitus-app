@@ -4,9 +4,13 @@ import FormInputComponent from './FormInputComponent'
 import uuid from 'react-native-uuid'
 
 interface Props {
+  key: string
   title: string
   inputType: string
   inputElements: Array<Object | undefined>
+  setValue: Function
+  errors: Object
+  register: Function
 }
 
 const FormArrayComponent = (props: Props) => {
@@ -15,7 +19,7 @@ const FormArrayComponent = (props: Props) => {
 
   const addInputElement = () => {
     const elements = [...inputElements]
-    elements.push(createInputElement(props.title + '_' + uuid.v4(), props.inputType, '', props.setValue, props.errors, props.register))
+    elements.push(createInputElement(props.title, props.inputType, '', props.setValue, props.errors, props.register))
     setInputElements(elements)
   }
 
@@ -26,7 +30,7 @@ const FormArrayComponent = (props: Props) => {
   }
 
   return (
-    <View>
+    <View key={props.key}>
       <Text>{props.title}</Text>
       {inputElements}
       <Button onPress={() => addInputElement()} title='Add another' />
@@ -38,12 +42,13 @@ const FormArrayComponent = (props: Props) => {
   )
 }
 
-const createInputElement = (title: string, type: string, defaultValue: string, setValue, errors, register) => {
+const createInputElement = (title: string, type: string, defaultValue: string, setValue: Function, errors: Object, register: Function) => {
+  const key = title + ' ' + uuid.v4()
   if (type === 'string') {
-    return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='default' setValue={setValue} errors={errors} register={register} isArrayItem={true} />
+    return <FormInputComponent key={key} title={key} defaultValue={defaultValue} keyboardType='default' setValue={setValue} errors={errors} register={register} isArrayItem={true} />
   } else if (type === 'integer') {
-    return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='numeric' setValue={setValue} errors={errors} register={register} isArrayItem={true} />    
+    return <FormInputComponent key={key} title={key} defaultValue={defaultValue} keyboardType='numeric' setValue={setValue} errors={errors} register={register} isArrayItem={true} />    
   }
-} 
+}
 
 export default FormArrayComponent

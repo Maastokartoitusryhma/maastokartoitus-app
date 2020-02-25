@@ -12,7 +12,8 @@ interface MyObject{
 let dict: { [key: string]: any } = {}
 
 
-export const parseSchemaToForm = (data: MyObject = {}, setValue, errors, register) => {
+export const parseSchemaToForm = (data: MyObject = {}, setValue: Function, errors: Object, register: Function) => {
+  register({'testi': 'testi'})
   const toReturn: Array<any> = []
   Object.keys(data).forEach((key: string) => {
     if (typeof(data[key]) === 'object') { // Check if key has other keys nested inside, aka is of type object
@@ -22,7 +23,7 @@ export const parseSchemaToForm = (data: MyObject = {}, setValue, errors, registe
   return toReturn
 } 
 
-const parseNested = (data: MyObject = {}, objectTitle: string, arrayBoolean: boolean, setValue, errors, register) => {
+const parseNested = (data: MyObject = {}, objectTitle: string, arrayBoolean: boolean, setValue: Function, errors: Object, register: Function) => {
     let toReturn = []
     let type: string = ''
     let title: string = ''
@@ -88,7 +89,7 @@ const setEnumValues = (data: MyObject = {}, dictKey: string) => {
 }
 
 // Creates a picker component with items, takes JSON schema item label as parameter
-const createPicker = (title: string, keyName: string, defaultValue: string, setValue, errors, register) => {
+const createPicker = (title: string, keyName: string, defaultValue: string, setValue: Function, errors: Object, register: Function) => {
   const dictObject = dict[keyName]
   const pickerItems = []
   for (const key in dictObject) {
@@ -96,21 +97,22 @@ const createPicker = (title: string, keyName: string, defaultValue: string, setV
   }
 
   if (defaultValue !== null) {
-    return <FormPickerComponent title={title} pickerItems={pickerItems} selectedValue={defaultValue} setValue={setValue} errors={errors} register={register} />
+    return <FormPickerComponent key={title} title={title} pickerItems={pickerItems} selectedValue={defaultValue} setValue={setValue} errors={errors} register={register} />
   } else {
-    return <FormPickerComponent title={title} pickerItems={pickerItems} selectedValue={null} setValue={setValue} errors={errors} register={register} />
+    return <FormPickerComponent key={title} title={title} pickerItems={pickerItems} selectedValue={null} setValue={setValue} errors={errors} register={register} />
   }
 }
 
-const createArray = (title: string, type: string, defaultValue: string, setValue, errors, register) => {
-  const inputElements = [createInputElement(title + '_' + uuid.v4(), type, defaultValue, setValue, errors, register, true)]
-  return <FormArrayComponent title={title} inputType={type} inputElements={inputElements} setValue={setValue} errors={errors} register={register} />
+const createArray = (title: string, type: string, defaultValue: string, setValue: Function, errors: Object, register: Function) => {
+  const key = title + ' ' + uuid.v4()
+  const inputElements = [createInputElement(key, type, defaultValue, setValue, errors, register, true)]
+  return <FormArrayComponent key={title} title={title} inputType={type} inputElements={inputElements} setValue={setValue} errors={errors} register={register} />
 }
 
-const createInputElement = (title: string, type: string, defaultValue: string, setValue, errors, register, isArrayItem) => {
+const createInputElement = (title: string, type: string, defaultValue: string, setValue: Function, errors: Object, register: Function, isArrayItem: boolean) => {
   if (type === 'string') {
-    return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='default' setValue={setValue} errors={errors} register={register} isArrayItem={isArrayItem} />
+    return <FormInputComponent key={title} title={title} defaultValue={defaultValue} keyboardType='default' setValue={setValue} errors={errors} register={register} isArrayItem={isArrayItem} />
   } else if (type === 'integer') {
-    return <FormInputComponent title={title} defaultValue={defaultValue} keyboardType='numeric' setValue={setValue} errors={errors} register={register} isArrayItem={isArrayItem} />    
+    return <FormInputComponent key={title} title={title} defaultValue={defaultValue} keyboardType='numeric' setValue={setValue} errors={errors} register={register} isArrayItem={isArrayItem} />    
   }
 } 

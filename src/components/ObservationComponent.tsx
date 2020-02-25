@@ -13,43 +13,25 @@ const ObservationComponent = (props) => {
 
   //For react-hook-form
   const { handleSubmit, setValue, errors, register, control } = useForm()
-
   const { t } = useTranslation()
-
-  const [singleObservationSchema, setSingleObservationSchema] = useState(null)
-  const [UISchema, setUISchema] = useState(null)
+  const [form, setForm] = useState()
 
   const onSubmit = data => console.log('REGISTER DATA:', data)
 
   // Fetch schemas
   useEffect(() => {
-    loadSingleObservationSchema()
-    //loadUISchema()
+    loadSchemaAndSetForm()
   }, [])
 
-  const loadSingleObservationSchema = async () => {
+  const loadSchemaAndSetForm = async () => {
     const fetchedSchema = await getSingleObservationSchema() 
     if (fetchedSchema !== null) {
-      setSingleObservationSchema(fetchedSchema) 
+      setForm(parseSchemaToForm(fetchedSchema, setValue, errors, register))
     }
-  }
-  /*
-    const loadUISchema = async () => {
-      const fetchedUISchema = await getUISchema()
-      if (fetchedUISchema !== null) {
-        setUISchema(fetchedUISchema)
-      }
-    }*/
-
-  const validate = (formData, errors) => {
-    if (formData.count === undefined) {
-      errors.count.addError(t('required field'))
-    }
-    return errors
   }
 
   // Check if schemas have been fetched
-  if (singleObservationSchema == null) {
+  if (form === null) {
     return <View><Text>Ladataan...</Text></View>
   } else {
     return (
@@ -57,7 +39,7 @@ const ObservationComponent = (props) => {
         <ScrollView>
           <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
           <View>
-            {parseSchemaToForm(singleObservationSchema, setValue, errors, register)}
+            {form}
             <Button onPress={() => console.log('ADD NEW OBSERVATION')} title='ADD'></Button>
           </View>
           <Button title='testi!' onPress={handleSubmit(onSubmit)} />
@@ -65,25 +47,6 @@ const ObservationComponent = (props) => {
       </View>
     )
   }
-  /*
-
-
-  const onSave = async data => {
-    storageController.save((data.date + '/' + data.time + '/' + data.species), JSON.stringify(data))
-    setKey(data.date + '/' + data.time + '/' + data.species)
-  }
-  const onFetch = async () => {
-    storageController.fetch(key)
-  }
-
-  const onReset = async () => storageController.clear()
-
-  let today = new Date().getDate() + '.' + (new Date().getMonth() + 1) + '.' + new Date().getFullYear()
-  let now = new Date().getHours() + ':' + (new Date().getMinutes()) + ':' + new Date().getSeconds()
-  const observationLocation = props.location ? `${props.location.coords.latitude} lat, ${props.location.coords.longitude} long` : ''
-
-  
-  */
 }
 
 const mapStateToProps = (state) => {
