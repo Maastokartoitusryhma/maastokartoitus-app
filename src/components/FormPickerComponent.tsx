@@ -17,7 +17,7 @@ const FormPickerComponent = (props: Props) => {
   const [selected, setSelected] = useState(props.selectedValue)
 
   return (
-    <View key={props.key}>
+    <View key={props.key} style={Cs.containerWithJustPadding}>
       <Text>{props.title}</Text>
       <View style={Cs.formPickerContainer}>
         <Picker

@@ -64,13 +64,37 @@ const ContainerStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  formInputContainer: {
+  containerWithJustPadding: {
     padding: 10
+  },
+  formContainer: {
+    justifyContent: 'space-between'
+  },
+  formInputContainer: {
+    padding: 10,
+    width: '100%'
+  },
+  formArrayInputContainer: {
+    width: '100%'
   },
   formPickerContainer: {
     borderColor: Colors.inputBorder,
     borderWidth: 1,
-    width: '100%'
+    paddingHorizontal: 10
+  },
+  formArrayButtonContainer: {
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around'
+  },
+  formAllInputsContainer: {
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  formSaveButtonContainer: {
+    padding: 10,
+    justifyContent: 'space-between'
   }
 })
 

@@ -9,6 +9,7 @@ interface Props {
   keyboardType: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'visible-password' | 'ascii-capable' | 'numbers-and-punctuation' | 'url' | 'number-pad' | 'name-phone-pad' | 'decimal-pad' | 'twitter' | 'web-search' | undefined
   defaultValue: string|undefined
   setValue: Function
+  unregister: Function
   errors: Object
   register: Function
   isArrayItem: boolean
@@ -17,7 +18,7 @@ interface Props {
 const FormInputComponent = (props: Props) => {
 
   return (
-    <View key={props.key} style={Cs.formInputContainer}>
+    <View key={props.key} style={props.isArrayItem ? Cs.formArrayInputContainer : Cs.formInputContainer}>
       {!props.isArrayItem
         ? <Text>{props.title}</Text>
         : null
