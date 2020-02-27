@@ -24,7 +24,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+        "bundleIdentifier": "com.yourcompany.yourappname",
+        "buildNumber": "1.0.0",
+        "supportsTablet": true
+    },
+    "android": {
+        "package": "org.luomus.maastokartoitus",
+        "versionCode": 1
     }
-  }
+   }
 }
