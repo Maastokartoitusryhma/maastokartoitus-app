@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Text, Button, View, AsyncStorage } from 'react-native'
 import Colors from '../styles/Colors'
 import { useTranslation } from 'react-i18next'
@@ -12,6 +12,16 @@ interface Props {
 const UserInfoComponent = (props: Props) => {
 
   const { t } = useTranslation()
+  const [userInfo, setUserInfo] = useState<Object|null>(null)
+
+  useEffect(() => {
+    fetchUserInfo()
+  }, [])
+
+  const fetchUserInfo = async () => {
+    const fetchedUserInfo: string|null = await AsyncStorage.getItem('userData')
+    setUserInfo(JSON.parse(fetchedUserInfo || '{}'))
+  }
 
   const logout = () => {
     clearUserData()
@@ -31,7 +41,12 @@ const UserInfoComponent = (props: Props) => {
     <View>
       <View style={Cs.userInfoContainer}>
         <View style={Ts.userInfoTitle}>
-          <Text style={Ts.loggedIn}>{t('loggedin')}Tähän Tulee Nimi</Text>
+          <Text style={Ts.loggedIn}>
+            {userInfo !== null
+              ? (t('loggedin') + userInfo.fullName)
+              : null
+            }
+          </Text>
         </View>
         <View style={Cs.logoutButtonContainer}>
           <Button
