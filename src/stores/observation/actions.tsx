@@ -10,7 +10,8 @@ import { observationActionTypes,
         TOGGLE_MAPTYPE,
         NEW_OBSERVATION_EVENT,
         SET_REGION,
-        CLEAR_REGION
+        CLEAR_REGION,
+        SET_SCHEMA
         } from './types'
 
 export const setRegion = (region: Region) : observationActionTypes => ({
@@ -55,4 +56,9 @@ export const toggleMaptype = () : observationActionTypes => ({
 export const newObservationEvent = (observation : object) : observationActionTypes => ({
   type: NEW_OBSERVATION_EVENT,
   payload: observation
+})
+
+export const setSchema = (schema : object) : observationActionTypes => ({
+  type: SET_SCHEMA,
+  payload: schema
 })

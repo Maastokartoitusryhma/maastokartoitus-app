@@ -8,7 +8,8 @@ import { observationActionTypes,
         TOGGLE_MAPTYPE,
         NEW_OBSERVATION_EVENT,
         SET_REGION,
-        CLEAR_REGION
+        CLEAR_REGION,
+        SET_SCHEMA
         } from './types'
 
 const initialRegion = { 
@@ -87,6 +88,15 @@ const observationEventsReducer = (state: any[] = [], action : observationActionT
   }
 }
 
+const schemaReducer = (state : object, action : observationActionTypes) => {
+  switch (action.type) {
+    case SET_SCHEMA:
+      return action.payload
+    default: 
+      return state
+  }
+}
+
 export { 
   regionReducer, 
   observationReducer, 
@@ -94,4 +104,5 @@ export {
   observingReducer, 
   centeringReducer, 
   maptypeReducer,
-  observationEventsReducer }
+  observationEventsReducer,
+  schemaReducer }

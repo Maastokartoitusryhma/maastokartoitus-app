@@ -11,6 +11,7 @@ export const TOGGLE_OBSERVING = 'TOGGLE_OBSERVING'
 export const TOGGLE_CENTERED = 'TOGGLE_CENTERED'
 export const TOGGLE_MAPTYPE = 'TOGGLE_MAPTYPE'
 export const NEW_OBSERVATION_EVENT ='NEW_OBSERVATION_EVENT'
+export const SET_SCHEMA ='SET_SCHEMA'
 
 interface setRegion {
   type: typeof SET_REGION
@@ -56,6 +57,11 @@ interface newObservationEvent {
   payload: object
 }
 
+interface setSchema {
+  type: typeof SET_SCHEMA
+  payload: object
+}
+
 export type observationActionTypes = setRegion |
                                      clearRegion |
                                      setObservationLocation | 
@@ -65,4 +71,5 @@ export type observationActionTypes = setRegion |
                                      toggleObserving | 
                                      toggleCentered |
                                      toggleMaptype |
-                                     newObservationEvent
+                                     newObservationEvent |
+                                     setSchema
