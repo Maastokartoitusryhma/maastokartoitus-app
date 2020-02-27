@@ -1,17 +1,40 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, ScrollView, Button } from 'react-native'
 import { useForm } from 'react-hook-form'
-import { connect } from 'react-redux'
+import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import { Point } from 'geojson'
 import { getSingleObservationSchema, getUISchema } from '../controllers/formController'
 import storageController from '../controllers/storageController'
-import { newObservationEvent } from '../stores/observation/actions'
+import { newObservationEvent, clearObservationLocation } from '../stores/observation/actions'
 import { parseSchemaToForm } from '../parsers/SchemaToFormParser'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import Colors from '../styles/Colors'
 
-const ObservationComponent = (props) => {
+interface RootState {
+  observation: Point
+  observationEvent: any[]
+}
+
+const mapStateToProps = (state: RootState) => {
+  const { observation, observationEvent } = state
+  return { observation, observationEvent }
+}
+
+const mapDispatchToProps = {
+  newObservationEvent,
+  clearObservationLocation
+}
+
+const connector = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+const ObservationComponent = (props: PropsFromRedux) => {
 
   //For react-hook-form
   const { handleSubmit, setValue, unregister, errors, register, control } = useForm()
@@ -28,6 +51,8 @@ const ObservationComponent = (props) => {
     console.log('EVENT OBJECT AFTER: ', event)
     props.newObservationEvent(event)
     console.log('EVENT AFTER:', props.observationEvent)
+
+    props.clearObservationLocation()
 
     //AsyncStorage testing with placeholder key.
     storageController.save('item1', event)
@@ -67,19 +92,5 @@ const ObservationComponent = (props) => {
     )
   }
 }
-
-const mapStateToProps = (state) => {
-  const { observation, observationEvent } = state
-  return { observation, observationEvent }
-}
-
-const mapDispatchToProps = {
-  newObservationEvent
-}
-
-const connector = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)
 
 export default connector(ObservationComponent)

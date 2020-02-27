@@ -8,7 +8,7 @@ import Ts from '../styles/TextStyles'
 import Color from '../styles/Colors'
 import { LocationData } from 'expo-location'
 import { LatLng } from 'react-native-maps'
-import { toggleObserving, setObservationZone, clearObservationZone, newObservationEvent } from '../stores/observation/actions'
+import { toggleObserving, setObservationZone, clearObservationZone, newObservationEvent, clearObservationLocation } from '../stores/observation/actions'
 import { updateLocation, appendPath } from '../stores/position/actions'
 import { connect, ConnectedProps } from 'react-redux'
 import { watchLocationAsync, stopLocationAsync } from '../geolocation/geolocation'
@@ -35,7 +35,8 @@ const mapDispatchToProps = {
   setObservationZone,
   clearObservationZone,
   toggleObserving,
-  newObservationEvent
+  newObservationEvent,
+  clearObservationLocation
 }
 
 const connector = connect(
@@ -91,6 +92,7 @@ const HomeComponent = (props: Props) => {
 
   const finishObservationEvent = () => {
     props.toggleObserving()
+    props.clearObservationLocation()
     stopLocationAsync()
   }
 
