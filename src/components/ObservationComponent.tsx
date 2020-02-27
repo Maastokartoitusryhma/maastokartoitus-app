@@ -9,7 +9,7 @@ import { newObservationEvent } from '../stores/observation/actions'
 import { parseSchemaToForm } from '../../SchemaToFormParser'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
-import Colors from '../styles/Colors';
+import Colors from '../styles/Colors'
 
 const ObservationComponent = (props) => {
 
@@ -18,18 +18,18 @@ const ObservationComponent = (props) => {
   const { t } = useTranslation()
   const [form, setForm] = useState()
 
-  const onSubmit = data => {
+  const onSubmit = (data: Object) => {
     console.log('EVENT BEFORE:', props.observationEvent)
+    
     const event = props.observationEvent.pop()
     console.log('EVENT OBJECT BEFORE: ', event)
     const changedEvent = {
       ...event
     }
-    event.gatherings[0].units.push(data)
-    console.log('EVENT OBJECT AFTER: ', event)
-    props.newObservationEvent(event)
-
-    console.log('REGISTER DATA:', data)
+    changedEvent.gatherings[0].units.push(data)
+    //event.gatherings[0].units.unitGathering.geometry.push(props.observation)
+    console.log('EVENT OBJECT AFTER: ', changedEvent)
+    props.newObservationEvent(changedEvent)
     console.log('EVENT AFTER:', props.observationEvent)
   }
 
@@ -46,7 +46,7 @@ const ObservationComponent = (props) => {
   }
 
   // Check if schemas have been fetched
-  if (form === null) {
+  if (form === undefined) {
     return <View><Text>Ladataan...</Text></View>
   } else {
     return (
@@ -68,8 +68,8 @@ const ObservationComponent = (props) => {
 }
 
 const mapStateToProps = (state) => {
-  const { location, observationEvent } = state
-  return { location, observationEvent }
+  const { observation, observationEvent } = state
+  return { observation, observationEvent }
 }
 
 const mapDispatchToProps = {

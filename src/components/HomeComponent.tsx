@@ -82,7 +82,7 @@ const HomeComponent = (props: Props) => {
 
   const beginObservationEvent = () => {
     const observationForm = testForm
-    observationForm.id = 'observatioEvent_' + uuid.v4
+    observationForm.id = 'observatioEvent_' + uuid.v4()
     props.newObservationEvent(observationForm)
     props.toggleObserving()
     watchLocationAsync(props.updateLocation, props.appendPath)
