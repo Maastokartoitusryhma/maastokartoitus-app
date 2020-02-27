@@ -30,8 +30,8 @@ const ObservationComponent = (props) => {
     console.log('EVENT AFTER:', props.observationEvent)
 
     //AsyncStorage testing with placeholder key.
-    storageController.save('item1', event)
-    storageController.fetch('item1')
+    storageController.save(event.id, event)
+    storageController.fetch(event.id)
   }
 
   // Fetch schemas
