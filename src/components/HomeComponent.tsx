@@ -61,17 +61,17 @@ const HomeComponent = (props: Props) => {
   const [regions, setRegions] = useState<RegionObject[]>([])
 
   useEffect(() => {
-    const loadRegions = async () => {
-      const response = await regionController.getRegions()
-      if (response !== null) {
-        setRegions(response.results)
-        setSelectedRegion(response.results[0].name)
-        setSelectedObservationZone(response.results[0].id)
-      }
-    }
-
     loadRegions()
   }, [])
+
+  const loadRegions = async () => {
+    const response = await regionController.getRegions()
+    if (response !== null) {
+      setRegions(response.results)
+      setSelectedRegion(response.results[0].name)
+      setSelectedObservationZone(response.results[0].id)
+    }
+  }
 
   const createRegionsList = () => {
     return regions.map(region => 

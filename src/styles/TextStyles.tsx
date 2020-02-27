@@ -33,7 +33,8 @@ const TextStyles = StyleSheet.create({
     fontWeight: 'bold',
   },
   observationEventTitle: {
-    padding: 10
+    padding: 10,
+    fontWeight: 'bold'
   }
 })
 
