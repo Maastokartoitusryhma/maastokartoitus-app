@@ -78,7 +78,7 @@ const maptypeReducer = (state: 'topographic' | 'satellite' = 'topographic', acti
   } 
 }
 
-const observationEventsReducer = (state = [], action : observationActionTypes) => {
+const observationEventsReducer = (state: any[] = [], action : observationActionTypes) => {
   switch (action.type) {
     case NEW_OBSERVATION_EVENT:
       return [...state, action.payload]

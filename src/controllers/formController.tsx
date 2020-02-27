@@ -47,21 +47,3 @@ export const getSingleObservationSchema = async () => {
     return null
   }
 }
-
-export const getUISchema = async () => {
-  const query = gql`
-    query {
-      form(id: "MHL.45") {
-        id
-        uiSchema
-      }
-    }
-  `
-  try {
-    const response = await client.query({ query })
-    return response.data.form.uiSchema
-  } catch (error) {
-    Alert.alert(error)
-    return null
-  }
-}
