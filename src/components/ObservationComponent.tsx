@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Point } from 'geojson'
-import { getSingleObservationSchema, getUISchema } from '../controllers/formController'
+import { getSingleObservationSchema } from '../controllers/formController'
 import storageController from '../controllers/storageController'
 import { newObservationEvent, clearObservationLocation } from '../stores/observation/actions'
 import { parseSchemaToForm } from '../parsers/SchemaToFormParser'
@@ -37,7 +37,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 const ObservationComponent = (props: PropsFromRedux) => {
 
   //For react-hook-form
-  const { handleSubmit, setValue, unregister, errors, register, control } = useForm()
+  const { handleSubmit, setValue, unregister, errors, register } = useForm()
   const { t } = useTranslation()
   const [form, setForm] = useState()
 
@@ -83,8 +83,7 @@ const ObservationComponent = (props: PropsFromRedux) => {
             {form}
           </View>
           <View style={Cs.formSaveButtonContainer}>
-            <Button onPress={() => console.log('ADD NEW OBSERVATION')} title='SAVE NEW OBSERVATION' color={Colors.positiveButton}></Button>
-            <Button title='testi!' onPress={handleSubmit(onSubmit)} />
+            <Button title={t('save observation')} onPress={handleSubmit(onSubmit)} color={Colors.positiveButton}/>
           </View>
           
         </ScrollView>
