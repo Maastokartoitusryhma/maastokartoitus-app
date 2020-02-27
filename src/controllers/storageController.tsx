@@ -12,9 +12,14 @@ const save = async (key: string, value: string) => {
 
 const fetch = async (key: string) => {
   try {
-    const value = await AsyncStorage.getItem(key)
-    console.log('ASYNC_STORAGE: Fetched the following item successfully: ', value)
-    return value
+    const value: string|null = await AsyncStorage.getItem(key)
+    if(typeof value !== null) {
+      console.log('ASYNC_STORAGE: Fetched the following item successfully: ', value)
+      return JSON.parse(value)
+    } else {
+      console.log('ASYNC_STORAGE: Fetched null from the storage.')
+      return null
+    }
   } catch (error) {
     console.log('ASYNC_STORAGE: Failed to fetch from the storage: ', error)
   }

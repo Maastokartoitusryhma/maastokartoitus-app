@@ -23,13 +23,10 @@ const ObservationComponent = (props) => {
     
     const event = props.observationEvent.pop()
     console.log('EVENT OBJECT BEFORE: ', event)
-    const changedEvent = {
-      ...event
-    }
-    changedEvent.gatherings[0].units.push(data)
+    event.gatherings[0].units.push(data)
     //event.gatherings[0].units.unitGathering.geometry.push(props.observation)
-    console.log('EVENT OBJECT AFTER: ', changedEvent)
-    props.newObservationEvent(changedEvent)
+    console.log('EVENT OBJECT AFTER: ', event)
+    props.newObservationEvent(event)
     console.log('EVENT AFTER:', props.observationEvent)
 
     //AsyncStorage testing with placeholder key.
