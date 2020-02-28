@@ -25,6 +25,16 @@ const fetch = async (key: string) => {
   }
 }
 
+const getKeys = async () => {
+  const allKeys = await AsyncStorage.getAllKeys()
+  return allKeys
+}
+
+const remove = async (key: string) => {
+  await AsyncStorage.removeItem(key)
+  console.log('ASYNC_STORAGE: Key ', key, ' has been removed.')
+}
+
 const clear = async () => {
   try {
     await AsyncStorage.clear()
@@ -34,4 +44,4 @@ const clear = async () => {
   }
 }
 
-export default { save, fetch, clear }
+export default { save, fetch, getKeys, remove, clear }

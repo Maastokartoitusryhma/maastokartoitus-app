@@ -85,7 +85,6 @@ const ObservationComponent = (props: PropsFromRedux) => {
           <View style={Cs.formSaveButtonContainer}>
             <Button title={t('save observation')} onPress={handleSubmit(onSubmit)} color={Colors.positiveButton}/>
           </View>
-          
         </ScrollView>
       </View>
     )
