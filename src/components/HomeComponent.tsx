@@ -91,8 +91,11 @@ const HomeComponent = (props: Props) => {
 
   const beginObservationEvent = () => {
     const observationForm = testForm
-    observationForm.id = 'observationEvent_' + uuid.v4()
-    props.newObservationEvent(observationForm)
+    const observationEventObject = {
+      id: 'observationEvent_' + uuid.v4(),
+      schema: observationForm
+    }   
+    props.newObservationEvent(observationEventObject)
     props.toggleObserving()
     watchLocationAsync(props.updateLocation, props.appendPath)
     props.onPressMap()

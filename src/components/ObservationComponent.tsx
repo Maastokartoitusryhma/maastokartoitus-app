@@ -46,7 +46,7 @@ const ObservationComponent = (props: PropsFromRedux) => {
     
     const event = props.observationEvent.pop()
     console.log('EVENT OBJECT BEFORE: ', event)
-    event.gatherings[0].units.push(data)
+    event.schema.gatherings[0].units.push(data)
     //event.gatherings[0].units.unitGathering.geometry.push(props.observation)
     console.log('EVENT OBJECT AFTER: ', event)
     props.newObservationEvent(event)
