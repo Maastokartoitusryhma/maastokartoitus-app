@@ -43,19 +43,18 @@ const parseNested = (data: MyObject = {}, objectTitle: string, arrayBoolean: boo
       } else if (typeof(data[key]) === 'object') { // Check if key has other keys nested inside, aka is of type object
         toReturn.push(parseNested(data[key], key, isArray, setValue, unregister, errors, register))
 
-      } else {
-        if (key === 'type') {
-          if (data[key] === 'array') {
-            isArray = true
-          }
-          type = data[key]
-        } else if (key === 'title') {
-          title = data[key]
-        } else if (key === 'default') {
-          defaultValue = data[key] 
+      } else if (key === 'type') {
+        if (data[key] === 'array') {
+          isArray = true
         }
+        type = data[key]
+      } else if (key === 'title') {
+        title = data[key]
+      } else if (key === 'default') {
+        defaultValue = data[key] 
       }
     })
+    
     // All keys in subtree are looped
     if (includesEnum) {
       toReturn.push(createPicker(title, objectTitle, defaultValue, setValue, unregister, errors, register))
