@@ -54,7 +54,7 @@ const ObservationComponent = (props: PropsFromRedux) => {
 
     props.clearObservationLocation()
 
-    //AsyncStorage testing with placeholder key.
+    //AsyncStorage
     storageController.save(event.id, event)
     storageController.fetch(event.id)
   }

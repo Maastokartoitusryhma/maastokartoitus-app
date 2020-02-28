@@ -88,7 +88,7 @@ const observationEventsReducer = (state: any[] = [], action : observationActionT
   }
 }
 
-const schemaReducer = (state : object, action : observationActionTypes) => {
+const schemaReducer = (state : object = {}, action : observationActionTypes) => {
   switch (action.type) {
     case SET_SCHEMA:
       return action.payload
