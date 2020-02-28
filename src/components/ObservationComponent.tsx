@@ -43,20 +43,21 @@ const ObservationComponent = (props: PropsFromRedux) => {
 
   const onSubmit = (data: Object) => {
     console.log('EVENT BEFORE:', props.observationEvent)
-    
-    const event = props.observationEvent.pop()
+    const events = props.observationEvent
+    const event = events.pop()
     console.log('EVENT OBJECT BEFORE: ', event)
     event.schema.gatherings[0].units.push(data)
     //event.gatherings[0].units.unitGathering.geometry.push(props.observation)
     console.log('EVENT OBJECT AFTER: ', event)
+    events.push(event)
     props.newObservationEvent(event)
     console.log('EVENT AFTER:', props.observationEvent)
 
     props.clearObservationLocation()
 
     //AsyncStorage
-    storageController.save(event.id, event)
-    storageController.fetch(event.id)
+    storageController.save('observationEvents', events)
+    storageController.fetch('observationEvents')
   }
 
   // Fetch schemas
