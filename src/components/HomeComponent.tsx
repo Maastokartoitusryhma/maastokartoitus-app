@@ -8,7 +8,15 @@ import Ts from '../styles/TextStyles'
 import Color from '../styles/Colors'
 import { LocationData } from 'expo-location'
 import { LatLng } from 'react-native-maps'
-import { toggleObserving, setObservationZone, clearObservationZone, newObservationEvent, clearObservationLocation } from '../stores/observation/actions'
+import { 
+  toggleObserving, 
+  newObservationEvent, 
+  clearObservationLocation 
+} from '../stores/observation/actions'
+import {
+  setObservationZone,
+  clearObservationZone
+} from '../stores/map/actions'
 import { updateLocation, appendPath } from '../stores/position/actions'
 import { connect, ConnectedProps } from 'react-redux'
 import { watchLocationAsync, stopLocationAsync } from '../geolocation/geolocation'
