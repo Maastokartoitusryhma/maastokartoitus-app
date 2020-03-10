@@ -10,27 +10,27 @@ import { parseSchemaToForm } from '../parsers/SchemaToFormParser'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import Colors from '../styles/Colors'
-
 const ObservationComponent = (props) => {
 
   //For react-hook-form
-  const { handleSubmit, setValue, unregister, errors, register, control } = useForm()
+  const { handleSubmit, watch, setValue, unregister, errors, register, control } = useForm()
   const { t } = useTranslation()
   const [form, setForm] = useState()
 
   const onSubmit = (data: Object) => {
-    console.log('EVENT BEFORE:', props.observationEvent)
+    //console.log('EVENT BEFORE:', props.observationEvent)
     
     const event = props.observationEvent.pop()
-    console.log('EVENT OBJECT BEFORE: ', event)
+    //console.log('EVENT OBJECT BEFORE: ', event)
     const changedEvent = {
       ...event
     }
     changedEvent.gatherings[0].units.push(data)
     //event.gatherings[0].units.unitGathering.geometry.push(props.observation)
-    console.log('EVENT OBJECT AFTER: ', changedEvent)
+    //console.log('EVENT OBJECT AFTER: ', changedEvent)
     props.newObservationEvent(changedEvent)
-    console.log('EVENT AFTER:', props.observationEvent)
+    //console.log('EVENT AFTER:', props.observationEvent)
+    console.log('REIGSTER DATA:', JSON.stringify(data))
   }
 
   // Fetch schemas
@@ -41,11 +41,10 @@ const ObservationComponent = (props) => {
   const loadSchemaAndSetForm = async () => {
     const fetchedSchema = await getSingleObservationSchema() 
     if (fetchedSchema !== null) {
-      setForm(parseSchemaToForm(fetchedSchema, setValue, unregister, errors, register))
+      setForm(parseSchemaToForm(fetchedSchema, watch, setValue, unregister, errors, register))
     }
   }
 
-  // Check if schemas have been fetched
   if (form === undefined) {
     return <View><Text>Ladataan...</Text></View>
   } else {

@@ -4,9 +4,11 @@ import Cs from '../styles/ContainerStyles'
 
 interface Props {
   key: string
+  objectTitle: string
   title: string
   selectedValue: string|null
   pickerItems: Array<Object>
+  watch: Function
   setValue: Function
   errors: Object
   register: Function
@@ -17,19 +19,19 @@ const FormPickerComponent = (props: Props) => {
   const [selected, setSelected] = useState(props.selectedValue)
 
   return (
-    <View key={props.key} style={Cs.containerWithJustPadding}>
+    <View style={Cs.containerWithJustPadding}>
       <Text>{props.title}</Text>
       <View style={Cs.formPickerContainer}>
         <Picker
-          ref={props.register({ name: props.title })}
+          ref={props.register({ name: props.objectTitle })}
           selectedValue={selected}
           onValueChange={itemValue => {
             setSelected(itemValue)
-            props.setValue(props.title, itemValue)}
+            props.setValue(props.objectTitle, itemValue)}
           }>
             {props.pickerItems}
         </Picker>
-        {props.setValue(props.title, selected)}
+        {props.setValue(props.objectTitle, selected)}
       </View>
     </View>
   )

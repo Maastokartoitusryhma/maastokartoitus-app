@@ -9,7 +9,7 @@ interface Props {
 
 const FormPickerItemComponent = (props: Props) => {
   
-  return <Picker.Item key={props.key} label={props.label} value={props.value} />
+  return <Picker.Item label={props.label} value={props.value} />
 }
 
 export default FormPickerItemComponent
