@@ -1,30 +1,48 @@
-import { AsyncStorage, Alert } from 'react-native'
+import { AsyncStorage } from 'react-native'
 
-const save = async (key: string, value: string) => {
+const save = async (key: string, value: any) => {
   try {
-    await AsyncStorage.setItem(key, value)
-    Alert.alert('Tallennus onnistui')
+    const item = JSON.stringify(value)
+    await AsyncStorage.setItem(key, item)
+    console.log('ASYNC_STORAGE: The following item has been successfully saved: ', item)
   } catch (error) {
-    Alert.alert('Failed to save into the local storage. ', error)
+    console.log('ASYNC_STORAGE: Failed to save into the storage: ', error)
   }
 }
 
 const fetch = async (key: string) => {
   try {
-    const value = await AsyncStorage.getItem(key)
-    Alert.alert(value)
+    const value: string|null = await AsyncStorage.getItem(key)
+    if(typeof value !== null) {
+      console.log('ASYNC_STORAGE: Fetched the following item successfully: ', value)
+      return JSON.parse(value)
+    } else {
+      console.log('ASYNC_STORAGE: Fetched null from the storage.')
+      return null
+    }
   } catch (error) {
-    Alert.alert('Failed to fetch from the local storage. ', error)
+    console.log('ASYNC_STORAGE: Failed to fetch from the storage: ', error)
   }
 }
 
+const getKeys = async () => {
+  const allKeys: Array<string> = await AsyncStorage.getAllKeys()
+  return allKeys
+}
+
+const remove = async (key: string) => {
+  await AsyncStorage.removeItem(key)
+  console.log('ASYNC_STORAGE: Key ', key, ' has been removed.')
+}
+
+//Caution! Removes ALL stored keys from the storage!
 const clear = async () => {
   try {
     await AsyncStorage.clear()
-    Alert.alert('Nollaus onnistui')
+    console.log('ASYNC_STORAGE: The storage has been cleared.')
   } catch (error) {
-    Alert.alert('Failed to clear the local storage. ', error)
+    console.log('ASYNC_STORAGE: Failed to clear the storage: ', error)
   }
 }
 
-export default { save, fetch, clear }
+export default { save, fetch, getKeys, remove, clear }

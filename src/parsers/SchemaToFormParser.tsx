@@ -58,6 +58,7 @@ const parseNested = (data: MyObject = {}, objectTitle: string, parentObjectTitle
       }
       
     })
+    
     // All keys in subtree are looped
     if (includesEnum) {
       toReturn.push(createPicker(title, objectTitle, defaultValue, watch, setValue, unregister, errors, register))

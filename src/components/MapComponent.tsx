@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import MapView, { Marker, Polyline, UrlTile, Region, LatLng } from 'react-native-maps'
 import { connect, ConnectedProps } from 'react-redux'
 import { Button, View, Dimensions, TouchableHighlight } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { LocationData } from 'expo-location'
 import { GeometryCollection, Point } from 'geojson'
-import { wrapGeometryInFC, convertGC2FC, convertLatLngToPoint } from '../converters/geoJSONConverters'
+import { wrapGeometryInFC, convertGC2FC, convertLatLngToPoint, getCenter } from '../converters/geoJSONConverters'
 import Geojson from 'react-native-typescript-geojson'
 import { 
-  setRegion,
   setObservationLocation, 
   clearObservationLocation, 
-  toggleCentered, 
-  toggleMaptype 
 } from '../stores/observation/actions' 
+import {
+  setRegion,
+  toggleCentered,
+  toggleMaptype,
+} from '../stores/map/actions'
 import Colors from '../styles/Colors'
 import { MaterialIcons } from '@expo/vector-icons'
 
@@ -180,8 +182,8 @@ const MapComponent = (props: Props) => {
         onPanDrag = {() => onPanDrag()}
         onLongPress = {(event) => markObservation(event.nativeEvent.coordinate)}
         onRegionChangeComplete = {(region) => onRegionChangeComplete(region)}
-        maxZoomLevel = {18}
-        minZoomLevel = {0}
+        maxZoomLevel = {18.9}
+        minZoomLevel = {5}
         mapType = {props.maptype === 'topographic' ? 'none' : props.maptype}
         rotateEnabled = {false}
         style = {{
