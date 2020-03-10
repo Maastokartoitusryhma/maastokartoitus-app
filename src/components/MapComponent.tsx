@@ -182,8 +182,8 @@ const MapComponent = (props: Props) => {
         onPanDrag = {() => onPanDrag()}
         onLongPress = {(event) => markObservation(event.nativeEvent.coordinate)}
         onRegionChangeComplete = {(region) => onRegionChangeComplete(region)}
-        maxZoomLevel = {18}
-        minZoomLevel = {0}
+        maxZoomLevel = {18.9}
+        minZoomLevel = {5}
         mapType = {props.maptype === 'topographic' ? 'none' : props.maptype}
         rotateEnabled = {false}
         style = {{
