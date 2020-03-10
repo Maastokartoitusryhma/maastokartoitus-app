@@ -26,7 +26,7 @@ const fetch = async (key: string) => {
 }
 
 const getKeys = async () => {
-  const allKeys = await AsyncStorage.getAllKeys()
+  const allKeys: Array<string> = await AsyncStorage.getAllKeys()
   return allKeys
 }
 
@@ -35,6 +35,7 @@ const remove = async (key: string) => {
   console.log('ASYNC_STORAGE: Key ', key, ' has been removed.')
 }
 
+//Caution! Removes ALL stored keys from the storage!
 const clear = async () => {
   try {
     await AsyncStorage.clear()
