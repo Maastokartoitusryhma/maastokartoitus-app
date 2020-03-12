@@ -26,5 +26,8 @@
   "info": "Information",
   "save": "Spara",
   "flying squirrel": "Flygekorre",
-  "previous observation events": "Tidigare observationshändelser"
+  "previous observation events": "Tidigare observationshändelser",
+  "beginObservation": "Börja observationshändelse",
+  "cancelObservation": "Sluta observationshändelse",
+  "remove": "Ta bort"
 }

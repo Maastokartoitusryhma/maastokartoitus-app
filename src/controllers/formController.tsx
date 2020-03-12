@@ -1,18 +1,22 @@
 import ApolloClient, { gql } from 'apollo-boost'
 import { Alert } from 'react-native'
 
-const client = new ApolloClient({
-  uri: 'https://apitest.laji.fi/v0/graphql',
-  request: (operation) => {
-    operation.setContext({
-      headers: {
-        authorization: 'R7uWGymPsmJ2ItzJphThYBcqLc6dBVDBfdUEGSRYq8aChwRvi34zvfJyrXTTUHFB'
-      }
-    })
-  }
-})
+const setClient = (language: string) => {
+  return new ApolloClient({
+    uri: 'https://apitest.laji.fi/v0/graphql',
+    request: (operation) => {
+      operation.setContext({
+        headers: {
+          'Authorization': 'R7uWGymPsmJ2ItzJphThYBcqLc6dBVDBfdUEGSRYq8aChwRvi34zvfJyrXTTUHFB',
+          'Accept-Language': language
+        }
+      })
+    }
+  })
+}
 
-export const getObservationEventSchema = async () => {
+export const getObservationEventSchema = async (language: string) => {
+  const client = setClient(language)
   const query = gql`
     query {
       form(id: "MHL.45") {
@@ -30,7 +34,8 @@ export const getObservationEventSchema = async () => {
   }
 }
 
-export const getSingleObservationSchema = async () => {
+export const getSingleObservationSchema = async (language: string) => {
+  const client = setClient(language)
   const query = gql`
     query {
       form(id: "MHL.45") {

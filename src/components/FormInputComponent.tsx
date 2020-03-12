@@ -4,18 +4,18 @@ import Os from '../styles/OtherStyles'
 import Cs from '../styles/ContainerStyles'
 
 interface Props {
-  parentObjectTitle: string
-  objectTitle: string
   title: string
+  objectTitle: string
+  parentObjectTitle: string
   keyboardType: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'visible-password' | 'ascii-capable' | 'numbers-and-punctuation' | 'url' | 'number-pad' | 'name-phone-pad' | 'decimal-pad' | 'twitter' | 'web-search' | undefined
-  defaultValue: string|undefined
-  watch: Function
-  setValue: Function
-  unregister: Function
-  errors: Object
+  defaultValue: string
   register: Function
+  setValue: Function
+  watch: Function
+  errors: Object
+  unregister: Function
   isArrayItem: boolean
-  parentCallback: Function
+  parentCallback: Function | undefined
 }
 
 const FormInputComponent = (props: Props) => {
@@ -37,7 +37,7 @@ const FormInputComponent = (props: Props) => {
     props.parentObjectTitle !== ''
       ? addValueToArray(props.defaultValue)
       : props.setValue(props.objectTitle, props.defaultValue)
-    if (props.parentCallback !== null) {
+    if (props.parentCallback !== undefined) {
       props.parentCallback({ title: props.title, value: props.defaultValue })
     }
   }, [])
@@ -55,8 +55,7 @@ const FormInputComponent = (props: Props) => {
           props.parentObjectTitle !== ''
             ? addValueToArray(text)
             : props.setValue(props.objectTitle, text)
-
-          props.parentCallback !== null
+          props.parentCallback !== undefined
             ? props.parentCallback({ title: props.title, value: text })
             : null
           }          

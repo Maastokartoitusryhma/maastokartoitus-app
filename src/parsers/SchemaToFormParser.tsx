@@ -9,20 +9,26 @@ interface MyObject{
   [key: string]: any
 }
 
-let dict: { [key: string]: any } = {}
+let dictionary: { [key: string]: any } = {}
 
-
-export const parseSchemaToForm = (data: MyObject = {}, watch: Function, setValue: Function, unregister: Function, errors: Object, register: Function) => {
+export const parseSchemaToForm = (
+  data: MyObject = {}, register: Function, setValue: Function,
+  watch: Function, errors: Object, unregister: Function
+  ) => {
   const toReturn: Array<any> = []
   Object.keys(data).forEach((key: string) => {
     if (typeof(data[key]) === 'object') { // Check if key has other keys nested inside, aka is of type object
-      toReturn.push(parseNested(data[key], key, '', false, watch, setValue, unregister, errors, register))
+      toReturn.push(parseNested(data[key], key, '', false, register, setValue, watch, errors, unregister))
     }
   })
   return toReturn
 } 
 
-const parseNested = (data: MyObject = {}, objectTitle: string, parentObjectTitle: string, arrayBoolean: boolean, watch: Function, setValue: Function, unregister: Function, errors: Object, register: Function) => {
+const parseNested = (
+  data: MyObject = {}, objectTitle: string, parentObjectTitle: string,
+  arrayBoolean: boolean, register: Function, setValue: Function,
+  watch: Function, errors: Object, unregister: Function
+  ) => {
     let toReturn = []
     let type: string = ''
     let title: string = ''
@@ -33,13 +39,13 @@ const parseNested = (data: MyObject = {}, objectTitle: string, parentObjectTitle
     Object.keys(data).forEach(key => {
       if (key === 'enum') {
         includesEnum = true
-        createNewDictKey(objectTitle) // Create new dictionary object inside dict
+        createNewdictionaryKey(objectTitle) // Create new object inside dictionary
         setEnumKeys(data[key], objectTitle) // Set keys to created dictionary object
     
       } else if (key === 'enumNames') {
         setEnumValues(data[key], objectTitle) // Set values to previously created dictionary object
 
-      } else if (typeof(data[key]) === 'object') { // Check if key has other keys nested inside, aka is of type object
+      } else if (typeof(data[key]) === 'object') { // If key has other keys nested inside - aka is of type object - then do recursion
         if (objectTitle !== 'items' && objectTitle !== 'properties' && objectTitle !== 'required') {
           toReturn.push(parseNested(data[key], key, objectTitle, isArray, watch ,setValue, unregister, errors, register))
         } else {
@@ -58,78 +64,117 @@ const parseNested = (data: MyObject = {}, objectTitle: string, parentObjectTitle
       }
       
     })
-    
     // All keys in subtree are looped
-    if (includesEnum) {
-      toReturn.push(createPicker(title, objectTitle, defaultValue, watch, setValue, unregister, errors, register))
-    } else if (title !== '' && type !== '' && isArray) {
-      toReturn.push(createArray(title, objectTitle, parentObjectTitle, type, defaultValue, watch, setValue, unregister, errors, register))
-    } else if (title !== '' && type !== '') {
-      toReturn.push(createInputElement(title, null, objectTitle, parentObjectTitle, type, defaultValue, watch, setValue, unregister, errors, register, false))
+    if (includesEnum) { // Go to create Picker element
+      toReturn.push(createPicker(
+        title, objectTitle, defaultValue, register,
+        setValue, watch, errors, unregister
+      ))
+    } else if (title !== '' && type !== '' && isArray) { // Go to create Array element
+      toReturn.push(createArray(
+        title, objectTitle, parentObjectTitle, type,
+        defaultValue, register, setValue, watch, errors, unregister
+      ))
+    } else if (title !== '' && type !== '') { // Go to create Input element
+      toReturn.push(createInputElement(
+        title, objectTitle, parentObjectTitle, type, defaultValue,
+        register, setValue, watch, errors, unregister, false, undefined
+      ))
     }
 
     return toReturn
 }
 
-const createNewDictKey = (name: string) => {
-  dict[name] = {}
+const createNewdictionaryKey = (name: string) => {
+  dictionary[name] = {}
 }
 
-const setEnumKeys = (data: MyObject = {}, dictKey: string) => {
-  const dictObject = dict[dictKey]
+const setEnumKeys = (data: MyObject = {}, dictionaryKey: string) => {
+  const dictionaryObject = dictionary[dictionaryKey]
   Object.keys(data).forEach(key => {
-    dictObject[data[key]] = ""
+    dictionaryObject[data[key]] = ""
   })
 }
 
-const setEnumValues = (data: MyObject = {}, dictKey: string) => {
-  const dictObject = dict[dictKey]
-  const array = Object.values(data)
-  for (const key in dictObject) {
-    const value = array.shift()
-    dictObject[key] = value
+const setEnumValues = (data: MyObject = {}, dictionaryKey: string) => {
+  const dictionaryObject = dictionary[dictionaryKey]
+  const values = Object.values(data)
+  for (const key in dictionaryObject) {
+    const value = values.shift()
+    dictionaryObject[key] = value
   }
 }
 
-// Creates a picker component with items, takes JSON schema item label as parameter
-const createPicker = (title: string, keyName: string, defaultValue: string, watch: Function, setValue: Function, unregister: Function, errors: Object, register: Function) => {
-  const dictObject = dict[keyName]
+// Creates a Picker component with PickerItems. Takes JSON schema item label as parameter.
+const createPicker = (
+  title: string, keyName: string, defaultValue: string,
+  register: Function, setValue: Function, watch: Function,
+  errors: Object, unregister: Function
+  ) => {
+  const dictionaryObject = dictionary[keyName]
   const pickerItems = []
 
-  for (const key in dictObject) {
-    pickerItems.push(<FormPickerItemComponent key={key} label={dictObject[key]} value={key} />)
+  // Create PickerItem for each key in dictionary object
+  for (const key in dictionaryObject) {
+    pickerItems.push(<FormPickerItemComponent key={key} label={dictionaryObject[key]} value={key} />)
   }
 
-  // If default value exists, set that as selected value. Otherwise, set the value of first picker item
-  if (defaultValue !== '') {
-    return <FormPickerComponent key={title} objectTitle={keyName} title={title} pickerItems={pickerItems} selectedValue={defaultValue} watch={watch} setValue={setValue} errors={errors} register={register} />
-  } else {
-    return <FormPickerComponent key={title} objectTitle={keyName} title={title} pickerItems={pickerItems} selectedValue={pickerItems[0].props.value} watch={watch} setValue={setValue} errors={errors} register={register} />
-  }
+  // Create picker component with created PickerItems as parameter.
+  return <FormPickerComponent
+    key={title} title={title} objectTitle={keyName} pickerItems={pickerItems}
+    selectedValue={defaultValue !== '' ? defaultValue : pickerItems[0].props.value} // If default value exists, set that as selected value. Otherwise, set the value of first picker item.
+    register={register} setValue={setValue} watch={watch} errors={errors} unregister={unregister}
+  />
 }
 
-const createArray = (title: string, objectTitle: string, parentObjectTitle: string, type: string, defaultValue: string, watch: Function, setValue: Function, unregister: Function, errors: Object, register: Function) => {
+const createArray = (
+  title: string, objectTitle: string, parentObjectTitle: string, type: string,
+  defaultValue: string, register: Function, setValue: Function,
+  watch: Function, errors: Object, unregister: Function
+  ) => {
   const key = title + ' ' + uuid.v4()
+  let elementDictionary: { [key: string]: any } = {} // Create dictionary for handling removal of inputs
 
-  let elementDict: { [key: string]: any } = {}
-
-  const callbackFunction = (childValue) => {
-    elementDict[childValue.title] = childValue.value
+  const callbackFunction = (childValue: any) => { // Create callback function for fetching values from inputs
+    elementDictionary[childValue.title] = childValue.value
   }
-
-  // Adds empty array to register
+  
   if (parentObjectTitle !== '') {
-    register({ name: parentObjectTitle })
-    setValue(parentObjectTitle, [])
+    register({ name: parentObjectTitle }) 
+    setValue(parentObjectTitle, []) // Adds empty array to register
   }
-  const inputElements = [createInputElement(key, callbackFunction, objectTitle, parentObjectTitle, type, defaultValue, watch, setValue, unregister, errors, register, true)]
-  return <FormArrayComponent callbackFunction={callbackFunction} elementDict={elementDict} parentObjectTitle={parentObjectTitle} objectTitle={objectTitle} key={title} title={title} inputType={type} inputElements={inputElements} watch={watch} setValue={setValue} unregister={unregister} errors={errors} register={register} />
+  const inputElements = [createInputElement(
+    key, objectTitle, parentObjectTitle, type, defaultValue,
+    register, setValue, watch, errors, unregister, true, callbackFunction
+  )]
+  return <FormArrayComponent
+    key={title} title={title} objectTitle={objectTitle} parentObjectTitle={parentObjectTitle}
+    inputType={type} register={register} setValue={setValue} watch={watch} errors={errors}
+    unregister={unregister} inputElements={inputElements} elementDictionary={elementDictionary}
+    callbackFunction={callbackFunction} />
 }
 
-const createInputElement = (title: string, callbackFunction: Function, objectTitle: string, parentObjectTitle: string, type: string, defaultValue: string, watch: Function, setValue: Function, unregister: Function, errors: Object, register: Function, isArrayItem: boolean) => {
+const createInputElement = (
+  title: string, objectTitle: string, parentObjectTitle: string,
+  type: string, defaultValue: string, register: Function,
+  setValue: Function, watch: Function, errors: Object,
+  unregister: Function, isArrayItem: boolean, callbackFunction: Function|undefined
+  ) => {
   if (type === 'string') {
-    return <FormInputComponent key={title} parentCallback={callbackFunction} parentObjectTitle={parentObjectTitle} objectTitle={objectTitle} title={title} defaultValue={defaultValue} keyboardType='default' watch={watch} setValue={setValue} unregister={unregister} errors={errors} register={register} isArrayItem={isArrayItem} />
+    return <FormInputComponent
+      key={title} title={title} objectTitle={objectTitle}
+      parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
+      keyboardType='default' register={register} setValue={setValue}
+      watch={watch} errors={errors} unregister={unregister}
+      isArrayItem={isArrayItem} parentCallback={callbackFunction}
+    />
   } else if (type === 'integer') {
-    return <FormInputComponent key={title} parentCallback={callbackFunction} parentObjectTitle={parentObjectTitle} objectTitle={objectTitle} title={title} defaultValue={defaultValue} keyboardType='numeric' watch={watch} setValue={setValue} unregister={unregister} errors={errors} register={register} isArrayItem={isArrayItem} />    
+    return <FormInputComponent
+      key={title} title={title} objectTitle={objectTitle}
+      parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
+      keyboardType='numeric' register={register} setValue={setValue}
+      watch={watch} errors={errors} unregister={unregister}
+      isArrayItem={isArrayItem} parentCallback={callbackFunction}
+    />    
   }
 } 

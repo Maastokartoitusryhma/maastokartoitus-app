@@ -3,15 +3,15 @@ import { View, Text, Picker } from 'react-native'
 import Cs from '../styles/ContainerStyles'
 
 interface Props {
-  key: string
-  objectTitle: string
   title: string
-  selectedValue: string|null
+  objectTitle: string
   pickerItems: Array<Object>
-  watch: Function
-  setValue: Function
-  errors: Object
+  selectedValue: string|null
   register: Function
+  setValue: Function
+  watch: Function
+  errors: Object
+  unregister: Function
 }
 
 const FormPickerComponent = (props: Props) => {
