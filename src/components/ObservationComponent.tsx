@@ -67,7 +67,7 @@ const ObservationComponent = (props: PropsFromRedux) => {
   }, [])
 
   const loadSchemaAndSetForm = async () => {
-    const fetchedSchema = await getSingleObservationSchema() 
+    const fetchedSchema = await getSingleObservationSchema(t('language')) 
     if (fetchedSchema !== null) {
       setForm(parseSchemaToForm(fetchedSchema, register, setValue, watch, errors, unregister))
     }
