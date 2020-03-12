@@ -54,21 +54,13 @@ const LoginComponent = (props: Props) => {
     loadUserData()
   }, [])
 
-  const fetchObservationEvents = async () => {
-    const observationEvents: Array<Object> = await storageController.fetch('observationEvents')
-    if(observationEvents !== null) {
-      observationEvents.forEach((event) => {
-        props.newObservationEvent(event)
-      })
-    }
-  }
-
   const login = async () => {
     const userObject = await userController.getUserByPersonToken(personToken)
     // If user is not found, a JSON object with key 'error' is returned, hence check if it exists
     if (userObject.error === undefined) {
       storeUserData(JSON.stringify(userObject))
       setErrorMessage('')
+      await fetchObservationEvents()
       props.onPress()
     } else {
       setErrorMessage(t('incorrect token'))
@@ -86,6 +78,15 @@ const LoginComponent = (props: Props) => {
 
   const inputHandler = (personToken: string) => {
     setPersonToken(personToken)
+  }
+
+  const fetchObservationEvents = async () => {
+    const observationEvents: Array<Object> = await storageController.fetch('observationEvents')
+    if(observationEvents !== null) {
+      observationEvents.forEach((event) => {
+        props.newObservationEvent(event)
+      })
+    }
   }
 
   return (
