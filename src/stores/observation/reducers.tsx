@@ -30,7 +30,8 @@ const observingReducer = (state = false, action : observationActionTypes) => {
 const observationEventsReducer = (state: any[] = [], action : observationActionTypes) => {
   switch (action.type) {
     case NEW_OBSERVATION_EVENT:
-      return [...state, action.payload]
+      const newState = [...state, action.payload]
+      return newState
     default:
       return state
   }

@@ -58,7 +58,6 @@ const ObservationComponent = (props: PropsFromRedux) => {
 
     //AsyncStorage
     storageController.save('observationEvents', events)
-    storageController.fetch('observationEvents')
   }
 
   // Fetch schemas

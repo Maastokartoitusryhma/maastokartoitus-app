@@ -7,9 +7,32 @@ import Cs from '../styles/ContainerStyles'
 import Bs from '../styles/ButtonStyles'
 import Ts from '../styles/TextStyles'
 import Os from '../styles/OtherStyles'
+import storageController from '../controllers/storageController'
+import { connect, ConnectedProps } from 'react-redux'
+import { newObservationEvent } from '../stores/observation/actions'
 
-interface Props {
-  onPress: () => void   
+interface RootState {
+  observationEvent: any[]
+}
+
+const mapStateToProps = (state: RootState) => {
+  const { observationEvent } = state
+  return { observationEvent }
+}
+
+const mapDispatchToProps = {
+  newObservationEvent
+}
+
+const connector = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+type Props = PropsFromRedux & {   
+  onPress: () => void
 }
 
 const LoginComponent = (props: Props) => {
@@ -24,11 +47,21 @@ const LoginComponent = (props: Props) => {
     const loadUserData = async () => {
       const userData = await AsyncStorage.getItem('userData')
       if (userData !== null) {
+        await fetchObservationEvents()
         props.onPress()
       }
     }
     loadUserData()
   }, [])
+
+  const fetchObservationEvents = async () => {
+    const observationEvents: Array<Object> = await storageController.fetch('observationEvents')
+    if(observationEvents !== null) {
+      observationEvents.forEach((event) => {
+        props.newObservationEvent(event)
+      })
+    }
+  }
 
   const login = async () => {
     const userObject = await userController.getUserByPersonToken(personToken)
@@ -77,4 +110,4 @@ const LoginComponent = (props: Props) => {
   )
 }
 
-export default LoginComponent
+export default connector(LoginComponent)
