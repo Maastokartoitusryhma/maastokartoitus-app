@@ -6,19 +6,18 @@ import Cs from '../styles/ContainerStyles'
 import Colors from '../styles/Colors'
 
 interface Props {
-  callbackFunction: Function
-  elementDict: any
-  parentObjectTitle: string
-  objectTitle: string
-  key: string
   title: string
+  objectTitle: string
+  parentObjectTitle: string
   inputType: string
-  inputElements: Array<Object | undefined>
-  watch: Function
-  setValue: Function
-  unregister: Function
-  errors: Object
   register: Function
+  setValue: Function
+  watch: Function
+  errors: Object
+  unregister: Function
+  inputElements: Array<Object | undefined>
+  elementDictionary: any
+  callbackFunction: Function | undefined
 }
 
 const FormArrayComponent = (props: Props) => {
@@ -27,7 +26,11 @@ const FormArrayComponent = (props: Props) => {
 
   const addInputElement = () => {
     const elements = [...inputElements]
-    elements.push(createInputElement(props.parentObjectTitle, props.objectTitle, props.title, props.inputType, '', props.watch, props.setValue, props.unregister, props.errors, props.register))
+    elements.push(createInputElement(
+      props.title, props.objectTitle, props.parentObjectTitle,
+      props.inputType, '', props.register, props.setValue,
+      props.watch, props.errors, props.unregister
+    ))
     setInputElements(elements)
   }
   
@@ -36,14 +39,14 @@ const FormArrayComponent = (props: Props) => {
     const elements = [...inputElements]
     const elementToRemove = elements.pop()
     const elementKey = elementToRemove.key
-    const valueToRemove = props.elementDict[elementKey] // Dictionary stores key-value pairs, where key is inputs key/title and value is inputs current value
+    const valueToRemove = props.elementDictionary[elementKey] // Dictionary stores key-value pairs, where key is key/title of input and value is crrent value of input
     removeValueFromRegister(valueToRemove)
-    delete props.elementDict[elementKey]
+    delete props.elementDictionary[elementKey]
     setInputElements(elements)
   }
 
   // Gets values stored in register, removes the value to remove and replaces register entry with modified array
-  const removeValueFromRegister = (value) => {
+  const removeValueFromRegister = (value: string) => {
     const values = props.watch(props.parentObjectTitle)
     const index = values.indexOf(value)
     if (index > -1) {
@@ -54,12 +57,28 @@ const FormArrayComponent = (props: Props) => {
     props.setValue(props.parentObjectTitle, values)
   }
 
-  const createInputElement = (parentObjectTitle: string, objectTitle: string, title: string, type: string, defaultValue: string, watch: Function, setValue: Function, unregister: Function, errors: Object, register: Function) => {
+  const createInputElement = (
+    title: string, objectTitle: string, parentObjectTitle: string,
+    type: string, defaultValue: string, register: Function,
+    setValue: Function, watch: Function, errors: Object, unregister: Function
+    ) => {
     const key = title + ' ' + uuid.v4()
     if (type === 'string') {
-      return <FormInputComponent key={key} parentCallback={props.callbackFunction} parentObjectTitle={parentObjectTitle} objectTitle={objectTitle} title={key} defaultValue={defaultValue} keyboardType='default' watch={watch} setValue={setValue} unregister={unregister} errors={errors} register={register} isArrayItem={true} />
+      return <FormInputComponent
+        key={key} title={key} objectTitle={objectTitle}
+        parentObjectTitle={parentObjectTitle} keyboardType='default'
+        defaultValue={defaultValue} register={register} setValue={setValue}
+        watch={watch} errors={errors} unregister={unregister} 
+        isArrayItem={true} parentCallback={props.callbackFunction}
+      />
     } else if (type === 'integer') {
-      return <FormInputComponent key={key} parentCallback={props.callbackFunction} parentObjectTitle={parentObjectTitle} objectTitle={objectTitle} title={key} defaultValue={defaultValue} keyboardType='numeric' watch={watch} setValue={setValue} unregister={unregister} errors={errors} register={register} isArrayItem={true} />    
+      return <FormInputComponent 
+        key={key} title={key} objectTitle={objectTitle}
+        parentObjectTitle={parentObjectTitle} keyboardType='numeric'
+        defaultValue={defaultValue} register={register} setValue={setValue}
+        watch={watch} errors={errors} unregister={unregister} 
+        isArrayItem={true} parentCallback={props.callbackFunction}
+      />
     }
   }
 
