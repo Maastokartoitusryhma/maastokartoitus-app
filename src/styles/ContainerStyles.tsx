@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 import Colors from './Colors'
 
 const ContainerStyles = StyleSheet.create({
@@ -100,6 +100,36 @@ const ContainerStyles = StyleSheet.create({
   singleObservationEventContainer: {
     padding: 10,
     justifyContent: 'space-between',
+  },
+  mapViewStyle: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
+  mapTypeContainer: {
+    position: 'absolute',
+    top: '1%',
+    right: '1%',
+    alignSelf: 'flex-end'
+  },
+  userLocationContainer: {
+    position: 'absolute',
+    top: '10%',
+    right: '1%',
+    alignSelf: 'flex-end'
+  },
+  observationTypeButtonsContainer: {
+    position: 'absolute',
+    width: '98%',
+    bottom: '1%',
+    flexDirection: 'column',
+    justifyContent: 'space-between'
+  },
+  observationTypeButton: {
+    padding: 5
+  },
+  observationTypeButtonsColumn: {
+    alignSelf: 'flex-end',
+    justifyContent: 'space-between'
   }
 })
 

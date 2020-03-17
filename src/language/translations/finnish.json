@@ -36,5 +36,8 @@
   "dateBegin": "Aloituspäivämäärä",
   "dateEnd": "Lopetuspäivämäärä",
   "Observations": "Havainnot",
-  "Zone": "Havainnointialue"
+  "Zone": "Havainnointialue",
+  "trace": "jälki",
+  "feces": "papana",
+  "nest": "pesä"
 }

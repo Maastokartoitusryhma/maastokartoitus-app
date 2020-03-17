@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import MapView, { Marker, Polyline, UrlTile, Region, LatLng } from 'react-native-maps'
 import { connect, ConnectedProps } from 'react-redux'
-import { Button, View, Dimensions, TouchableHighlight } from 'react-native'
+import { Button, View, TouchableHighlight } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { LocationData } from 'expo-location'
 import { GeometryCollection, Point } from 'geojson'
@@ -18,6 +18,8 @@ import {
 } from '../stores/map/actions'
 import Colors from '../styles/Colors'
 import { MaterialIcons } from '@expo/vector-icons'
+import Cs from '../styles/ContainerStyles'
+import Os from '../styles/OtherStyles'
 
 const urlTemplate: string = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
 
@@ -186,10 +188,7 @@ const MapComponent = (props: Props) => {
         minZoomLevel = {5}
         mapType = {props.maptype === 'topographic' ? 'none' : props.maptype}
         rotateEnabled = {false}
-        style = {{
-          width: Dimensions.get('window').width,
-          height: Dimensions.get('window').height,
-        }}
+        style = {Cs.mapViewStyle}
       >
         {locationOverlay()}
         {targetOverlay()}
@@ -198,12 +197,8 @@ const MapComponent = (props: Props) => {
         {tileOverlay()}
       </MapView>
       <View
-        style = {{
-          position: 'absolute',
-          top: '1%',
-          alignSelf: 'flex-end'
-        }}>
-        <TouchableHighlight onPress = {() => props.toggleMaptype()} style = {{backgroundColor: Colors.headerBackground, borderRadius: 5}}>
+        style = {Cs.mapTypeContainer}>
+        <TouchableHighlight onPress = {() => props.toggleMaptype()} style = {Os.touchableHiglightStyle}>
           <MaterialIcons
             name='layers'
             size={50}
@@ -212,12 +207,8 @@ const MapComponent = (props: Props) => {
         </TouchableHighlight>
       </View>
       <View
-        style = {{
-          position: 'absolute',
-          top: '10%',
-          alignSelf: 'flex-end'
-        }}>
-        <TouchableHighlight onPress = {() => centerMapAnim()} style = {{backgroundColor: Colors.headerBackground, borderRadius: 5}}>
+        style = {Cs.userLocationContainer}>
+        <TouchableHighlight onPress = {() => centerMapAnim()} style = {Os.touchableHiglightStyle}>
           <MaterialIcons
             name='my-location'
             size={50}
@@ -227,24 +218,24 @@ const MapComponent = (props: Props) => {
       </View>
       { props.observation ?
         <View
-          style = {{
-            position: 'absolute',
-            width: '100%',
-            bottom: '0%',
-            flexDirection: 'row',
-            justifyContent: 'space-between'
-          }}>
+          style = {Cs.observationTypeButtonsContainer}>
           <View
-            style={{
-              alignSelf: 'flex-start',
-            }}>
-            <Button title = {t('remove')} onPress = {() => cancelObservation()} color = {Colors.negativeButton}/>
-          </View>
-          <View
-            style={{
-              alignSelf: 'flex-end',       
-            }}>
-            <Button title = {t('observation')} onPress = {props.onPress1}/>
+            style={Cs.observationTypeButtonsColumn}>
+              <View style={Cs.observationTypeButton}>
+                <Button title = {t('observation')} onPress = {props.onPress1}/>
+              </View>
+              <View style={Cs.observationTypeButton}>
+                <Button title = {t('trace')} onPress = {props.onPress1}/>
+              </View>
+              <View style={Cs.observationTypeButton}>
+              <Button title = {t('feces')} onPress = {props.onPress1}/>
+              </View>
+              <View style={Cs.observationTypeButton}>
+                <Button title = {t('nest')} onPress = {props.onPress1}/>
+              </View>
+              <View style={Cs.observationTypeButton}>
+                <Button title = {t('remove')} onPress = {() => cancelObservation()} color = {Colors.negativeButton}/>
+              </View>
           </View>
         </View>
         : null

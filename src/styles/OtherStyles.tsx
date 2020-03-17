@@ -15,6 +15,10 @@ const OtherStyles = StyleSheet.create({
     width: '80%',
     paddingHorizontal: 10,
     textAlign: 'justify'
+  },
+  touchableHiglightStyle: {
+    backgroundColor: Colors.headerBackground,
+    borderRadius: 5
   }
 })
 

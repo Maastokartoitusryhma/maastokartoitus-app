@@ -36,5 +36,8 @@
   "dateBegin": "Startdatum",
   "dateEnd": "Slutdatum",
   "Observations": "Observationer",
-  "Zone": "Observationsplatsen"
+  "Zone": "Observationsplatsen",
+  "trace": "spår",
+  "feces": "avföring",
+  "nest": "bo"
 }

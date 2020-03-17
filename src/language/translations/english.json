@@ -36,6 +36,9 @@
   "dateBegin": "Starting date",
   "dateEnd": "Ending date",
   "Observations": "Observations",
-  "Zone": "Observation zone"
+  "Zone": "Observation zone",
+  "trace": "trace",
+  "feces": "feces",
+  "nest": "nest"
 
 }
