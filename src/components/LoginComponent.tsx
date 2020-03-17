@@ -44,6 +44,13 @@ const LoginComponent = (props: Props) => {
   // Check if user has previously logged in, redirect to home screen if is
 
   useEffect(() => {
+    const loadUserData = async () => {
+      const userData = await AsyncStorage.getItem('userData')
+      if (userData !== null) {
+        await fetchObservationEvents()
+        props.onPress()
+      }
+    }
     loadUserData()
   }, [])
 
@@ -57,7 +64,7 @@ const LoginComponent = (props: Props) => {
 
   const fetchObservationEvents = async () => {
     const observationEvents: Array<Object> = await storageController.fetch('observationEvents')
-    if(observationEvents !== null) {
+    if (observationEvents !== null) {
       observationEvents.forEach((event) => {
         props.newObservationEvent(event)
       })
