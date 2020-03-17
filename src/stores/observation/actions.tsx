@@ -5,6 +5,7 @@ import { observationActionTypes,
         CLEAR_OBSERVATION,
         TOGGLE_OBSERVING,
         NEW_OBSERVATION_EVENT,
+        ALL_OBSERVATION_EVENTS,
         SET_SCHEMA
         } from './types'
 
@@ -24,6 +25,10 @@ export const toggleObserving = () : observationActionTypes => ({
 export const newObservationEvent = (observation : object) : observationActionTypes => ({
   type: NEW_OBSERVATION_EVENT,
   payload: observation
+})
+
+export const allObservationEvents = () : observationActionTypes => ({
+  type: ALL_OBSERVATION_EVENTS
 })
 
 export const setSchema = (schema : object) : observationActionTypes => ({

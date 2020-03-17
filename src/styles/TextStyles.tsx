@@ -35,6 +35,9 @@ const TextStyles = StyleSheet.create({
   observationEventTitle: {
     padding: 10,
     fontWeight: 'bold'
+  },
+  observationEventListElement: {
+    padding: 6
   }
 })
 

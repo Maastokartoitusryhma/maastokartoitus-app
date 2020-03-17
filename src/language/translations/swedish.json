@@ -29,5 +29,12 @@
   "previous observation events": "Tidigare observationshändelser",
   "beginObservation": "Börja observationshändelse",
   "cancelObservation": "Sluta observationshändelse",
-  "remove": "Ta bort"
+  "remove": "Ta bort",
+  "observations": "observationer",
+  "singleObservation": "observation",
+  "event": "Observationshändelse",
+  "dateBegin": "Startdatum",
+  "dateEnd": "Slutdatum",
+  "Observations": "Observationer",
+  "Zone": "Observationsplatsen"
 }

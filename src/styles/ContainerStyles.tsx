@@ -54,10 +54,6 @@ const ContainerStyles = StyleSheet.create({
     paddingTop: 10,
     paddingRight: 10
   },
-  previousObservationsContainer: {
-    width: '90%',
-    paddingTop: 10
-  },
   mapContainer: {
     flex: 1,
     backgroundColor: '#fff',
@@ -95,6 +91,15 @@ const ContainerStyles = StyleSheet.create({
   formSaveButtonContainer: {
     padding: 10,
     justifyContent: 'space-between'
+  },
+  observationEventListContainer: {
+    padding: 10,
+    backgroundColor: Colors.blueBackground,
+    width: '90%'
+  },
+  singleObservationEventContainer: {
+    padding: 10,
+    justifyContent: 'space-between',
   }
 })
 

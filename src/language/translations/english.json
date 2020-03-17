@@ -29,5 +29,13 @@
   "previous observation events": "Previous observation events",
   "beginObservation": "Begin observation",
   "cancelObservation": "Stop observation",
-  "remove": "remove"
+  "remove": "remove",
+  "observations": "observations",
+  "singleObservation": "observation",
+  "event": "Observation Event",
+  "dateBegin": "Starting date",
+  "dateEnd": "Ending date",
+  "Observations": "Observations",
+  "Zone": "Observation zone"
+
 }

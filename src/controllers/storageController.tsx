@@ -13,7 +13,7 @@ const save = async (key: string, value: any) => {
 const fetch = async (key: string) => {
   try {
     const value: string|null = await AsyncStorage.getItem(key)
-    if(typeof value !== null) {
+    if (value !== null) {
       console.log('ASYNC_STORAGE: Fetched the following item successfully: ', value)
       return JSON.parse(value)
     } else {

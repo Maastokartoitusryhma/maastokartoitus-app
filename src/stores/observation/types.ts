@@ -4,6 +4,7 @@ export const SET_OBSERVATION = 'SET_OBSERVATION'
 export const CLEAR_OBSERVATION = 'CLEAR_OBSERVATION'
 export const TOGGLE_OBSERVING = 'TOGGLE_OBSERVING'
 export const NEW_OBSERVATION_EVENT ='NEW_OBSERVATION_EVENT'
+export const ALL_OBSERVATION_EVENTS = 'ALL_OBSERVATION_EVENTS'
 export const SET_SCHEMA ='SET_SCHEMA'
 
 interface setObservationLocation {
@@ -24,6 +25,10 @@ interface newObservationEvent {
   payload: object
 }
 
+interface allObservationEvents {
+  type: typeof ALL_OBSERVATION_EVENTS
+}
+
 interface setSchema {
   type: typeof SET_SCHEMA
   payload: object
@@ -33,4 +38,5 @@ export type observationActionTypes = setObservationLocation |
                                      clearObservationLocation |  
                                      toggleObserving | 
                                      newObservationEvent |
+                                     allObservationEvents |
                                      setSchema

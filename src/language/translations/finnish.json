@@ -29,5 +29,12 @@
   "previous observation events": "Aiemmat havaintotapahtumat",
   "beginObservation": "Aloita havaintotapahtuma",
   "cancelObservation": "Lopeta havaintotapahtuma",
-  "remove": "poista"
+  "remove": "poista",
+  "observations": "havaintoa",
+  "singleObservation": "havainto",
+  "event": "Havaintotapahtuma",
+  "dateBegin": "Aloituspäivämäärä",
+  "dateEnd": "Lopetuspäivämäärä",
+  "Observations": "Havainnot",
+  "Zone": "Havainnointialue"
 }

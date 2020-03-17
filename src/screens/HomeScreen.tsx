@@ -32,7 +32,9 @@ export default class HomeScreen extends Component<NavigationStackScreenProps<Pro
       <HomeComponent
         onPressMap={() => this.props.navigation.navigate('Map')}
         onLogout={() => this.props.navigation.replace('Login')}
-      />
+        onPressObservationEvent={(id: string) => {
+          this.props.navigation.navigate('ObservationEvent', {id})
+        }}/>
     )
   }
 }

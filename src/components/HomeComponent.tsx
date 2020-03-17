@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, Button, Picker } from 'react-native'
 import UserInfoComponent from './UserInfoComponent'
+import ObservationEventListComponent from './ObservationEventListElementComponent'
 import { useTranslation } from 'react-i18next'
 import regionController from '../controllers/regionController'
 import Cs from '../styles/ContainerStyles'
@@ -11,8 +12,9 @@ import { LatLng } from 'react-native-maps'
 import { 
   toggleObserving, 
   newObservationEvent, 
+  allObservationEvents,
   clearObservationLocation 
-} from '../stores/observation/actions'
+  } from '../stores/observation/actions'
 import {
   setObservationZone,
   clearObservationZone
@@ -30,11 +32,12 @@ interface RootState {
   observing: boolean
   observation: LatLng
   zone: GeometryCollection
+  observationEvent: any[]
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, observing, observation, zone } = state
-  return { position, path, observing, observation, zone }
+  const { position, path, observing, observation, zone, observationEvent } = state
+  return { position, path, observing, observation, zone, observationEvent }
 }
 
 const mapDispatchToProps = {
@@ -44,6 +47,7 @@ const mapDispatchToProps = {
   clearObservationZone,
   toggleObserving,
   newObservationEvent,
+  allObservationEvents,
   clearObservationLocation
 }
 
@@ -56,6 +60,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {   
   onLogout: () => void
   onPressMap: () => void 
+  onPressObservationEvent: (id: string) => void
 }
 
 interface RegionObject {
@@ -68,10 +73,27 @@ const HomeComponent = (props: Props) => {
 
   const [selectedRegion, setSelectedRegion] = useState('')
   const [regions, setRegions] = useState<RegionObject[]>([])
+  const [observationEvents, setObservationEvents] = useState<Element[]>([])
 
   useEffect(() => {
     loadRegions()
+    loadObservationEvents()
   }, [])
+
+  const loadObservationEvents =  async () => {
+    props.allObservationEvents()
+    if (props.observationEvent !== null) {
+      const events: Array<Element> = []
+      props.observationEvent.forEach(event => {
+        const id = event.id
+        const dateBegin = event.schema.gatheringEvent.dateBegin
+        const dateEnd = event.schema.gatheringEvent.dateEnd
+        const observationCount = event.schema.gatherings[0].units.length
+        events.push(<ObservationEventListComponent key={id} id={id} dateBegin={dateBegin} dateEnd={dateEnd} observationCount={observationCount} onPress={() => props.onPressObservationEvent(id)} />)
+      })
+      await setObservationEvents(events)
+    }
+  }
 
   const loadRegions = async () => {
     const response = await regionController.getRegions()
@@ -143,8 +165,10 @@ const HomeComponent = (props: Props) => {
             }
           </View>
         </View>
-        <View style={Cs.previousObservationsContainer}>
+        <View style={{ height: 10 }}></View>
+        <View style={Cs.observationEventListContainer}>
           <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
+          {observationEvents}
         </View>
       </View>
     </View>

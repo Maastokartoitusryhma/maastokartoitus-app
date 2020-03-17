@@ -5,6 +5,7 @@ import { withTranslation, WithTranslation } from 'react-i18next'
 import HomeScreen from '../screens/HomeScreen'
 import MapScreen from '../screens/MapScreen'
 import ObservationScreen from '../screens/ObservationScreen'
+import ObservationEventScreen from '../screens/ObservationEventScreen'
 import LoginScreen from '../screens/LoginScreen'
 
 const MainNavigator = createStackNavigator(
@@ -12,7 +13,8 @@ const MainNavigator = createStackNavigator(
     Login: LoginScreen,
     Home: HomeScreen,
     Map: MapScreen,
-    Observation: ObservationScreen
+    Observation: ObservationScreen,
+    ObservationEvent: ObservationEventScreen
   },
   {
     initialRouteName: 'Login'
