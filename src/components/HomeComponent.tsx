@@ -24,6 +24,8 @@ import { connect, ConnectedProps } from 'react-redux'
 import { watchLocationAsync, stopLocationAsync } from '../geolocation/geolocation'
 import { GeometryCollection } from 'geojson'
 import testForm from '../../temporaryForm.json'
+import { getObservationEventSchema } from '../controllers/formController'
+import { parseSchemaToJSONObject } from '../parsers/SchemaToJSONObject'
 import uuid from 'react-native-uuid'
 
 interface RootState {
@@ -33,6 +35,10 @@ interface RootState {
   observation: LatLng
   zone: GeometryCollection
   observationEvent: any[]
+}
+
+interface MyObject {
+  [key: string]: any
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -103,6 +109,21 @@ const HomeComponent = (props: Props) => {
       setSelectedObservationZone(response.results[0].id)
     }
   }
+  
+  const loadSchemaAndSetForm = async () => {
+    const fetchedSchema = await getObservationEventSchema(t('language')) 
+    if (fetchedSchema !== null) {
+      //parse schema object
+      const schemaObject: MyObject = {} = parseSchemaToJSONObject(fetchedSchema.properties)
+      //parse gatherings object
+      const gatheringsObject: MyObject = {} = parseSchemaToJSONObject(fetchedSchema.properties.gatherings.items.properties)
+      console.log(gatheringsObject)
+      schemaObject.gatherings.push(gatheringsObject)
+      console.log('PARSED SCHEMA: ' + JSON.stringify(schemaObject))
+      return schemaObject
+    }
+    return null
+  }
 
   const createRegionsList = () => {
     return regions.map(region => 
@@ -111,8 +132,14 @@ const HomeComponent = (props: Props) => {
 
   const { t } = useTranslation()
 
-  const beginObservationEvent = () => {
-    const observationForm = testForm
+  const beginObservationEvent = async () => {
+    
+    const observationForm = await loadSchemaAndSetForm()
+    if (observationForm !== null) {
+      console.log('OBSERVATION FORM: ' + JSON.stringify(observationForm))
+      observationForm.gatheringEvent.dateBegin = new Date(Date.now()).toISOString()
+    }
+    
     const observationEventObject = {
       id: 'observationEvent_' + uuid.v4(),
       sentToServer: false,
