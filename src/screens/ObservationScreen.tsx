@@ -20,7 +20,10 @@ export default class ObservationScreen extends Component<NavigationStackScreenPr
 
   render() {
     return (
-      <ObservationComponent type={this.props.navigation.state.params.type} />
+      <ObservationComponent 
+        onPress={() => this.props.navigation.navigate('Map')} 
+        type={this.props.navigation.state.params.type}
+      />
     )
   }
 }

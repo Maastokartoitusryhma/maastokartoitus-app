@@ -3,10 +3,13 @@ import { GeometryCollection, Point  } from 'geojson'
 import { observationActionTypes,
         SET_OBSERVATION,
         CLEAR_OBSERVATION,
+        ADD_TO_LOCATIONS,
+        REMOVE_FROM_LOCATIONS,
+        CLEAR_LOCATIONS,
         TOGGLE_OBSERVING,
         NEW_OBSERVATION_EVENT,
         ALL_OBSERVATION_EVENTS,
-        SET_SCHEMA
+        SET_SCHEMA,
         } from './types'
 
 export const setObservationLocation = (point : Point | null) : observationActionTypes => ({
@@ -16,6 +19,20 @@ export const setObservationLocation = (point : Point | null) : observationAction
 
 export const clearObservationLocation = () : observationActionTypes => ({
   type: CLEAR_OBSERVATION
+})
+
+export const addToObservationLocations = (point : Point | null) : observationActionTypes => ({
+  type: ADD_TO_LOCATIONS,
+  payload: point
+})
+
+export const removeFromObservationLocations = (point: Point | null ) : observationActionTypes => ({
+  type: REMOVE_FROM_LOCATIONS,
+  payload: point
+})
+
+export const clearObservationLocations = () : observationActionTypes => ({
+  type: CLEAR_LOCATIONS
 })
 
 export const toggleObserving = () : observationActionTypes => ({

@@ -13,7 +13,8 @@ import {
   toggleObserving, 
   newObservationEvent, 
   allObservationEvents,
-  clearObservationLocation 
+  clearObservationLocation,
+  clearObservationLocations
   } from '../stores/observation/actions'
 import {
   setObservationZone,
@@ -54,7 +55,8 @@ const mapDispatchToProps = {
   toggleObserving,
   newObservationEvent,
   allObservationEvents,
-  clearObservationLocation
+  clearObservationLocation,
+  clearObservationLocations
 }
 
 const connector = connect(
@@ -154,6 +156,7 @@ const HomeComponent = (props: Props) => {
   const finishObservationEvent = () => {
     props.toggleObserving()
     props.clearObservationLocation()
+    props.clearObservationLocations()
     stopLocationAsync()
   }
 

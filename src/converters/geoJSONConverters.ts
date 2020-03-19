@@ -23,7 +23,7 @@ const featureConstructor = (geometry: Geometry) => {
   const feature: Feature = {
     type: 'Feature',
     properties: {},
-    geometry: geometry
+    geometry: geometry,
   }
 
   return feature

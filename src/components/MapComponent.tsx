@@ -5,11 +5,13 @@ import { Button, View, TouchableHighlight } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { LocationData } from 'expo-location'
 import { GeometryCollection, Point } from 'geojson'
-import { wrapGeometryInFC, convertGC2FC, convertLatLngToPoint, getCenter } from '../converters/geoJSONConverters'
+import { wrapGeometryInFC, convertGC2FC, convertLatLngToPoint } from '../converters/geoJSONConverters'
 import Geojson from 'react-native-typescript-geojson'
 import { 
   setObservationLocation, 
   clearObservationLocation, 
+  addToObservationLocations,
+  removeFromObservationLocations
 } from '../stores/observation/actions' 
 import {
   setRegion,
@@ -20,6 +22,7 @@ import Colors from '../styles/Colors'
 import { MaterialIcons } from '@expo/vector-icons'
 import Cs from '../styles/ContainerStyles'
 import Os from '../styles/OtherStyles'
+import uuid from 'react-native-uuid'
 
 const urlTemplate: string = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
 
@@ -28,19 +31,22 @@ interface RootState {
   path: LocationData[]
   region: Region
   observation: Point
+  observationLocations: Point[]
   zone: GeometryCollection
   centered: boolean
   maptype: 'topographic' | 'satellite'
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, region, observation, zone, centered, maptype } = state
-  return { position, path, region, observation, zone, centered, maptype }
+  const { position, path, region, observation, observationLocations, zone, centered, maptype } = state
+  return { position, path, region, observation, observationLocations, zone, centered, maptype }
 }
 
 const mapDispatchToProps = {
   setRegion,
   setObservationLocation,
+  addToObservationLocations,
+  removeFromObservationLocations,
   clearObservationLocation,
   toggleCentered,
   toggleMaptype,
@@ -117,11 +123,16 @@ const MapComponent = (props: Props) => {
 
   const markObservation = (coordinate: LatLng) => {
     const point = convertLatLngToPoint(coordinate)
-
     props.setObservationLocation(point)
   }
 
+  const markAddedObservation = (coordinate: LatLng) => {
+    const point = convertLatLngToPoint(coordinate)
+    
+  }
+
   const cancelObservation = () => {
+    props.removeFromObservationLocations(props.observation)
     props.clearObservationLocation()
   }
 
@@ -181,6 +192,12 @@ const MapComponent = (props: Props) => {
     : null
   )
 
+  const observationLocationsOverlay = () => (
+    props.observationLocations.map(location =>
+      <Geojson key={uuid.v4()} geojson={wrapGeometryInFC(location)} />
+    )
+  )
+
   return (
     <>
       <MapView
@@ -201,6 +218,7 @@ const MapComponent = (props: Props) => {
         {pathOverlay()}
         {zoneOverlay()}
         {tileOverlay()}
+        {observationLocationsOverlay()}
       </MapView>
       <View
         style = {Cs.mapTypeContainer}>
@@ -246,6 +264,7 @@ const MapComponent = (props: Props) => {
         </View>
         : null
       }
+      
     </>
   )
 }

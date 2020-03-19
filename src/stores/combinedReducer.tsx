@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import { positionReducer, pathReducer } from './position/reducers'
-import { observationReducer, observingReducer, observationEventsReducer, schemaReducer } from './observation/reducers'
+import { observationReducer, observationLocationsReducer, observingReducer, observationEventsReducer, schemaReducer } from './observation/reducers'
 import { regionReducer, zoneReducer, centeringReducer, maptypeReducer} from './map/reducers'
 
 export default combineReducers({
@@ -9,6 +9,7 @@ export default combineReducers({
   path: pathReducer,
   observing: observingReducer,
   observation: observationReducer,
+  observationLocations: observationLocationsReducer,
   zone: zoneReducer,
   centered: centeringReducer,
   maptype: maptypeReducer,
