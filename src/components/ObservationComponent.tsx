@@ -10,6 +10,7 @@ import { newObservationEvent, clearObservationLocation, addToObservationLocation
 import ObservationForm from '../forms/ObservationForm'
 import TrackObservationForm from '../forms/TrackObservationForm'
 import FecesObservationForm from '../forms/FecesObservationForm'
+import NestObservationForm from '../forms/NestObservationForm'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import Colors from '../styles/Colors'
@@ -70,7 +71,7 @@ const ObservationComponent = (props: Props) => {
       data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
     }
     console.log('POINT:', props.observation)
-   // console.log('REGISTER DATA:', JSON.stringify(data))
+    console.log('REGISTER DATA:', JSON.stringify(data))
     //console.log('EVENT BEFORE:', props.observationEvent)
     console.log('LOCATIONS', props.observationLocations)
     const events = props.observationEvent
@@ -81,7 +82,7 @@ const ObservationComponent = (props: Props) => {
     //console.log('EVENT OBJECT AFTER: ', event)
     events.push(event)
     props.newObservationEvent(event)
-    //console.log('EVENT AFTER:', props.observationEvent)
+    console.log('EVENT AFTER:', props.observationEvent)
 
     props.clearObservationLocation()
 
@@ -107,7 +108,7 @@ const ObservationComponent = (props: Props) => {
     } else if(props.type === 'fecesObservation') {
       setForm(FecesObservationForm(register, setValue, watch, errors, unregister))
     } else if(props.type === 'nestObservation') {
-      setForm(ObservationForm(register, setValue, watch, errors, unregister))
+      setForm(NestObservationForm(register, setValue, watch, errors, unregister))
     }
   }
 
