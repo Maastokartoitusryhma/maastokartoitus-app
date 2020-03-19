@@ -9,6 +9,7 @@ import storageController from '../controllers/storageController'
 import { newObservationEvent, clearObservationLocation, addToObservationLocations, removeFromObservationLocations } from '../stores/observation/actions'
 import ObservationForm from '../forms/ObservationForm'
 import TrackObservationForm from '../forms/TrackObservationForm'
+import FecesObservationForm from '../forms/FecesObservationForm'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import Colors from '../styles/Colors'
@@ -65,6 +66,9 @@ const ObservationComponent = (props: Props) => {
     if(!('recordBasis' in data)) {
       data['recordBasis'] = 'MY.recordBasisHumanObservationIndirect'
     }
+    if(props.type === 'fecesObservation') {
+      data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
+    }
     console.log('POINT:', props.observation)
    // console.log('REGISTER DATA:', JSON.stringify(data))
     //console.log('EVENT BEFORE:', props.observationEvent)
@@ -101,7 +105,7 @@ const ObservationComponent = (props: Props) => {
     } else if(props.type === 'trackObservation') {
       setForm(TrackObservationForm(register, setValue, watch, errors, unregister))
     } else if(props.type === 'fecesObservation') {
-      setForm(ObservationForm(register, setValue, watch, errors, unregister))
+      setForm(FecesObservationForm(register, setValue, watch, errors, unregister))
     } else if(props.type === 'nestObservation') {
       setForm(ObservationForm(register, setValue, watch, errors, unregister))
     }
