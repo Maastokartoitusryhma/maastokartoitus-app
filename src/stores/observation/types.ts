@@ -2,6 +2,9 @@ import { Point } from 'geojson'
 
 export const SET_OBSERVATION = 'SET_OBSERVATION'
 export const CLEAR_OBSERVATION = 'CLEAR_OBSERVATION'
+export const ADD_TO_LOCATIONS = 'ADD_TO_LOCATIONS'
+export const REMOVE_FROM_LOCATIONS = 'REMOVE_FROM_LOCATIONS'
+export const CLEAR_LOCATIONS = 'CLEAR_LOCATIONS'
 export const TOGGLE_OBSERVING = 'TOGGLE_OBSERVING'
 export const NEW_OBSERVATION_EVENT ='NEW_OBSERVATION_EVENT'
 export const ALL_OBSERVATION_EVENTS = 'ALL_OBSERVATION_EVENTS'
@@ -14,6 +17,20 @@ interface setObservationLocation {
 
 interface clearObservationLocation {
   type: typeof CLEAR_OBSERVATION
+}
+
+interface addToObservationLocations {
+  type: typeof ADD_TO_LOCATIONS
+  payload: Point | null
+}
+
+interface removeFromObservationLocations {
+  type: typeof REMOVE_FROM_LOCATIONS
+  payload: Point | null
+}
+
+interface clearObservationLocations {
+  type: typeof CLEAR_LOCATIONS
 }
 
 interface toggleObserving {
@@ -36,6 +53,9 @@ interface setSchema {
 
 export type observationActionTypes = setObservationLocation | 
                                      clearObservationLocation |  
+                                     addToObservationLocations |
+                                     removeFromObservationLocations |
+                                     clearObservationLocations |
                                      toggleObserving | 
                                      newObservationEvent |
                                      allObservationEvents |

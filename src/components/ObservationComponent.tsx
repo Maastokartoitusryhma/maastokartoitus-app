@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Point } from 'geojson'
 import { getSingleObservationSchema } from '../controllers/formController'
 import storageController from '../controllers/storageController'
-import { newObservationEvent, clearObservationLocation } from '../stores/observation/actions'
+import { newObservationEvent, clearObservationLocation, addToObservationLocations, removeFromObservationLocations } from '../stores/observation/actions'
 import { parseSchemaToForm } from '../parsers/SchemaToFormParser'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
@@ -15,16 +15,19 @@ import Colors from '../styles/Colors'
 interface RootState {
   observation: Point
   observationEvent: any[]
+  observationLocations: Point[]
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { observation, observationEvent } = state
-  return { observation, observationEvent }
+  const { observation, observationEvent, observationLocations } = state
+  return { observation, observationEvent, observationLocations }
 }
 
 const mapDispatchToProps = {
   newObservationEvent,
-  clearObservationLocation
+  clearObservationLocation,
+  addToObservationLocations,
+  removeFromObservationLocations
 }
 
 const connector = connect(
@@ -36,23 +39,29 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 
 const ObservationComponent = (props: PropsFromRedux) => {
 
+  useEffect(() => {
+    props.addToObservationLocations(props.observation)
+  }, [])
+
   //For react-hook-form
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
   const { t } = useTranslation()
   const [form, setForm] = useState()
 
   const onSubmit = (data: Object) => {
-    console.log('REGISTER DATA:', JSON.stringify(data))
-    console.log('EVENT BEFORE:', props.observationEvent)
+    console.log('POINT:', props.observation)
+   // console.log('REGISTER DATA:', JSON.stringify(data))
+    //console.log('EVENT BEFORE:', props.observationEvent)
+    console.log('LOCATIONS', props.observationLocations)
     const events = props.observationEvent
     const event = events.pop()
-    console.log('EVENT OBJECT BEFORE: ', event)
+    //console.log('EVENT OBJECT BEFORE: ', event)
     event.schema.gatherings[0].units.push(data)
     //event.gatherings[0].units.unitGathering.geometry.push(props.observation)
-    console.log('EVENT OBJECT AFTER: ', event)
+    //console.log('EVENT OBJECT AFTER: ', event)
     events.push(event)
     props.newObservationEvent(event)
-    console.log('EVENT AFTER:', props.observationEvent)
+    //console.log('EVENT AFTER:', props.observationEvent)
 
     props.clearObservationLocation()
 
