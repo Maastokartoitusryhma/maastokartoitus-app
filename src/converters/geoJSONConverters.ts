@@ -22,9 +22,7 @@ const featureCollectionConstructor = (features: Feature[]) => {
 const featureConstructor = (geometry: Geometry) => {
   const feature: Feature = {
     type: 'Feature',
-    properties: {
-      'color': '#22c'
-    },
+    properties: {},
     geometry: geometry,
   }
 
