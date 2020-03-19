@@ -8,6 +8,7 @@ import { getSingleObservationSchema } from '../controllers/formController'
 import storageController from '../controllers/storageController'
 import { newObservationEvent, clearObservationLocation } from '../stores/observation/actions'
 import { parseSchemaToForm } from '../parsers/SchemaToFormParser'
+import ObservationForm from '../forms/ObservationForm'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import Colors from '../styles/Colors'
@@ -68,7 +69,8 @@ const ObservationComponent = (props: PropsFromRedux) => {
   const loadSchemaAndSetForm = async () => {
     const fetchedSchema = await getSingleObservationSchema(t('language')) 
     if (fetchedSchema !== null) {
-      setForm(parseSchemaToForm(fetchedSchema, register, setValue, watch, errors, unregister))
+      //setForm(parseSchemaToForm(fetchedSchema, register, setValue, watch, errors, unregister))
+      setForm(ObservationForm(register, setValue, watch, errors, unregister))
     }
   }
 
