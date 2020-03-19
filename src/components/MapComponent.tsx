@@ -122,6 +122,7 @@ const MapComponent = (props: Props) => {
 
   const locationOverlay = () => (props.position !== null ? (
     <Marker
+      onPress={(event) => markObservation(event.nativeEvent.coordinate)}
       coordinate = {{
         latitude: props.position.coords.latitude,
         longitude: props.position.coords.longitude
