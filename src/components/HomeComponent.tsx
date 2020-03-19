@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, Button, Picker } from 'react-native'
+import { View, Text, Button, Picker, ScrollView } from 'react-native'
 import UserInfoComponent from './UserInfoComponent'
 import ObservationEventListComponent from './ObservationEventListElementComponent'
 import { useTranslation } from 'react-i18next'
@@ -97,7 +97,7 @@ const HomeComponent = (props: Props) => {
         const observationCount = event.schema.gatherings[0].units.length
         events.push(<ObservationEventListComponent key={id} id={id} dateBegin={dateBegin} dateEnd={dateEnd} observationCount={observationCount} onPress={() => props.onPressObservationEvent(id)} />)
       })
-      await setObservationEvents(events)
+      setObservationEvents(events)
     }
   }
 
@@ -167,38 +167,41 @@ const HomeComponent = (props: Props) => {
 
   return (
     <View>
-      <UserInfoComponent onLogout={props.onLogout} />
-      <View style={Cs.homeContainer}>
-        <View style={Cs.observationEventContainer}>
-          <Text style={Ts.observationEventTitle}>{t('observation event')}</Text>
-          <View style={Cs.pickerContainer}>
-            <Text>{t('observation zone')}</Text>
-            <Picker 
-              selectedValue={selectedRegion}
-              onValueChange={itemValue => {
-                setSelectedRegion(itemValue)
-                setSelectedObservationZone(itemValue) 
-              }}>
-              {createRegionsList()}
-            </Picker>
+      <ScrollView>
+        <UserInfoComponent onLogout={props.onLogout} />
+        <View style={Cs.homeContainer}>
+          <View style={Cs.observationEventContainer}>
+            <Text style={Ts.observationEventTitle}>{t('observation event')}</Text>
+            <View style={Cs.pickerContainer}>
+              <Text>{t('observation zone')}</Text>
+              <Picker 
+                selectedValue={selectedRegion}
+                onValueChange={itemValue => {
+                  setSelectedRegion(itemValue)
+                  setSelectedObservationZone(itemValue) 
+                }}>
+                {createRegionsList()}
+              </Picker>
+            </View>
+            <View style={Cs.buttonContainer}>
+              { props.observing ?
+                <>
+                  <Button onPress = {() => props.onPressMap() } title = {t('map')}></Button>
+                  <Button onPress = {() => finishObservationEvent()} title = {t('cancelObservation')} color = {Color.negativeButton}></Button>
+                </>
+              :
+                <Button onPress = {() => beginObservationEvent()}  title = {t('beginObservation')}></Button>
+              }
+            </View>
           </View>
-          <View style={Cs.buttonContainer}>
-            { props.observing ?
-              <>
-                <Button onPress = {() => props.onPressMap() } title = {t('map')}></Button>
-                <Button onPress = {() => finishObservationEvent()} title = {t('cancelObservation')} color = {Color.negativeButton}></Button>
-              </>
-            :
-              <Button onPress = {() => beginObservationEvent()}  title = {t('beginObservation')}></Button>
-            }
+          <View style={{ height: 10 }}></View>
+          <View style={Cs.observationEventListContainer}>
+            <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
+            {observationEvents}
           </View>
+          <View style={{ height: 10 }}></View>
         </View>
-        <View style={{ height: 10 }}></View>
-        <View style={Cs.observationEventListContainer}>
-          <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
-          {observationEvents}
-        </View>
-      </View>
+      </ScrollView>
     </View>
   )
 }
