@@ -115,10 +115,10 @@ const HomeComponent = (props: Props) => {
   const loadSchemaAndSetForm = async () => {
     const fetchedSchema = await getObservationEventSchema(t('language')) 
     if (fetchedSchema !== null) {
-      //parse schema object
-      const schemaObject: MyObject = {} = parseSchemaToJSONObject(fetchedSchema.properties)
-      //parse gatherings object
-      const gatheringsObject: MyObject = {} = parseSchemaToJSONObject(fetchedSchema.properties.gatherings.items.properties)
+      //parse schema object and make a deep copy
+      const schemaObject: MyObject = {} = JSON.parse(JSON.stringify(parseSchemaToJSONObject(fetchedSchema.properties)))
+      //parse gatherings object and make a deep copy
+      const gatheringsObject: MyObject = {} = JSON.parse(JSON.stringify(parseSchemaToJSONObject(fetchedSchema.properties.gatherings.items.properties)))
       console.log(gatheringsObject)
       schemaObject.gatherings.push(gatheringsObject)
       console.log('PARSED SCHEMA: ' + JSON.stringify(schemaObject))
