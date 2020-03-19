@@ -25,7 +25,10 @@ export default class MapScreen extends Component<NavigationStackScreenProps<Prop
     return (
       <View style = {Cs.mapContainer}>
         <MapComponent 
-          onPress1 = {() => navigate('Observation')} 
+          onPressObservation = {() => navigate('Observation', {type: 'observation'})} 
+          onPressTrackObservation = {() => navigate('Observation', {type: 'trackObservation'})} 
+          onPressFecesObservation = {() => navigate('Observation', {type: 'fecesObservation'})} 
+          onPressNestObservation = {() => navigate('Observation', {type: 'nestObservation'})} 
         />
       </View>
     )

@@ -1,9 +1,5 @@
 import { createPicker, createArray, createInputElement } from '../builders/FormComponentBuilders'
 
-interface MyObject {
-  [key: string]: any
-}
-
 const ObservationForm = (register: Function, setValue: Function,
   watch: Function, errors: Object, unregister: Function
 ) => {
@@ -25,7 +21,7 @@ const ObservationForm = (register: Function, setValue: Function,
     'MY.lifeStageDead' : 'kuollut',
     'MY.lifeStageAlive' : 'elävä'
   }
-  toReturn.push(createPicker('Määrityksen varmuus', 'taxonConfidence', '', register, setValue, watch, errors, unregister, taxonConfidenceDictionary))
+  toReturn.push(createPicker('Määrityksen varmuus', 'taxonConfidence', 'MY.taxonConfidenceSure', register, setValue, watch, errors, unregister, taxonConfidenceDictionary))
   toReturn.push(createPicker('Havainnointitapa', 'recordBasis', '', register, setValue, watch, errors, unregister, recordBasisDictionary))
   toReturn.push(createInputElement('Määrä', 'count', '', 'string', '', register, setValue, watch, errors, unregister, false, undefined))
   toReturn.push(createPicker('Elinvaihe', 'lifeStage', 'MY.lifeStageAlive', register, setValue, watch, errors, unregister, lifeStageDictionary))

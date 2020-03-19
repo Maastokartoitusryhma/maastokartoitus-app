@@ -52,7 +52,12 @@ const connector = connect(
 )
 
 type PropsFromRedux = ConnectedProps<typeof connector>
-type Props = PropsFromRedux & { onPress1: () => void } 
+type Props = PropsFromRedux & { 
+  onPressObservation: () => void, 
+  onPressTrackObservation: () => void, 
+  onPressFecesObservation: () => void, 
+  onPressNestObservation: () => void 
+} 
 
 const MapComponent = (props: Props) => {
   const { t } = useTranslation()
@@ -223,16 +228,16 @@ const MapComponent = (props: Props) => {
           <View
             style={Cs.observationTypeButtonsColumn}>
               <View style={Cs.observationTypeButton}>
-                <Button title = {t('observation')} onPress = {props.onPress1}/>
+                <Button title = {t('observation')} onPress = {props.onPressObservation}/>
               </View>
               <View style={Cs.observationTypeButton}>
-                <Button title = {t('trace')} onPress = {props.onPress1}/>
+                <Button title = {t('trace')} onPress = {props.onPressTrackObservation}/>
               </View>
               <View style={Cs.observationTypeButton}>
-              <Button title = {t('feces')} onPress = {props.onPress1}/>
+              <Button title = {t('feces')} onPress = {props.onPressFecesObservation}/>
               </View>
               <View style={Cs.observationTypeButton}>
-                <Button title = {t('nest')} onPress = {props.onPress1}/>
+                <Button title = {t('nest')} onPress = {props.onPressNestObservation}/>
               </View>
               <View style={Cs.observationTypeButton}>
                 <Button title = {t('remove')} onPress = {() => cancelObservation()} color = {Colors.negativeButton}/>

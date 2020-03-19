@@ -7,8 +7,8 @@ import { Point } from 'geojson'
 import { getSingleObservationSchema } from '../controllers/formController'
 import storageController from '../controllers/storageController'
 import { newObservationEvent, clearObservationLocation } from '../stores/observation/actions'
-import { parseSchemaToForm } from '../parsers/SchemaToFormParser'
 import ObservationForm from '../forms/ObservationForm'
+import TrackObservationForm from '../forms/TrackObservationForm'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import Colors from '../styles/Colors'
@@ -34,15 +34,25 @@ const connector = connect(
 )
 
 type PropsFromRedux = ConnectedProps<typeof connector>
+type Props = PropsFromRedux & { type: string } 
 
-const ObservationComponent = (props: PropsFromRedux) => {
+const ObservationComponent = (props: Props) => {
 
   //For react-hook-form
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
   const { t } = useTranslation()
   const [form, setForm] = useState()
 
-  const onSubmit = (data: Object) => {
+  const onSubmit = (data: { [key: string]: any }) => {
+    if(!('taxonConfidence' in data)) {
+      data['taxonConfidence'] = 'MY.taxonConfidenceSure'
+    }
+    if(!('identifications' in data)) {
+      data['identifications'] = [{'taxonID': 'MX.48243'}]
+    }
+    if(!('recordBasis' in data)) {
+      data['recordBasis'] = 'MY.recordBasisHumanObservationIndirect'
+    }
     console.log('REGISTER DATA:', JSON.stringify(data))
     console.log('EVENT BEFORE:', props.observationEvent)
     const events = props.observationEvent
@@ -67,9 +77,18 @@ const ObservationComponent = (props: PropsFromRedux) => {
   }, [])
 
   const loadSchemaAndSetForm = async () => {
-    const fetchedSchema = await getSingleObservationSchema(t('language')) 
-    if (fetchedSchema !== null) {
-      //setForm(parseSchemaToForm(fetchedSchema, register, setValue, watch, errors, unregister))
+    // const fetchedSchema = await getSingleObservationSchema(t('language')) 
+    // if (fetchedSchema !== null) {
+    //   setForm(parseSchemaToForm(fetchedSchema, register, setValue, watch, errors, unregister))
+    // }
+    console.log(props.type, 'TYYYYPPEEEEEE')
+    if(props.type === 'observation') {
+      setForm(ObservationForm(register, setValue, watch, errors, unregister))
+    } else if(props.type === 'trackObservation') {
+      setForm(TrackObservationForm(register, setValue, watch, errors, unregister))
+    } else if(props.type === 'fecesObservation') {
+      setForm(ObservationForm(register, setValue, watch, errors, unregister))
+    } else if(props.type === 'nestObservation') {
       setForm(ObservationForm(register, setValue, watch, errors, unregister))
     }
   }
