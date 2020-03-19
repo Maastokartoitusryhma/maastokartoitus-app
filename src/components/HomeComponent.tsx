@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, Button, Picker } from 'react-native'
+import { View, Text, Button, Picker, ScrollView } from 'react-native'
 import UserInfoComponent from './UserInfoComponent'
 import ObservationEventListComponent from './ObservationEventListElementComponent'
 import { useTranslation } from 'react-i18next'
@@ -24,6 +24,8 @@ import { connect, ConnectedProps } from 'react-redux'
 import { watchLocationAsync, stopLocationAsync } from '../geolocation/geolocation'
 import { GeometryCollection } from 'geojson'
 import testForm from '../../temporaryForm.json'
+import { getObservationEventSchema } from '../controllers/formController'
+import { parseSchemaToJSONObject } from '../parsers/SchemaToJSONObject'
 import uuid from 'react-native-uuid'
 
 interface RootState {
@@ -33,6 +35,10 @@ interface RootState {
   observation: LatLng
   zone: GeometryCollection
   observationEvent: any[]
+}
+
+interface MyObject {
+  [key: string]: any
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -91,7 +97,7 @@ const HomeComponent = (props: Props) => {
         const observationCount = event.schema.gatherings[0].units.length
         events.push(<ObservationEventListComponent key={id} id={id} dateBegin={dateBegin} dateEnd={dateEnd} observationCount={observationCount} onPress={() => props.onPressObservationEvent(id)} />)
       })
-      await setObservationEvents(events)
+      setObservationEvents(events)
     }
   }
 
@@ -103,6 +109,21 @@ const HomeComponent = (props: Props) => {
       setSelectedObservationZone(response.results[0].id)
     }
   }
+  
+  const loadSchemaAndSetForm = async () => {
+    const fetchedSchema = await getObservationEventSchema(t('language')) 
+    if (fetchedSchema !== null) {
+      //parse schema object
+      const schemaObject: MyObject = {} = parseSchemaToJSONObject(fetchedSchema.properties)
+      //parse gatherings object
+      const gatheringsObject: MyObject = {} = parseSchemaToJSONObject(fetchedSchema.properties.gatherings.items.properties)
+      console.log(gatheringsObject)
+      schemaObject.gatherings.push(gatheringsObject)
+      console.log('PARSED SCHEMA: ' + JSON.stringify(schemaObject))
+      return schemaObject
+    }
+    return null
+  }
 
   const createRegionsList = () => {
     return regions.map(region => 
@@ -111,8 +132,14 @@ const HomeComponent = (props: Props) => {
 
   const { t } = useTranslation()
 
-  const beginObservationEvent = () => {
-    const observationForm = testForm
+  const beginObservationEvent = async () => {
+    
+    const observationForm = await loadSchemaAndSetForm()
+    if (observationForm !== null) {
+      console.log('OBSERVATION FORM: ' + JSON.stringify(observationForm))
+      observationForm.gatheringEvent.dateBegin = new Date(Date.now()).toISOString()
+    }
+    
     const observationEventObject = {
       id: 'observationEvent_' + uuid.v4(),
       sentToServer: false,
@@ -140,38 +167,41 @@ const HomeComponent = (props: Props) => {
 
   return (
     <View>
-      <UserInfoComponent onLogout={props.onLogout} />
-      <View style={Cs.homeContainer}>
-        <View style={Cs.observationEventContainer}>
-          <Text style={Ts.observationEventTitle}>{t('observation event')}</Text>
-          <View style={Cs.pickerContainer}>
-            <Text>{t('observation zone')}</Text>
-            <Picker 
-              selectedValue={selectedRegion}
-              onValueChange={itemValue => {
-                setSelectedRegion(itemValue)
-                setSelectedObservationZone(itemValue) 
-              }}>
-              {createRegionsList()}
-            </Picker>
+      <ScrollView>
+        <UserInfoComponent onLogout={props.onLogout} />
+        <View style={Cs.homeContainer}>
+          <View style={Cs.observationEventContainer}>
+            <Text style={Ts.observationEventTitle}>{t('observation event')}</Text>
+            <View style={Cs.pickerContainer}>
+              <Text>{t('observation zone')}</Text>
+              <Picker 
+                selectedValue={selectedRegion}
+                onValueChange={itemValue => {
+                  setSelectedRegion(itemValue)
+                  setSelectedObservationZone(itemValue) 
+                }}>
+                {createRegionsList()}
+              </Picker>
+            </View>
+            <View style={Cs.buttonContainer}>
+              { props.observing ?
+                <>
+                  <Button onPress = {() => props.onPressMap() } title = {t('map')}></Button>
+                  <Button onPress = {() => finishObservationEvent()} title = {t('cancelObservation')} color = {Color.negativeButton}></Button>
+                </>
+              :
+                <Button onPress = {() => beginObservationEvent()}  title = {t('beginObservation')}></Button>
+              }
+            </View>
           </View>
-          <View style={Cs.buttonContainer}>
-            { props.observing ?
-              <>
-                <Button onPress = {() => props.onPressMap() } title = {t('map')}></Button>
-                <Button onPress = {() => finishObservationEvent()} title = {t('cancelObservation')} color = {Color.negativeButton}></Button>
-              </>
-            :
-              <Button onPress = {() => beginObservationEvent()}  title = {t('beginObservation')}></Button>
-            }
+          <View style={{ height: 10 }}></View>
+          <View style={Cs.observationEventListContainer}>
+            <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
+            {observationEvents}
           </View>
+          <View style={{ height: 10 }}></View>
         </View>
-        <View style={{ height: 10 }}></View>
-        <View style={Cs.observationEventListContainer}>
-          <Text style={Ts.previousObservationsTitle}>{t('previous observation events')}</Text>
-          {observationEvents}
-        </View>
-      </View>
+      </ScrollView>
     </View>
   )
 }
