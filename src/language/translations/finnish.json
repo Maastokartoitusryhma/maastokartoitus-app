@@ -39,5 +39,6 @@
   "Zone": "Havainnointialue",
   "trace": "jälki",
   "feces": "papana",
-  "nest": "pesä"
+  "nest": "pesä",
+  "observation saved": "Havainnon tallentaminen onnistui!"
 }

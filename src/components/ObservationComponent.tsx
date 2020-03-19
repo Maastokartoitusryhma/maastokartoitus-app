@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, ScrollView, Button } from 'react-native'
+import { View, Text, ScrollView, Button, Alert } from 'react-native'
 import { useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -12,6 +12,7 @@ import ObservationForm from '../forms/ObservationForm'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import Colors from '../styles/Colors'
+import Modal from 'react-native-modal'
 
 interface RootState {
   observation: Point
@@ -37,8 +38,11 @@ const connector = connect(
 )
 
 type PropsFromRedux = ConnectedProps<typeof connector>
+type Props = PropsFromRedux & {
+  onPress: () => void
+}
 
-const ObservationComponent = (props: PropsFromRedux) => {
+const ObservationComponent = (props: Props) => {
 
   useEffect(() => {
     props.addToObservationLocations(props.observation)
@@ -48,6 +52,7 @@ const ObservationComponent = (props: PropsFromRedux) => {
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
   const { t } = useTranslation()
   const [form, setForm] = useState()
+  const [showModal, setShowModal] = useState(false)
 
   const onSubmit = (data: Object) => {
     console.log('POINT:', props.observation)
@@ -68,6 +73,7 @@ const ObservationComponent = (props: PropsFromRedux) => {
 
     //AsyncStorage
     storageController.save('observationEvents', events)
+    setShowModal(true)
   }
 
   // Fetch schemas
@@ -96,6 +102,20 @@ const ObservationComponent = (props: PropsFromRedux) => {
           <View style={Cs.formSaveButtonContainer}>
             <Button title={t('save observation')} onPress={handleSubmit(onSubmit)} color={Colors.positiveButton}/>
           </View>
+          <Modal isVisible={showModal}>
+            <View style={Cs.observationAddModal}>
+              <Text style={Cs.containerWithJustPadding}>{t('observation saved')}</Text>
+              <View style={{ width: '20%'}}>
+                <Button
+                  title='OK'
+                  color={Colors.neutralColor}
+                  onPress={() => {
+                  setShowModal(!showModal)
+                  props.onPress()
+                }} />
+              </View>
+            </View>
+          </Modal>
         </ScrollView>
       </View>
     )

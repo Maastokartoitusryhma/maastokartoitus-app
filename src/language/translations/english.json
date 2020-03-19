@@ -39,6 +39,7 @@
   "Zone": "Observation zone",
   "trace": "trace",
   "feces": "feces",
-  "nest": "nest"
+  "nest": "nest",
+  "observation saved": "Observation was saved successfully!"
 
 }

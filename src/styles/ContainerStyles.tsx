@@ -130,6 +130,12 @@ const ContainerStyles = StyleSheet.create({
   observationTypeButtonsColumn: {
     alignSelf: 'flex-end',
     justifyContent: 'space-between'
+  },
+  observationAddModal: {
+    padding: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+    backgroundColor: Colors.white
   }
 })
 
