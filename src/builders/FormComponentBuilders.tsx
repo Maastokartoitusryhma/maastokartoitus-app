@@ -3,7 +3,7 @@ import FormInputComponent from '../components/FormInputComponent'
 import FormArrayComponent from '../components/FormArrayComponent'
 import FormPickerItemComponent from '../components/FormPickerItemComponent'
 import FormPickerComponent from '../components/FormPickerComponent'
-import uuid from 'react-native-uuid'
+import uuid from 'uuid'
 
 // Creates a Picker component with PickerItems. Takes JSON schema item label as parameter.
 export const createPicker = (

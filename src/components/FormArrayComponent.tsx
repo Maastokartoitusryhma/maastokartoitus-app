@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Text, View, Button } from 'react-native'
 import FormInputComponent from './FormInputComponent'
-import uuid from 'react-native-uuid'
+import uuid from 'uuid'
 import Cs from '../styles/ContainerStyles'
 import Colors from '../styles/Colors'
 

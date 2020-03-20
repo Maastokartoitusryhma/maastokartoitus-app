@@ -6,7 +6,6 @@ import { connect, ConnectedProps } from 'react-redux'
 import { allObservationEvents } from '../stores/observation/actions'
 import { useTranslation } from 'react-i18next'
 import ObservationInfoComponent from './ObservationInfoComponent'
-import uuid from 'react-native-uuid'
 
 interface RootState {
   observationEvent: any[]
