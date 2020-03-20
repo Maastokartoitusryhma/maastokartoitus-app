@@ -63,7 +63,7 @@ const ObservationEventComponent = (props: Props) => {
           <Text>{t('dateEnd')}: {event.schema.gatheringEvent.dateBegin}</Text>
           <Text>{t('Zone')}: </Text>
           <Text style={Ts.observationText}>{t('Observations')}:</Text>
-          {observations.map(observation => <ObservationInfoComponent key={uuid.v4()} observation={observation} />)}
+          {observations.map(observation => <ObservationInfoComponent key={observation.id} observation={observation} />)}
         </ScrollView>
       </View>
     )
