@@ -27,7 +27,7 @@ import { GeometryCollection } from 'geojson'
 import testForm from '../../temporaryForm.json'
 import { getObservationEventSchema } from '../controllers/formController'
 import { parseSchemaToJSONObject } from '../parsers/SchemaToJSONObject'
-import uuid from 'uuid'
+import uuid from 'react-native-uuid'
 
 interface RootState {
   position: LocationData

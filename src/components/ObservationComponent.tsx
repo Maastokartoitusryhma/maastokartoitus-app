@@ -16,7 +16,7 @@ import Ts from '../styles/TextStyles'
 import Colors from '../styles/Colors'
 import Modal from 'react-native-modal'
 import _ from 'lodash'
-import uuid from 'uuid'
+import uuid from 'react-native-uuid'
 
 interface RootState {
   observation: Point

@@ -22,7 +22,7 @@ import Colors from '../styles/Colors'
 import { MaterialIcons } from '@expo/vector-icons'
 import Cs from '../styles/ContainerStyles'
 import Os from '../styles/OtherStyles'
-import uuid from 'uuid'
+import uuid from 'react-native-uuid'
 
 const urlTemplate: string = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
 
