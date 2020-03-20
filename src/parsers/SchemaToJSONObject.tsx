@@ -1,4 +1,3 @@
-import React from 'react'
 
 interface MyObject {
   [key: string]: any
