@@ -16,6 +16,7 @@ import Ts from '../styles/TextStyles'
 import Colors from '../styles/Colors'
 import Modal from 'react-native-modal'
 import _ from 'lodash'
+import uuid from 'react-native-uuid'
 
 interface RootState {
   observation: Point
@@ -81,12 +82,14 @@ const ObservationComponent = (props: Props) => {
     const events = _.cloneDeep(props.observationEvent)
     const event = events.pop()
 
-    //Add bservation location to rest of observation parameters
+    //Add observation location to rest of observation parameters
     const newUnit = {
+      id: 'observation_' + uuid.v4(),
       ...data,
       unitGathering: {
         geometry: props.observation
-      }
+      },
+      type: props.type 
     }
 
     //console.log('EVENT OBJECT BEFORE: ', event)
