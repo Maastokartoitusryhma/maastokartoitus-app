@@ -80,8 +80,17 @@ const ObservationComponent = (props: Props) => {
     //clone events from reducer for modification
     const events = _.cloneDeep(props.observationEvent)
     const event = events.pop()
+
+    //Add bservation location to rest of observation parameters
+    const newUnit = {
+      ...data,
+      unitGathering: {
+        geometry: props.observation
+      }
+    }
+
     //console.log('EVENT OBJECT BEFORE: ', event)
-    event.schema.gatherings[0].units.push(data)
+    event.schema.gatherings[0].units.push(newUnit)
     //event.gatherings[0].units.unitGathering.geometry.push(props.observation)
     //console.log('EVENT OBJECT AFTER: ', event)
     events.push(event)
