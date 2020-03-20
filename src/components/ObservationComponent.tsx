@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Point } from 'geojson'
 import { getSingleObservationSchema } from '../controllers/formController'
 import storageController from '../controllers/storageController'
-import { newObservationEvent, clearObservationLocation, addToObservationLocations, removeFromObservationLocations } from '../stores/observation/actions'
+import { replaceObservationEvents, clearObservationLocation, addToObservationLocations, removeFromObservationLocations } from '../stores/observation/actions'
 import ObservationForm from '../forms/ObservationForm'
 import TrackObservationForm from '../forms/TrackObservationForm'
 import FecesObservationForm from '../forms/FecesObservationForm'
@@ -15,6 +15,7 @@ import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import Colors from '../styles/Colors'
 import Modal from 'react-native-modal'
+import _ from 'lodash'
 
 interface RootState {
   observation: Point
@@ -28,7 +29,7 @@ const mapStateToProps = (state: RootState) => {
 }
 
 const mapDispatchToProps = {
-  newObservationEvent,
+  replaceObservationEvents,
   clearObservationLocation,
   addToObservationLocations,
   removeFromObservationLocations
@@ -70,18 +71,23 @@ const ObservationComponent = (props: Props) => {
     if(props.type === 'fecesObservation') {
       data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
     }
+
     console.log('POINT:', props.observation)
     console.log('REGISTER DATA:', JSON.stringify(data))
-    //console.log('EVENT BEFORE:', props.observationEvent)
+    console.log('EVENT BEFORE:', props.observationEvent)
     console.log('LOCATIONS', props.observationLocations)
-    const events = props.observationEvent
+
+    //clone events from reducer for modification
+    const events = _.cloneDeep(props.observationEvent)
     const event = events.pop()
     //console.log('EVENT OBJECT BEFORE: ', event)
     event.schema.gatherings[0].units.push(data)
     //event.gatherings[0].units.unitGathering.geometry.push(props.observation)
     //console.log('EVENT OBJECT AFTER: ', event)
     events.push(event)
-    props.newObservationEvent(event)
+
+    //replace events with modified list
+    props.replaceObservationEvents(events)
     console.log('EVENT AFTER:', props.observationEvent)
 
     props.clearObservationLocation()

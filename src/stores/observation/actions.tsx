@@ -10,6 +10,7 @@ import { observationActionTypes,
         NEW_OBSERVATION_EVENT,
         ALL_OBSERVATION_EVENTS,
         SET_SCHEMA,
+        REPLACE_OBSERVATION_EVENTS,
         } from './types'
 
 export const setObservationLocation = (point : Point | null) : observationActionTypes => ({
@@ -46,6 +47,11 @@ export const newObservationEvent = (observation : object) : observationActionTyp
 
 export const allObservationEvents = () : observationActionTypes => ({
   type: ALL_OBSERVATION_EVENTS
+})
+
+export const replaceObservationEvents = (events: any[]) : observationActionTypes => ({
+  type: REPLACE_OBSERVATION_EVENTS,
+  payload: events
 })
 
 export const setSchema = (schema : object) : observationActionTypes => ({
