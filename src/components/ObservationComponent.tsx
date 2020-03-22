@@ -51,6 +51,7 @@ const ObservationComponent = (props: Props) => {
 
   useEffect(() => {
     props.addToObservationLocations(props.observation)
+    loadSchemaAndSetForm()
   }, [])
 
   //For react-hook-form
@@ -91,11 +92,7 @@ const ObservationComponent = (props: Props) => {
       },
       type: props.type 
     }
-
-    //console.log('EVENT OBJECT BEFORE: ', event)
     event.schema.gatherings[0].units.push(newUnit)
-    //event.gatherings[0].units.unitGathering.geometry.push(props.observation)
-    //console.log('EVENT OBJECT AFTER: ', event)
     events.push(event)
 
     //replace events with modified list
@@ -108,11 +105,6 @@ const ObservationComponent = (props: Props) => {
     storageController.save('observationEvents', events)
     setShowModal(true)
   }
-
-  // Fetch schemas
-  useEffect(() => {
-    loadSchemaAndSetForm()
-  }, [])
 
   const loadSchemaAndSetForm = async () => {
     // const fetchedSchema = await getSingleObservationSchema(t('language')) 

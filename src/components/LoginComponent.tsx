@@ -8,20 +8,23 @@ import Bs from '../styles/ButtonStyles'
 import Ts from '../styles/TextStyles'
 import Os from '../styles/OtherStyles'
 import storageController from '../controllers/storageController'
+import { getObservationEventSchema } from '../controllers/formController'
 import { connect, ConnectedProps } from 'react-redux'
-import { newObservationEvent } from '../stores/observation/actions'
+import { newObservationEvent, setSchema } from '../stores/observation/actions'
 
 interface RootState {
-  observationEvent: any[]
+  observationEvent: any[],
+  schema: object
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { observationEvent } = state
-  return { observationEvent }
+  const { observationEvent, schema } = state
+  return { observationEvent, schema }
 }
 
 const mapDispatchToProps = {
-  newObservationEvent
+  newObservationEvent,
+  setSchema
 }
 
 const connector = connect(
@@ -48,19 +51,12 @@ const LoginComponent = (props: Props) => {
       const userData = await AsyncStorage.getItem('userData')
       if (userData !== null) {
         await fetchObservationEvents()
+        await fetchSchemaFromServer()
         props.onPress()
       }
     }
     loadUserData()
   }, [])
-
-  const loadUserData = async () => {
-    const userData = await AsyncStorage.getItem('userData')
-    if (userData !== null) {
-      await fetchObservationEvents()
-      props.onPress()
-    }
-  }
 
   const fetchObservationEvents = async () => {
     const observationEvents: Array<Object> = await storageController.fetch('observationEvents')
@@ -71,6 +67,11 @@ const LoginComponent = (props: Props) => {
     }
   }
 
+  const fetchSchemaFromServer = async () => {
+    const fetchedSchema: object = await getObservationEventSchema(t('language'))
+    props.setSchema(fetchedSchema)
+  }
+
   const login = async () => {
     const userObject = await userController.getUserByPersonToken(personToken)
     // If user is not found, a JSON object with key 'error' is returned, hence check if it exists
@@ -78,6 +79,7 @@ const LoginComponent = (props: Props) => {
       storeUserData(JSON.stringify(userObject))
       setErrorMessage('')
       await fetchObservationEvents()
+      await fetchSchemaFromServer()
       props.onPress()
     } else {
       setErrorMessage(t('incorrect token'))
