@@ -5,7 +5,7 @@ import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Point } from 'geojson'
 import storageController from '../controllers/storageController'
-import { replaceObservationEvents, clearObservationLocation, addToObservationLocations, removeFromObservationLocations } from '../stores/observation/actions'
+import { replaceObservationEvents } from '../stores/observation/actions'
 import ObservationForm from '../forms/ObservationForm'
 import TrackObservationForm from '../forms/TrackObservationForm'
 import FecesObservationForm from '../forms/FecesObservationForm'
@@ -15,24 +15,19 @@ import Ts from '../styles/TextStyles'
 import Colors from '../styles/Colors'
 import Modal from 'react-native-modal'
 import _ from 'lodash'
-import uuid from 'react-native-uuid'
 
 interface RootState {
   observation: Point
   observationEvent: any[]
-  observationLocations: Point[]
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { observation, observationEvent, observationLocations } = state
-  return { observation, observationEvent, observationLocations }
+  const { observation, observationEvent } = state
+  return { observation, observationEvent }
 }
 
 const mapDispatchToProps = {
-  replaceObservationEvents,
-  clearObservationLocation,
-  addToObservationLocations,
-  removeFromObservationLocations
+  replaceObservationEvents
 }
 
 const connector = connect(
@@ -43,15 +38,45 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
   onPress: () => void
+  eventID: string
+  observationID: string
   type: string
 }
 
-const ObservationComponent = (props: Props) => {
+
+const EditObservationComponent = (props: Props) => {
+  const [ events, setEvents ] = useState(null)
+  const [ indexOfEditedEvent, setIndexOfEditedEvent ] = useState(null)
+  const [ event, setEvent ] = useState(null)
+  const [ observations, setObservations ] = useState(null)
+  const [ indexOfEditedObservation, setIndexOfEditedObservation ] = useState(null)
+  const [ observation, setObservation ] = useState(null)
 
   useEffect(() => {
-    props.addToObservationLocations(props.observation)
+    initVariables()
     loadSchemaAndSetForm()
   }, [])
+
+  const initVariables = () => {
+    //clone events from reducer for modification
+    const eventClone = _.cloneDeep(props.observationEvent)
+    setEvents(eventClone)
+    //find the correct event by id
+    const eventIndex = eventClone.findIndex(event => event.id === props.eventID)
+    setIndexOfEditedEvent(eventIndex)
+    const searchedEvent = eventClone[eventIndex]
+    setEvent(searchedEvent)
+    //find the correct observation by id
+    const observationsClone = searchedEvent.schema.gatherings[0].units
+    setObservations(observationsClone)
+    const observationIndex = observationsClone.findIndex(observation => observation.id === props.observationID)
+    setIndexOfEditedObservation(observationIndex)
+    const observationClone = observationsClone[observationIndex]
+    setObservation(observationClone)
+
+    console.log('EVENT: ', event)
+    console.log('OBS: ', observation)
+  }
 
   //For react-hook-form
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
@@ -72,52 +97,45 @@ const ObservationComponent = (props: Props) => {
     if(props.type === 'fecesObservation') {
       data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
     }
-    
-    console.log('POINT:', props.observation)
+
     console.log('REGISTER DATA:', JSON.stringify(data))
     console.log('EVENT BEFORE:', props.observationEvent)
-    console.log('LOCATIONS', props.observationLocations)
 
-    //clone events from reducer for modification
-    const events = _.cloneDeep(props.observationEvent)
-    const event = events.pop()
-
-    //Add observation location to rest of observation parameters
-    const newUnit = {
-      id: 'observation_' + uuid.v4(),
+    //replace the data of the unit that's being edited while keeping its id, unitGathering and type values
+    const editedUnit = {
+      id: props.observationID,
       ...data,
-      unitGathering: {
-        geometry: props.observation
-      },
-      type: props.type 
+      unitGathering: observation.unitGathering,
+      type: props.type
     }
-    event.schema.gatherings[0].units.push(newUnit)
-    events.push(event)
+
+    events[indexOfEditedEvent].schema.gatherings[0].units[indexOfEditedObservation] = editedUnit
 
     //replace events with modified list
     props.replaceObservationEvents(events)
+    
     console.log('EVENT AFTER:', props.observationEvent)
 
-    props.clearObservationLocation()
-
-    //AsyncStorage
     storageController.save('observationEvents', events)
+    
     setShowModal(true)
   }
 
   const loadSchemaAndSetForm = async () => {
+    console.log('load: ', observation)
     if(props.type === 'observation') {
-      setForm(ObservationForm(register, setValue, watch, errors, unregister, undefined))
+      setForm(ObservationForm(register, setValue, watch, errors, unregister, observation))
     } else if(props.type === 'trackObservation') {
-      setForm(TrackObservationForm(register, setValue, watch, errors, unregister, undefined))
+      setForm(TrackObservationForm(register, setValue, watch, errors, unregister, observation))
     } else if(props.type === 'fecesObservation') {
-      setForm(FecesObservationForm(register, setValue, watch, errors, unregister, undefined))
+      setForm(FecesObservationForm(register, setValue, watch, errors, unregister, observation))
     } else if(props.type === 'nestObservation') {
-      setForm(NestObservationForm(register, setValue, watch, errors, unregister, undefined))
+      setForm(NestObservationForm(register, setValue, watch, errors, unregister, observation))
     }
   }
 
   if (form === undefined) {
+    loadSchemaAndSetForm()
     return <View><Text>Ladataan...</Text></View>
   } else {
     return (
@@ -128,7 +146,7 @@ const ObservationComponent = (props: Props) => {
             {form}
           </View>
           <View style={Cs.formSaveButtonContainer}>
-            <Button title={t('save observation')} onPress={handleSubmit(onSubmit)} color={Colors.positiveButton}/>
+            <Button title={t('edit observation')} onPress={handleSubmit(onSubmit)} color={Colors.positiveButton}/>
           </View>
           <Modal isVisible={showModal}>
             <View style={Cs.observationAddModal}>
@@ -150,4 +168,4 @@ const ObservationComponent = (props: Props) => {
   }
 }
 
-export default connector(ObservationComponent)
+export default connector(EditObservationComponent)

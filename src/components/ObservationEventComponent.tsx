@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, Button } from 'react-native'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import { connect, ConnectedProps } from 'react-redux'
 import { allObservationEvents } from '../stores/observation/actions'
 import { useTranslation } from 'react-i18next'
 import ObservationInfoComponent from './ObservationInfoComponent'
+import Colors from '../styles/Colors'
 
 interface RootState {
   observationEvent: any[]
@@ -29,6 +30,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & {
   id: string
+  onPressObservation: (eventID: string, observationID: string, type: string) => void
 }
 
 const ObservationEventComponent = (props: Props) => {
@@ -62,7 +64,12 @@ const ObservationEventComponent = (props: Props) => {
           <Text>{t('dateEnd')}: {event.schema.gatheringEvent.dateEnd}</Text>
           <Text>{t('Zone')}: </Text>
           <Text style={Ts.observationText}>{t('Observations')}:</Text>
-          {observations.map(observation => <ObservationInfoComponent key={observation.id} observation={observation} />)}
+          {observations.map(observation =>
+            <View>
+              <ObservationInfoComponent key={observation.id} observation={observation} />
+              <Button title={'Muokkaa havaintoa'} onPress={() => props.onPressObservation(event.id, observation.id, observation.type)} color={Colors.positiveButton}/>
+            </View>
+          )}
         </ScrollView>
       </View>
     )
