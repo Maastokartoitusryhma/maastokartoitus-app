@@ -20,12 +20,7 @@ export default class EditObservationScreen extends Component<NavigationStackScre
 
   render() {
     return (
-      <EditObservationComponent 
-        onPress={() => this.props.navigation.navigate('Home')}
-        eventID={this.props.navigation.state.params.eventID}
-        observationID={this.props.navigation.state.params.observationID}
-        type={this.props.navigation.state.params.type}
-      />
+      <EditObservationComponent onPress={() => this.props.navigation.navigate('Home')} />
     )
   }
 }

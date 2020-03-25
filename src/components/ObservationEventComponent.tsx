@@ -3,22 +3,24 @@ import { View, Text, ScrollView, Button } from 'react-native'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import { connect, ConnectedProps } from 'react-redux'
-import { allObservationEvents } from '../stores/observation/actions'
+import { allObservationEvents, setObservationId } from '../stores/observation/actions'
 import { useTranslation } from 'react-i18next'
 import ObservationInfoComponent from './ObservationInfoComponent'
 import Colors from '../styles/Colors'
 
 interface RootState {
   observationEvent: any[]
+  observationId: object
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { observationEvent } = state
-  return { observationEvent }
+  const { observationEvent, observationId } = state
+  return { observationEvent, observationId }
 }
 
 const mapDispatchToProps = {
-  allObservationEvents
+  allObservationEvents,
+  setObservationId
 }
 
 const connector = connect(
@@ -30,7 +32,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & {
   id: string
-  onPressObservation: (eventID: string, observationID: string, type: string) => void
+  onPressObservation: () => void
 }
 
 const ObservationEventComponent = (props: Props) => {
@@ -67,7 +69,14 @@ const ObservationEventComponent = (props: Props) => {
           {observations.map(observation =>
             <View>
               <ObservationInfoComponent key={observation.id} observation={observation} />
-              <Button title={'Muokkaa havaintoa'} onPress={() => props.onPressObservation(event.id, observation.id, observation.type)} color={Colors.positiveButton}/>
+              <Button title={'Muokkaa havaintoa'} onPress={() => {
+                const id = {
+                  eventId: event.id,
+                  unitId: observation.id
+                }
+                props.setObservationId(id)
+                props.onPressObservation()
+              }} color={Colors.positiveButton}/>
             </View>
           )}
         </ScrollView>

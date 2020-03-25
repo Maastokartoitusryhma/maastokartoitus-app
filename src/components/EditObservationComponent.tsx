@@ -5,7 +5,7 @@ import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Point } from 'geojson'
 import storageController from '../controllers/storageController'
-import { replaceObservationEvents } from '../stores/observation/actions'
+import { replaceObservationEvents, clearObservationId } from '../stores/observation/actions'
 import ObservationForm from '../forms/ObservationForm'
 import TrackObservationForm from '../forms/TrackObservationForm'
 import FecesObservationForm from '../forms/FecesObservationForm'
@@ -19,15 +19,17 @@ import _ from 'lodash'
 interface RootState {
   observation: Point
   observationEvent: any[]
+  observationId: object
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { observation, observationEvent } = state
-  return { observation, observationEvent }
+  const { observation, observationEvent, observationId } = state
+  return { observation, observationEvent, observationId }
 }
 
 const mapDispatchToProps = {
-  replaceObservationEvents
+  replaceObservationEvents,
+  clearObservationId
 }
 
 const connector = connect(
@@ -38,9 +40,6 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
   onPress: () => void
-  eventID: string
-  observationID: string
-  type: string
 }
 
 
@@ -62,20 +61,17 @@ const EditObservationComponent = (props: Props) => {
     const eventClone = _.cloneDeep(props.observationEvent)
     setEvents(eventClone)
     //find the correct event by id
-    const eventIndex = eventClone.findIndex(event => event.id === props.eventID)
+    const eventIndex = eventClone.findIndex(event => event.id === props.observationId.eventId)
     setIndexOfEditedEvent(eventIndex)
     const searchedEvent = eventClone[eventIndex]
     setEvent(searchedEvent)
     //find the correct observation by id
     const observationsClone = searchedEvent.schema.gatherings[0].units
     setObservations(observationsClone)
-    const observationIndex = observationsClone.findIndex(observation => observation.id === props.observationID)
+    const observationIndex = observationsClone.findIndex(observation => observation.id === props.observationId.unitId)
     setIndexOfEditedObservation(observationIndex)
     const observationClone = observationsClone[observationIndex]
     setObservation(observationClone)
-
-    console.log('EVENT: ', event)
-    console.log('OBS: ', observation)
   }
 
   //For react-hook-form
@@ -94,7 +90,7 @@ const EditObservationComponent = (props: Props) => {
     if(!('recordBasis' in data)) {
       data['recordBasis'] = 'MY.recordBasisHumanObservationIndirect'
     }
-    if(props.type === 'fecesObservation') {
+    if(observation.type === 'fecesObservation') {
       data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
     }
 
@@ -103,10 +99,10 @@ const EditObservationComponent = (props: Props) => {
 
     //replace the data of the unit that's being edited while keeping its id, unitGathering and type values
     const editedUnit = {
-      id: props.observationID,
+      id: observation.id,
       ...data,
       unitGathering: observation.unitGathering,
-      type: props.type
+      type: observation.type
     }
 
     events[indexOfEditedEvent].schema.gatherings[0].units[indexOfEditedObservation] = editedUnit
@@ -117,19 +113,18 @@ const EditObservationComponent = (props: Props) => {
     console.log('EVENT AFTER:', props.observationEvent)
 
     storageController.save('observationEvents', events)
-    
+    props.clearObservationId()
     setShowModal(true)
   }
 
   const loadSchemaAndSetForm = async () => {
-    console.log('load: ', observation)
-    if(props.type === 'observation') {
+    if(observation.type === 'observation') {
       setForm(ObservationForm(register, setValue, watch, errors, unregister, observation))
-    } else if(props.type === 'trackObservation') {
+    } else if(observation.type === 'trackObservation') {
       setForm(TrackObservationForm(register, setValue, watch, errors, unregister, observation))
-    } else if(props.type === 'fecesObservation') {
+    } else if(observation.type === 'fecesObservation') {
       setForm(FecesObservationForm(register, setValue, watch, errors, unregister, observation))
-    } else if(props.type === 'nestObservation') {
+    } else if(observation.type === 'nestObservation') {
       setForm(NestObservationForm(register, setValue, watch, errors, unregister, observation))
     }
   }
