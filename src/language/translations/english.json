@@ -40,6 +40,7 @@
   "trace": "trace",
   "feces": "feces",
   "nest": "nest",
-  "observation saved": "Observation was saved successfully!"
+  "observation saved": "Observation was saved successfully!",
+  "login text": "You need to log in to use the application."
 
 }

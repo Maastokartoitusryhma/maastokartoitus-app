@@ -40,5 +40,6 @@
   "trace": "jälki",
   "feces": "papana",
   "nest": "pesä",
-  "observation saved": "Havainnon tallentaminen onnistui!"
+  "observation saved": "Havainnon tallentaminen onnistui!",
+  "login text": "Käyttääksesi sovellusta, sinun tulee kirjautua sisään."
 }

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { View, Button, Text, TextInput, AsyncStorage } from 'react-native'
+import { View, Button, Text, AsyncStorage } from 'react-native'
 import Colors from '../styles/Colors'
 import userController from '../controllers/userController'
 import { useTranslation } from 'react-i18next'
+import i18n from '../language/i18n'
 import Cs from '../styles/ContainerStyles'
 import Bs from '../styles/ButtonStyles'
 import Ts from '../styles/TextStyles'
-import Os from '../styles/OtherStyles'
 import storageController from '../controllers/storageController'
 import { connect, ConnectedProps } from 'react-redux'
 import { newObservationEvent } from '../stores/observation/actions'
@@ -21,7 +21,7 @@ const mapStateToProps = (state: RootState) => {
 }
 
 const mapDispatchToProps = {
-  newObservationEvent
+  newObservationEvent,
 }
 
 const connector = connect(
@@ -32,55 +32,63 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & {
-  onPress: () => void   
+  onPressLogin: (url: string) => void
+  onSuccessfulLogin: () => void
 }
 
 const LoginComponent = (props: Props) => {
 
-  const [personToken, setPersonToken] = useState('')
-  const [errorMessage, setErrorMessage] = useState('')
+  const [polling, setPolling] = useState(false)
+  const [loginURL, setLoginURL] = useState('')
   const { t } = useTranslation()
-
-  // Check if user has previously logged in, redirect to home screen if is
-
+  
   useEffect(() => {
-    const loadUserData = async () => {
-      const userData = await AsyncStorage.getItem('userData')
-      if (userData !== null) {
-        await fetchObservationEvents()
-        props.onPress()
-      }
-    }
     loadUserData()
   }, [])
 
+  // Check if user has previously logged in, redirect to home screen if is
   const loadUserData = async () => {
     const userData = await AsyncStorage.getItem('userData')
     if (userData !== null) {
       await fetchObservationEvents()
-      props.onPress()
-    }
-  }
-
-  const fetchObservationEvents = async () => {
-    const observationEvents: Array<Object> = await storageController.fetch('observationEvents')
-    if (observationEvents !== null) {
-      observationEvents.forEach((event) => {
-        props.newObservationEvent(event)
-      })
+      props.onSuccessfulLogin()
     }
   }
 
   const login = async () => {
-    const userObject = await userController.getUserByPersonToken(personToken)
-    // If user is not found, a JSON object with key 'error' is returned, hence check if it exists
+    if (!polling) { // User has not yet opened web login view
+      const result = await userController.getTempTokenAndLoginUrl()
+      setLoginURL(result.loginURL)
+      props.onPressLogin(result.loginURL)
+      setPolling(true)
+      pollPostRequest(result.tmpToken, 3000) // Start polling login request
+    } else { // User has already opened web login view --> redirect there
+      props.onPressLogin(loginURL)
+    }
+  }
+
+  const pollPostRequest = async (tmpToken: string, interval: number) => {
+    const run = async () => {
+      const result = await userController.postTmpToken(tmpToken)
+      if (result.token !== undefined) { // Login is successful and personToken is returned in result
+        getUserInfo(result.token)
+      } else {
+        setTimeout(() => {
+          run()
+        }, interval) 
+      }
+    }
+    run()
+  }
+
+  // Get user info based on personToken
+  const getUserInfo = async (token: string) => {
+    const userObject = await userController.getUserByPersonToken(token)
     if (userObject.error === undefined) {
-      storeUserData(JSON.stringify(userObject))
-      setErrorMessage('')
-      await fetchObservationEvents()
-      props.onPress()
+      await storeUserData(JSON.stringify(userObject))
+      loadUserData()
     } else {
-      setErrorMessage(t('incorrect token'))
+      console.log('SOME ERROR')
     }
   }
 
@@ -92,28 +100,32 @@ const LoginComponent = (props: Props) => {
       console.log('Error saving user data to storage: ', e)
     }
   }
+  
 
-  const inputHandler = (personToken: string) => {
-    setPersonToken(personToken)
+  const fetchObservationEvents = async () => {
+    const observationEvents: Array<Object> = await storageController.fetch('observationEvents')
+    if (observationEvents !== null) {
+      observationEvents.forEach((event) => {
+        props.newObservationEvent(event)
+      })
+    }
   }
 
   return (
-    <View>
+    <View style={Cs.loginViewContainer}>
       <View style={Cs.loginContainer}>
         <Text style={Ts.loginHeader}>{t('login')}</Text>
         <View style={Cs.inputContainer}>
-          <Text style={Ts.loginText}>{t('personal token')}</Text>
-          <TextInput
-            placeholder='personToken'
-            style={Os.textInput}
-            value={personToken}
-            onChangeText={inputHandler}
-          />
+          <Text style={Ts.loginText}>{t('login text')}</Text>
         </View>
         <View style={Bs.loginButton}>
           <Button onPress={login} title={t('login')} color={Colors.neutralColor} />
         </View>
-        <Text style={Ts.errorText}>{errorMessage}</Text>
+      </View>
+      <View style={Cs.loginLanguageContainer}>
+        <Text style={Ts.loginLanguage} onPress={() => i18n.changeLanguage('fi')}>FI</Text>
+        <Text style={Ts.loginLanguage} onPress={() => i18n.changeLanguage('sv')}>SV</Text>
+        <Text style={Ts.loginLanguage} onPress={() => i18n.changeLanguage('en')}>EN</Text>
       </View>
     </View>
   )

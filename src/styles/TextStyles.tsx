@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Platform } from 'react-native'
 import Colors from './Colors'
 
 const TextStyles = StyleSheet.create({
@@ -38,6 +38,9 @@ const TextStyles = StyleSheet.create({
   },
   observationEventListElement: {
     padding: 6
+  },
+  loginLanguage: {
+    padding: 10
   }
 })
 

@@ -14,13 +14,21 @@ export default class LoginScreen extends Component<NavigationStackScreenProps<Pr
     headerStyle: {
       backgroundColor: Colors.headerBackground
     },
-    headerTintColor: Colors.white
+    headerTintColor: Colors.white,
   })
 
   render() {
     //getSingleObservationSchema()
     return (
-      <LoginComponent onPress = { () => this.props.navigation.replace('Home') } />
+      <LoginComponent
+        onPressLogin={(loginURL: string) => {
+          this.props.navigation.navigate('WebView', { loginURL }) // Redirect to login web view
+        }}
+        onSuccessfulLogin={() => {
+          this.props.navigation.replace('Home')
+        }}
+      />
+        
     )
   }
 }

@@ -136,6 +136,15 @@ const ContainerStyles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     backgroundColor: Colors.white
+  },
+  loginViewContainer: {
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+  },
+  loginLanguageContainer: {
+    paddingTop: 20,
+    justifyContent: 'center',
+    flexDirection: 'row',
   }
 })
 
