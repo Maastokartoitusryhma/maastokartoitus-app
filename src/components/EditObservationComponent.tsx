@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next'
 import { Point } from 'geojson'
 import storageController from '../controllers/storageController'
 import { replaceObservationEvents, clearObservationId } from '../stores/observation/actions'
+import { toggleEditing } from '../stores/map/actions'
+import { setObservationLocation, clearObservationLocation } from '../stores/observation/actions'
 import ObservationForm from '../forms/ObservationForm'
 import TrackObservationForm from '../forms/TrackObservationForm'
 import FecesObservationForm from '../forms/FecesObservationForm'
@@ -20,16 +22,20 @@ interface RootState {
   observation: Point
   observationEvent: any[]
   observationId: object
+  editing: boolean
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { observation, observationEvent, observationId } = state
-  return { observation, observationEvent, observationId }
+  const { observation, observationEvent, observationId, editing } = state
+  return { observation, observationEvent, observationId, editing }
 }
 
 const mapDispatchToProps = {
   replaceObservationEvents,
-  clearObservationId
+  clearObservationId,
+  toggleEditing,
+  setObservationLocation,
+  clearObservationLocation,
 }
 
 const connector = connect(
@@ -39,7 +45,8 @@ const connector = connect(
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
-  onPress: () => void
+  onPress: () => void,
+  onEditLocation: () => void
 }
 
 
@@ -104,6 +111,13 @@ const EditObservationComponent = (props: Props) => {
       unitGathering: observation.unitGathering,
       type: observation.type
     }
+    
+    //if editing-flag is true try to replace location with new location, and clear editing-flag
+    if (props.editing) {
+      props.observation ? editedUnit.unitGathering.geometry = props.observation : null
+      props.clearObservationLocation()
+      props.toggleEditing()
+    }
 
     events[indexOfEditedEvent].schema.gatherings[0].units[indexOfEditedObservation] = editedUnit
 
@@ -129,6 +143,13 @@ const EditObservationComponent = (props: Props) => {
     }
   }
 
+  //redirects navigator to map for selection of new observation location
+  const handleChangeToMap = () => {
+    props.setObservationLocation(observation.unitGathering.geometry)
+    props.editing ? null : props.toggleEditing()
+    props.onEditLocation()
+  }
+
   if (form === undefined) {
     loadSchemaAndSetForm()
     return <View><Text>Ladataan...</Text></View>
@@ -137,6 +158,9 @@ const EditObservationComponent = (props: Props) => {
       <View style={Cs.observationContainer}>
         <ScrollView>
           <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
+          <View style={Cs.buttonContainer}>
+            <Button title={t('edit location')} onPress={() => handleChangeToMap()}></Button>
+          </View>
           <View style={Cs.formContainer}>
             {form}
           </View>

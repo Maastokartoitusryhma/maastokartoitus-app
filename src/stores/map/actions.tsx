@@ -8,6 +8,7 @@ import { mapActionTypes,
         SET_REGION,
         TOGGLE_ZONE,
         CLEAR_REGION,
+        TOGGLE_EDITING,
         } from './types'
 
 export const setRegion = (region: Region) : mapActionTypes => ({
@@ -38,4 +39,8 @@ export const toggleZoomToZone = () : mapActionTypes => ({
 
 export const toggleMaptype = () : mapActionTypes => ({
   type: TOGGLE_MAPTYPE
+})
+
+export const toggleEditing = () : mapActionTypes => ({
+  type: TOGGLE_EDITING
 })
