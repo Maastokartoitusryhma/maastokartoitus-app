@@ -109,7 +109,7 @@ const HomeComponent = (props: Props) => {
     const response = await regionController.getRegions()
     if (response !== null) {
       setRegions(response.results)
-      setSelectedRegion(response.results[0].name)
+      setSelectedRegion(response.results[0].id)
       setSelectedObservationZone(response.results[0].id)
     }
   }
@@ -122,7 +122,6 @@ const HomeComponent = (props: Props) => {
       //parse gatherings object
       const gatheringsObject: MyObject = {} = (parseSchemaToJSONObject(fetchedSchema.properties.gatherings.items.properties))
       schemaObject.gatherings.push(gatheringsObject)
-      console.log('PARSED SCHEMA: ' + JSON.stringify(schemaObject))
       return schemaObject
     }
     return null
@@ -141,8 +140,12 @@ const HomeComponent = (props: Props) => {
     if (observationForm !== null) {
       console.log('OBSERVATION FORM: ' + JSON.stringify(observationForm))
       observationForm.gatheringEvent.dateBegin = new Date(Date.now()).toISOString()
+      const region: RegionObject | undefined = regions.find(region => region.id === selectedRegion)
+      if (region) {
+        observationForm.gatherings[0].geometry = region.geometry.geometries[0]
+      }  
     }
-
+    
     const observationEventObject = {
       id: 'observationEvent_' + uuid.v4(),
       sentToServer: false,
