@@ -1,11 +1,24 @@
 import React, { useState, useEffect } from 'react'
 import { Text, Button, View, AsyncStorage } from 'react-native'
+import { connect, ConnectedProps } from 'react-redux'
+import { clearObservationEvents } from '../stores/observation/actions'
 import Colors from '../styles/Colors'
 import { useTranslation } from 'react-i18next'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 
-interface Props {
+const mapDispatchToProps = {
+  clearObservationEvents
+}
+
+const connector = connect(
+  null,
+  mapDispatchToProps
+)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+type Props = PropsFromRedux & {
   onLogout: () => void   
 }
 
@@ -25,6 +38,7 @@ const UserInfoComponent = (props: Props) => {
 
   const logout = () => {
     clearUserData()
+    props.clearObservationEvents()
     props.onLogout()
   }
 
@@ -60,4 +74,4 @@ const UserInfoComponent = (props: Props) => {
   )
 }
 
-export default UserInfoComponent
+export default connector(UserInfoComponent)

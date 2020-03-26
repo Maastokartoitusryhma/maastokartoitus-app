@@ -14,7 +14,7 @@ const ObservationInfoComponent = (props: Props) => {
         return (
           <View>
            {props.observation[key] !== ''
-              ? <Text key={key}>{key}: {props.observation[key]}</Text>
+              ? <Text key={key}>{key}: {JSON.stringify(props.observation[key])}</Text>
               : null
             }
           </View>

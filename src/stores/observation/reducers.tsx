@@ -7,7 +7,11 @@ import { observationActionTypes,
         NEW_OBSERVATION_EVENT,
         ALL_OBSERVATION_EVENTS,
         SET_SCHEMA,
-        CLEAR_LOCATIONS
+        CLEAR_LOCATIONS,
+        REPLACE_OBSERVATION_EVENTS,
+        CLEAR_OBSERVATION_EVENTS,
+        SET_OBSERVATION_ID,
+        CLEAR_OBSERVATION_ID
         } from './types'
 import { Point } from 'geojson'
 
@@ -54,16 +58,31 @@ const observationEventsReducer = (state: any[] = [], action : observationActionT
       return newState
     case ALL_OBSERVATION_EVENTS:
       return state
+    case REPLACE_OBSERVATION_EVENTS:
+      return action.payload
+    case CLEAR_OBSERVATION_EVENTS:
+      return []
     default:
       return state
   }
 }
 
-const schemaReducer = (state : object = {}, action : observationActionTypes) => {
+const schemaReducer = (state = null, action : observationActionTypes) => {
   switch (action.type) {
     case SET_SCHEMA:
       return action.payload
     default: 
+      return state
+  }
+}
+
+const observationIdReducer = (state = null, action : observationActionTypes) => {
+  switch (action.type) {
+    case SET_OBSERVATION_ID:
+      return action.payload
+    case CLEAR_OBSERVATION_ID:
+      return null
+    default:
       return state
   }
 }
@@ -73,5 +92,6 @@ export {
   observationLocationsReducer,
   observingReducer, 
   observationEventsReducer,
-  schemaReducer 
+  schemaReducer,
+  observationIdReducer, 
 }

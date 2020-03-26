@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import ObservationComponent from '../components/ObservationComponent'
+import EditObservationComponent from '../components/EditObservationComponent'
 import Colors from '../styles/Colors'
 import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
 import { StackRouter, NavigationActions } from 'react-navigation'
@@ -8,10 +8,10 @@ type Props  = {
   navigation: NavigationStackProp<any, any>
 }
 
-export default class ObservationScreen extends Component<NavigationStackScreenProps<Props>>  {
+export default class EditObservationScreen extends Component<NavigationStackScreenProps<Props>>  {
 
   static navigationOptions = ({ screenProps }: any) => ({
-    title: screenProps.t('add observation'),
+    title: screenProps.t('edit observation'),
     headerStyle: {
       backgroundColor: Colors.headerBackground
     },
@@ -19,10 +19,11 @@ export default class ObservationScreen extends Component<NavigationStackScreenPr
   })
 
   render() {
+    const { navigate } = this.props.navigation
     return (
-      <ObservationComponent 
-        onPress={() => this.props.navigation.navigate('Map')} 
-        type={this.props.navigation.state.params.type}
+      <EditObservationComponent 
+        onPress={() => navigate('Home')}
+        onEditLocation={() => navigate('Map')}
       />
     )
   }

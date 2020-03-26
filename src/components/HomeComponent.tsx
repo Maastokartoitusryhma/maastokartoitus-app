@@ -11,8 +11,9 @@ import { LocationData } from 'expo-location'
 import { LatLng } from 'react-native-maps'
 import { 
   toggleObserving, 
-  newObservationEvent, 
+  newObservationEvent,
   allObservationEvents,
+  replaceObservationEvents, 
   clearObservationLocation,
   clearObservationLocations
   } from '../stores/observation/actions'
@@ -24,10 +25,9 @@ import { updateLocation, appendPath } from '../stores/position/actions'
 import { connect, ConnectedProps } from 'react-redux'
 import { watchLocationAsync, stopLocationAsync } from '../geolocation/geolocation'
 import { GeometryCollection } from 'geojson'
-import testForm from '../../temporaryForm.json'
-import { getObservationEventSchema } from '../controllers/formController'
 import { parseSchemaToJSONObject } from '../parsers/SchemaToJSONObject'
 import uuid from 'react-native-uuid'
+import _ from 'lodash'
 
 interface RootState {
   position: LocationData
@@ -36,6 +36,7 @@ interface RootState {
   observation: LatLng
   zone: GeometryCollection
   observationEvent: any[]
+  schema: object
 }
 
 interface MyObject {
@@ -43,8 +44,8 @@ interface MyObject {
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, observing, observation, zone, observationEvent } = state
-  return { position, path, observing, observation, zone, observationEvent }
+  const { position, path, observing, observation, zone, observationEvent, schema } = state
+  return { position, path, observing, observation, zone, observationEvent, schema }
 }
 
 const mapDispatchToProps = {
@@ -55,6 +56,7 @@ const mapDispatchToProps = {
   toggleObserving,
   newObservationEvent,
   allObservationEvents,
+  replaceObservationEvents,
   clearObservationLocation,
   clearObservationLocations
 }
@@ -112,14 +114,13 @@ const HomeComponent = (props: Props) => {
     }
   }
   
-  const loadSchemaAndSetForm = async () => {
-    const fetchedSchema = await getObservationEventSchema(t('language')) 
+  const parseObservationEventObject = () => {
+    const fetchedSchema = _.cloneDeep(props.schema)
     if (fetchedSchema !== null) {
       //parse schema object
-      const schemaObject: MyObject = {} = parseSchemaToJSONObject(fetchedSchema.properties)
+      const schemaObject: MyObject = {} = (parseSchemaToJSONObject(fetchedSchema.properties))
       //parse gatherings object
-      const gatheringsObject: MyObject = {} = parseSchemaToJSONObject(fetchedSchema.properties.gatherings.items.properties)
-      console.log(gatheringsObject)
+      const gatheringsObject: MyObject = {} = (parseSchemaToJSONObject(fetchedSchema.properties.gatherings.items.properties))
       schemaObject.gatherings.push(gatheringsObject)
       console.log('PARSED SCHEMA: ' + JSON.stringify(schemaObject))
       return schemaObject
@@ -134,19 +135,20 @@ const HomeComponent = (props: Props) => {
 
   const { t } = useTranslation()
 
-  const beginObservationEvent = async () => {
+  const beginObservationEvent = () => {
     
-    const observationForm = await loadSchemaAndSetForm()
+    const observationForm = parseObservationEventObject()
     if (observationForm !== null) {
       console.log('OBSERVATION FORM: ' + JSON.stringify(observationForm))
       observationForm.gatheringEvent.dateBegin = new Date(Date.now()).toISOString()
     }
-    
+
     const observationEventObject = {
       id: 'observationEvent_' + uuid.v4(),
       sentToServer: false,
       schema: observationForm
     }
+
     props.newObservationEvent(observationEventObject)
     props.toggleObserving()
     watchLocationAsync(props.updateLocation, props.appendPath)
@@ -154,10 +156,21 @@ const HomeComponent = (props: Props) => {
   }
 
   const finishObservationEvent = () => {
+    const events = _.cloneDeep(props.observationEvent)
+    console.log(events)
+    const event = events.pop()
+    console.log(JSON.stringify(event))
+    event.schema.gatheringEvent.dateEnd = new Date(Date.now()).toISOString()
+    events.push(event)
+
+    //replace events with modified list
+    props.replaceObservationEvents(events)
+
     props.toggleObserving()
     props.clearObservationLocation()
     props.clearObservationLocations()
     stopLocationAsync()
+    loadObservationEvents()
   }
 
   const setSelectedObservationZone = (id: string) => {

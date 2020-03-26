@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, Button } from 'react-native'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import { connect, ConnectedProps } from 'react-redux'
-import { allObservationEvents } from '../stores/observation/actions'
+import { allObservationEvents, setObservationId } from '../stores/observation/actions'
 import { useTranslation } from 'react-i18next'
 import ObservationInfoComponent from './ObservationInfoComponent'
-import uuid from 'react-native-uuid'
+import Colors from '../styles/Colors'
 
 interface RootState {
   observationEvent: any[]
+  observationId: object
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { observationEvent } = state
-  return { observationEvent }
+  const { observationEvent, observationId } = state
+  return { observationEvent, observationId }
 }
 
 const mapDispatchToProps = {
-  allObservationEvents
+  allObservationEvents,
+  setObservationId
 }
 
 const connector = connect(
@@ -30,6 +32,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & {
   id: string
+  onPressObservation: () => void
 }
 
 const ObservationEventComponent = (props: Props) => {
@@ -60,10 +63,22 @@ const ObservationEventComponent = (props: Props) => {
         <ScrollView>
           <Text>ID: {event.id}</Text>
           <Text>{t('dateBegin')}: {event.schema.gatheringEvent.dateBegin}</Text>
-          <Text>{t('dateEnd')}: {event.schema.gatheringEvent.dateBegin}</Text>
+          <Text>{t('dateEnd')}: {event.schema.gatheringEvent.dateEnd}</Text>
           <Text>{t('Zone')}: </Text>
           <Text style={Ts.observationText}>{t('Observations')}:</Text>
-          {observations.map(observation => <ObservationInfoComponent key={uuid.v4()} observation={observation} />)}
+          {observations.map(observation =>
+            <View>
+              <ObservationInfoComponent key={observation.id} observation={observation} />
+              <Button title={'Muokkaa havaintoa'} onPress={() => {
+                const id = {
+                  eventId: event.id,
+                  unitId: observation.id
+                }
+                props.setObservationId(id)
+                props.onPressObservation()
+              }} color={Colors.positiveButton}/>
+            </View>
+          )}
         </ScrollView>
       </View>
     )

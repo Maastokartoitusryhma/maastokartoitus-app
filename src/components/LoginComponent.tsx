@@ -8,20 +8,23 @@ import Cs from '../styles/ContainerStyles'
 import Bs from '../styles/ButtonStyles'
 import Ts from '../styles/TextStyles'
 import storageController from '../controllers/storageController'
+import { getObservationEventSchema } from '../controllers/formController'
 import { connect, ConnectedProps } from 'react-redux'
-import { newObservationEvent } from '../stores/observation/actions'
+import { newObservationEvent, setSchema } from '../stores/observation/actions'
 
 interface RootState {
-  observationEvent: any[]
+  observationEvent: any[],
+  schema: object
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { observationEvent } = state
-  return { observationEvent }
+  const { observationEvent, schema } = state
+  return { observationEvent, schema }
 }
 
 const mapDispatchToProps = {
   newObservationEvent,
+  setSchema
 }
 
 const connector = connect(
@@ -51,6 +54,7 @@ const LoginComponent = (props: Props) => {
     const userData = await AsyncStorage.getItem('userData')
     if (userData !== null) {
       await fetchObservationEvents()
+      await fetchSchemaFromServer()
       props.onSuccessfulLogin()
     }
   }
@@ -100,7 +104,6 @@ const LoginComponent = (props: Props) => {
       console.log('Error saving user data to storage: ', e)
     }
   }
-  
 
   const fetchObservationEvents = async () => {
     const observationEvents: Array<Object> = await storageController.fetch('observationEvents')
@@ -109,6 +112,11 @@ const LoginComponent = (props: Props) => {
         props.newObservationEvent(event)
       })
     }
+  }
+
+  const fetchSchemaFromServer = async () => {
+    const fetchedSchema: object = await getObservationEventSchema(t('language'))
+    props.setSchema(fetchedSchema)
   }
 
   return (

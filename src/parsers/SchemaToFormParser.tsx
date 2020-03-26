@@ -39,11 +39,15 @@ const parseNested = (
     Object.keys(data).forEach(key => {
       if (key === 'enum') {
         includesEnum = true
-        createNewdictionaryKey(objectTitle) // Create new object inside dictionary
-        setEnumKeys(data[key], objectTitle) // Set keys to created dictionary object
-    
+        if (data['enumNames']) {
+          addEnumsAndEnumNames(data[key], data['enumNames'], objectTitle)
+        } else {
+          //if data['enumNames'] does not exist or is empty enums and enumNames are same
+          addEnumsAndEnumNames(data[key], data[key], objectTitle)
+        }
+        
       } else if (key === 'enumNames') {
-        setEnumValues(data[key], objectTitle) // Set values to previously created dictionary object
+        //this is already handled
 
       } else if (typeof(data[key]) === 'object') { // If key has other keys nested inside - aka is of type object - then do recursion
         if (objectTitle !== 'items' && objectTitle !== 'properties' && objectTitle !== 'required') {
@@ -85,23 +89,11 @@ const parseNested = (
     return toReturn
 }
 
-const createNewdictionaryKey = (name: string) => {
+const addEnumsAndEnumNames = (enums: Array<string>, enumNames: Array<string>, name: string) => {
   dictionary[name] = {}
-}
-
-const setEnumKeys = (data: MyObject = {}, dictionaryKey: string) => {
-  const dictionaryObject = dictionary[dictionaryKey]
-  Object.keys(data).forEach(key => {
-    dictionaryObject[data[key]] = ""
-  })
-}
-
-const setEnumValues = (data: MyObject = {}, dictionaryKey: string) => {
-  const dictionaryObject = dictionary[dictionaryKey]
-  const values = Object.values(data)
-  for (const key in dictionaryObject) {
-    const value = values.shift()
-    dictionaryObject[key] = value
+  const arrayLength = Math.min(enums.length, enumNames.length) //if the arrays are not same length use the length of the shorter array to avoid error
+  for (let i = 0; i < arrayLength; i++) {
+      dictionary[name][enums[i]] = enumNames[i]
   }
 }
 

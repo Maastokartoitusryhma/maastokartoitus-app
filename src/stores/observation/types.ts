@@ -8,7 +8,11 @@ export const CLEAR_LOCATIONS = 'CLEAR_LOCATIONS'
 export const TOGGLE_OBSERVING = 'TOGGLE_OBSERVING'
 export const NEW_OBSERVATION_EVENT ='NEW_OBSERVATION_EVENT'
 export const ALL_OBSERVATION_EVENTS = 'ALL_OBSERVATION_EVENTS'
+export const REPLACE_OBSERVATION_EVENTS = 'REPLACE_OBSERVATION_EVENTS'
+export const CLEAR_OBSERVATION_EVENTS = 'CLEAR_OBSERVATION_EVENTS'
 export const SET_SCHEMA ='SET_SCHEMA'
+export const SET_OBSERVATION_ID = 'SET_OBSERVATION_ID'
+export const CLEAR_OBSERVATION_ID = 'CLEAR_OBSERVATION_ID'
 
 interface setObservationLocation {
   type: typeof SET_OBSERVATION
@@ -46,9 +50,27 @@ interface allObservationEvents {
   type: typeof ALL_OBSERVATION_EVENTS
 }
 
+interface replaceObservationEvents {
+  type: typeof REPLACE_OBSERVATION_EVENTS
+  payload: any[]
+}
+
+interface clearObservationEvents {
+  type: typeof CLEAR_OBSERVATION_EVENTS
+}
+
 interface setSchema {
   type: typeof SET_SCHEMA
   payload: object
+}
+
+interface setObservationId {
+  type: typeof SET_OBSERVATION_ID
+  payload: object
+}
+
+interface clearObservationId {
+  type: typeof CLEAR_OBSERVATION_ID
 }
 
 export type observationActionTypes = setObservationLocation | 
@@ -59,4 +81,8 @@ export type observationActionTypes = setObservationLocation |
                                      toggleObserving | 
                                      newObservationEvent |
                                      allObservationEvents |
-                                     setSchema
+                                     replaceObservationEvents |
+                                     clearObservationEvents |
+                                     setSchema |
+                                     setObservationId |
+                                     clearObservationId

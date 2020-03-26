@@ -24,6 +24,8 @@ const FormInputComponent = (props: Props) => {
 
   const addValueToArray = (value: string) => {
     const values = props.watch(props.parentObjectTitle)
+    console.log('values: ', props.parentObjectTitle)
+    console.log('currentvalue: ', currentValue)
     const index = values.indexOf(currentValue)
     if (index > -1) {
       values.splice(index, 1)

@@ -4,15 +4,18 @@ import { useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Point } from 'geojson'
-import { getSingleObservationSchema } from '../controllers/formController'
 import storageController from '../controllers/storageController'
-import { newObservationEvent, clearObservationLocation, addToObservationLocations, removeFromObservationLocations } from '../stores/observation/actions'
-import { parseSchemaToForm } from '../parsers/SchemaToFormParser'
+import { replaceObservationEvents, clearObservationLocation, addToObservationLocations, removeFromObservationLocations } from '../stores/observation/actions'
 import ObservationForm from '../forms/ObservationForm'
+import TrackObservationForm from '../forms/TrackObservationForm'
+import FecesObservationForm from '../forms/FecesObservationForm'
+import NestObservationForm from '../forms/NestObservationForm'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import Colors from '../styles/Colors'
 import Modal from 'react-native-modal'
+import _ from 'lodash'
+import uuid from 'react-native-uuid'
 
 interface RootState {
   observation: Point
@@ -26,7 +29,7 @@ const mapStateToProps = (state: RootState) => {
 }
 
 const mapDispatchToProps = {
-  newObservationEvent,
+  replaceObservationEvents,
   clearObservationLocation,
   addToObservationLocations,
   removeFromObservationLocations
@@ -40,12 +43,14 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
   onPress: () => void
+  type: string
 }
 
 const ObservationComponent = (props: Props) => {
 
   useEffect(() => {
     props.addToObservationLocations(props.observation)
+    loadSchemaAndSetForm()
   }, [])
 
   //For react-hook-form
@@ -54,20 +59,44 @@ const ObservationComponent = (props: Props) => {
   const [form, setForm] = useState()
   const [showModal, setShowModal] = useState(false)
 
-  const onSubmit = (data: Object) => {
+  const onSubmit = (data: { [key: string]: any }) => {
+    if(!('taxonConfidence' in data)) {
+      data['taxonConfidence'] = 'MY.taxonConfidenceSure'
+    }
+    if(!('identifications' in data)) {
+      data['identifications'] = [{'taxonID': 'MX.48243'}]
+    }
+    if(!('recordBasis' in data)) {
+      data['recordBasis'] = 'MY.recordBasisHumanObservationIndirect'
+    }
+    if(props.type === 'fecesObservation') {
+      data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
+    }
+    
     console.log('POINT:', props.observation)
-   // console.log('REGISTER DATA:', JSON.stringify(data))
-    //console.log('EVENT BEFORE:', props.observationEvent)
+    console.log('REGISTER DATA:', JSON.stringify(data))
+    console.log('EVENT BEFORE:', props.observationEvent)
     console.log('LOCATIONS', props.observationLocations)
-    const events = props.observationEvent
+
+    //clone events from reducer for modification
+    const events = _.cloneDeep(props.observationEvent)
     const event = events.pop()
-    //console.log('EVENT OBJECT BEFORE: ', event)
-    event.schema.gatherings[0].units.push(data)
-    //event.gatherings[0].units.unitGathering.geometry.push(props.observation)
-    //console.log('EVENT OBJECT AFTER: ', event)
+
+    //Add observation location to rest of observation parameters
+    const newUnit = {
+      id: 'observation_' + uuid.v4(),
+      ...data,
+      unitGathering: {
+        geometry: props.observation
+      },
+      type: props.type 
+    }
+    event.schema.gatherings[0].units.push(newUnit)
     events.push(event)
-    props.newObservationEvent(event)
-    //console.log('EVENT AFTER:', props.observationEvent)
+
+    //replace events with modified list
+    props.replaceObservationEvents(events)
+    console.log('EVENT AFTER:', props.observationEvent)
 
     props.clearObservationLocation()
 
@@ -76,16 +105,15 @@ const ObservationComponent = (props: Props) => {
     setShowModal(true)
   }
 
-  // Fetch schemas
-  useEffect(() => {
-    loadSchemaAndSetForm()
-  }, [])
-
   const loadSchemaAndSetForm = async () => {
-    const fetchedSchema = await getSingleObservationSchema(t('language')) 
-    if (fetchedSchema !== null) {
-      //setForm(parseSchemaToForm(fetchedSchema, register, setValue, watch, errors, unregister))
-      setForm(ObservationForm(register, setValue, watch, errors, unregister))
+    if(props.type === 'observation') {
+      setForm(ObservationForm(register, setValue, watch, errors, unregister, undefined))
+    } else if(props.type === 'trackObservation') {
+      setForm(TrackObservationForm(register, setValue, watch, errors, unregister, undefined))
+    } else if(props.type === 'fecesObservation') {
+      setForm(FecesObservationForm(register, setValue, watch, errors, unregister, undefined))
+    } else if(props.type === 'nestObservation') {
+      setForm(NestObservationForm(register, setValue, watch, errors, unregister, undefined))
     }
   }
 

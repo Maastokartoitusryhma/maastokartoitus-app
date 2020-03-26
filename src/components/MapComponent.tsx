@@ -17,6 +17,7 @@ import {
   setRegion,
   toggleCentered,
   toggleMaptype,
+  toggleEditing,
 } from '../stores/map/actions'
 import Colors from '../styles/Colors'
 import { MaterialIcons } from '@expo/vector-icons'
@@ -35,11 +36,12 @@ interface RootState {
   zone: GeometryCollection
   centered: boolean
   maptype: 'topographic' | 'satellite'
+  editing: boolean
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, region, observation, observationLocations, zone, centered, maptype } = state
-  return { position, path, region, observation, observationLocations, zone, centered, maptype }
+  const { position, path, region, observation, observationLocations, zone, centered, maptype, editing } = state
+  return { position, path, region, observation, observationLocations, zone, centered, maptype, editing }
 }
 
 const mapDispatchToProps = {
@@ -50,6 +52,7 @@ const mapDispatchToProps = {
   clearObservationLocation,
   toggleCentered,
   toggleMaptype,
+  toggleEditing,
 }
 
 const connector = connect(
@@ -58,32 +61,42 @@ const connector = connect(
 )
 
 type PropsFromRedux = ConnectedProps<typeof connector>
-type Props = PropsFromRedux & { onPress1: () => void } 
+type Props = PropsFromRedux & { 
+  onPressObservation: () => void, 
+  onPressTrackObservation: () => void, 
+  onPressFecesObservation: () => void, 
+  onPressNestObservation: () => void,
+  onPressEditing: () => void,
+} 
 
 const MapComponent = (props: Props) => {
   const { t } = useTranslation()
 
+  //if centering is true keeps recentering the map on renders
   useEffect(() => {
     if (props.centered && props.position) {
       followUser()
-    } else {
-
     }
   })
 
+  //reference for mapView
   let mapView: MapView | null = null
 
+  //animates map to given region
   const moveToRegion = (region: Region | null) => {
     if (region && mapView) {
       mapView.animateToRegion(region, 500)
     }
   }
 
+  //gets user region and moves map to themr
   const followUser = () => {
     const region = getRegionFromCoords()
     moveToRegion(region)
   }
 
+  //extracts user coordinates from geolocationdata, and converts to region-type
+  //for map view
   const getRegionFromCoords = () => {
     if (props.position) {
       const coords : LatLng = { ...props.position.coords }
@@ -101,13 +114,14 @@ const MapComponent = (props: Props) => {
     return null
   }
 
+  //centers the map on user and sets the centering flag to true
   const centerMapAnim = () => {
     props.centered ? null : props.toggleCentered()
 
-    const region = getRegionFromCoords()
-    moveToRegion(region)
+    followUser()
   }
 
+  //releases mapcenter from userlocation on moving the map
   const onPanDrag = () => {
     props.centered ? props.toggleCentered() : null
   }
@@ -116,19 +130,30 @@ const MapComponent = (props: Props) => {
     props.setRegion(region)
   }
 
+  //on long press on map converts selected location to point and places in observation location reducer 
   const markObservation = (coordinate: LatLng) => {
     const point = convertLatLngToPoint(coordinate)
     props.setObservationLocation(point)
   }
 
-  const markAddedObservation = (coordinate: LatLng) => {
-    const point = convertLatLngToPoint(coordinate)
-    
-  }
-
+  //clears observation location from its reducer, and removes it from the list
+  //of locations in observationEvent
   const cancelObservation = () => {
     props.removeFromObservationLocations(props.observation)
     props.clearObservationLocation()
+  }
+
+  //redirects navigator back to edit page of single observation
+  const submitEdit = () => {
+    props.onPressEditing()
+  }
+
+  //redirects navigator back to edit page, sets edit-flag to false and clears
+  //selected observation location from reducer
+  const cancelEdit = () => {
+    props.clearObservationLocation()
+    props.toggleEditing()
+    props.onPressEditing()
   }
 
   const locationOverlay = () => (props.position !== null ? (
@@ -193,6 +218,41 @@ const MapComponent = (props: Props) => {
     )
   )
 
+  const observationButtonsOverlay = () => (        
+    <View style = {Cs.observationTypeButtonsContainer}>
+      <View
+        style={Cs.observationTypeButtonsColumn}>
+          {props.editing ?
+            <>
+              <View style={Cs.observationTypeButton}>
+                <Button title = {t('submit')} onPress = {() => submitEdit()}/>
+              </View>
+              <View>
+                <Button title = {t('cancel')} onPress = {() => cancelEdit()}/>
+              </View>
+            </> :
+            <>
+              <View style={Cs.observationTypeButton}>
+                <Button title = {t('observation')} onPress = {props.onPressObservation}/>
+              </View>
+              <View style={Cs.observationTypeButton}>
+                <Button title = {t('trace')} onPress = {props.onPressTrackObservation}/>
+              </View>
+              <View style={Cs.observationTypeButton}>
+              <Button title = {t('feces')} onPress = {props.onPressFecesObservation}/>
+              </View>
+              <View style={Cs.observationTypeButton}>
+                <Button title = {t('nest')} onPress = {props.onPressNestObservation}/>
+              </View>
+              <View style={Cs.observationTypeButton}>
+                <Button title = {t('remove')} onPress = {() => cancelObservation()} color = {Colors.negativeButton}/>
+              </View>
+            </>
+          }
+      </View>
+    </View>
+  )
+
   return (
     <>
       <MapView
@@ -236,27 +296,7 @@ const MapComponent = (props: Props) => {
         </TouchableHighlight>
       </View>
       { props.observation ?
-        <View
-          style = {Cs.observationTypeButtonsContainer}>
-          <View
-            style={Cs.observationTypeButtonsColumn}>
-              <View style={Cs.observationTypeButton}>
-                <Button title = {t('observation')} onPress = {props.onPress1}/>
-              </View>
-              <View style={Cs.observationTypeButton}>
-                <Button title = {t('trace')} onPress = {props.onPress1}/>
-              </View>
-              <View style={Cs.observationTypeButton}>
-              <Button title = {t('feces')} onPress = {props.onPress1}/>
-              </View>
-              <View style={Cs.observationTypeButton}>
-                <Button title = {t('nest')} onPress = {props.onPress1}/>
-              </View>
-              <View style={Cs.observationTypeButton}>
-                <Button title = {t('remove')} onPress = {() => cancelObservation()} color = {Colors.negativeButton}/>
-              </View>
-          </View>
-        </View>
+        observationButtonsOverlay()
         : null
       }
       

@@ -6,6 +6,7 @@ import { mapActionTypes,
         SET_REGION,
         TOGGLE_ZONE,
         CLEAR_REGION,
+        TOGGLE_EDITING,
         } from './types'
 
 const initialRegion = { 
@@ -54,6 +55,16 @@ const zoomZoneReducer = (state = true, action: mapActionTypes) => {
   }  
 }
 
+const editingReducer = (state = false, action: mapActionTypes) => {
+  switch (action.type) {
+    case TOGGLE_EDITING: 
+      const newState = !state
+      return newState
+    default:
+      return state
+  }  
+}
+
 const maptypeReducer = (state: 'topographic' | 'satellite' = 'topographic', action : mapActionTypes) => {
   switch (action.type) {
     case TOGGLE_MAPTYPE: 
@@ -69,4 +80,5 @@ export {
   zoneReducer, 
   centeringReducer, 
   maptypeReducer,
+  editingReducer,
 }
