@@ -1,8 +1,9 @@
 import { createPicker, createArray, createInputElement } from '../builders/FormComponentBuilders'
 
-const FecesObservationForm = (register: Function, setValue: Function,
-  watch: Function, errors: Object, unregister: Function, defaults: Object | undefined
-) => {
+const FecesObservationForm = (
+  register: Function, setValue: Function,
+  watch: Function, errors: Object, 
+  unregister: Function, defaults: Object | undefined) => {
 
   let toReturn = []
   let defaultLolifeDroppingsType = null
@@ -29,19 +30,25 @@ const FecesObservationForm = (register: Function, setValue: Function,
     'MY.lolifeDroppingsQuality3' : 'Tuoreita ja keltaisia'
   }
 
-  if(defaults !== undefined) {
-    if(defaults.lolifeDroppingsType !== undefined) { defaultLolifeDroppingsType = defaults.lolifeDroppingsType }
-    if(defaults.lolifeDroppingsCount !== undefined) { defaultLolifeDroppingsCount = defaults.lolifeDroppingsCount }
-    if(defaults.lolifeDroppingsQuality !== undefined) { defaultLolifeDroppingsQuality = defaults.lolifeDroppingsQuality }
+  if (defaults !== undefined) {
+    if (defaults.lolifeDroppingsType !== undefined) { defaultLolifeDroppingsType = defaults.lolifeDroppingsType }
+    if (defaults.lolifeDroppingsCount !== undefined) { defaultLolifeDroppingsCount = defaults.lolifeDroppingsCount }
+    if (defaults.lolifeDroppingsQuality !== undefined) { defaultLolifeDroppingsQuality = defaults.lolifeDroppingsQuality }
   }
 
-  if(defaultLolifeDroppingsType === null || defaultLolifeDroppingsType === undefined) { defaultLolifeDroppingsType =  '' }
-  if(defaultLolifeDroppingsCount === null || defaultLolifeDroppingsCount === undefined) { defaultLolifeDroppingsCount = '' }
-  if(defaultLolifeDroppingsQuality === null || defaultLolifeDroppingsQuality === undefined) { defaultLolifeDroppingsQuality = '' }
+  if (defaultLolifeDroppingsType === null || defaultLolifeDroppingsType === undefined) { defaultLolifeDroppingsType =  '' }
+  if (defaultLolifeDroppingsCount === null || defaultLolifeDroppingsCount === undefined) { defaultLolifeDroppingsCount = '' }
+  if (defaultLolifeDroppingsQuality === null || defaultLolifeDroppingsQuality === undefined) { defaultLolifeDroppingsQuality = '' }
 
-  toReturn.push(createPicker('Papanahavainnon tyyppi', 'lolifeDroppingsType', defaultLolifeDroppingsType, register, setValue, watch, errors, unregister, lolifeDroppingsTypeDictionary))
-  toReturn.push(createPicker('Papanamäärä', 'lolifeDroppingsCount', defaultLolifeDroppingsCount, register, setValue, watch, errors, unregister, lolifeDroppingsCountDictionary))
-  toReturn.push(createPicker('Papanoiden laatu', 'lolifeDroppingsQuality', defaultLolifeDroppingsQuality, register, setValue, watch, errors, unregister, lolifeDroppingsQualityDictionary))
+  toReturn.push(createPicker('Papanahavainnon tyyppi', 'lolifeDroppingsType', defaultLolifeDroppingsType, 
+    register, setValue, watch, errors, unregister, lolifeDroppingsTypeDictionary))
+
+  toReturn.push(createPicker('Papanamäärä', 'lolifeDroppingsCount', defaultLolifeDroppingsCount,
+    register, setValue, watch, errors, unregister, lolifeDroppingsCountDictionary))
+
+  toReturn.push(createPicker('Papanoiden laatu', 'lolifeDroppingsQuality', defaultLolifeDroppingsQuality,
+    register, setValue, watch, errors, unregister, lolifeDroppingsQualityDictionary))
+    
   return (toReturn)
 }
 
