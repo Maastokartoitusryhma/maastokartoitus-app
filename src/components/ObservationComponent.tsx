@@ -16,6 +16,7 @@ import Colors from '../styles/Colors'
 import Modal from 'react-native-modal'
 import _ from 'lodash'
 import uuid from 'react-native-uuid'
+import * as ImagePicker from 'expo-image-picker'
 
 interface RootState {
   observation: Point
@@ -58,6 +59,19 @@ const ObservationComponent = (props: Props) => {
   const { t } = useTranslation()
   const [form, setForm] = useState()
   const [showModal, setShowModal] = useState(false)
+
+  const attachImage = async () => {
+    let permissionResult = await ImagePicker.requestCameraPermissionsAsync()
+    if (permissionResult.granted === false) {
+      return false
+    }
+
+    let pickerResult = await ImagePicker.launchImageLibraryAsync()
+    console.log(pickerResult)
+
+    let result : boolean = !pickerResult.cancelled
+    return result
+  }
 
   const onSubmit = (data: { [key: string]: any }) => {
     if(!('taxonConfidence' in data)) {
@@ -123,6 +137,9 @@ const ObservationComponent = (props: Props) => {
     return (
       <View style={Cs.observationContainer}>
         <ScrollView>
+          <View style={Cs.formSaveButtonContainer}>
+            <Button title={t('attach image')} onPress={attachImage} color={Colors.positiveButton}/>
+          </View>
           <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
           <View style={Cs.formContainer}>
             {form}
