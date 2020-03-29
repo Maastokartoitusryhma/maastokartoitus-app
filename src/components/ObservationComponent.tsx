@@ -61,12 +61,25 @@ const ObservationComponent = (props: Props) => {
   const [showModal, setShowModal] = useState(false)
 
   const attachImage = async () => {
-    let permissionResult = await ImagePicker.requestCameraPermissionsAsync()
+    let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync()
     if (permissionResult.granted === false) {
       return false
     }
 
     let pickerResult = await ImagePicker.launchImageLibraryAsync()
+    console.log(pickerResult)
+
+    let result : boolean = !pickerResult.cancelled
+    return result
+  }
+
+  const useCamera = async () => {
+    let permissionResult = await ImagePicker.requestCameraPermissionsAsync()
+    if (permissionResult.granted === false) {
+      return false
+    }
+
+    let pickerResult = await ImagePicker.launchCameraAsync()
     console.log(pickerResult)
 
     let result : boolean = !pickerResult.cancelled
@@ -139,6 +152,7 @@ const ObservationComponent = (props: Props) => {
         <ScrollView>
           <View style={Cs.formSaveButtonContainer}>
             <Button title={t('attach image')} onPress={attachImage} color={Colors.positiveButton}/>
+            <Button title={t('use camera')} onPress={useCamera} color={Colors.positiveButton}/>
           </View>
           <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
           <View style={Cs.formContainer}>
