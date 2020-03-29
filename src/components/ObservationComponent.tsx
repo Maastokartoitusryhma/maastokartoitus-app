@@ -69,10 +69,8 @@ const ObservationComponent = (props: Props) => {
     }
 
     let pickerResult = await ImagePicker.launchImageLibraryAsync()
-    console.log(pickerResult)
-
     let succeeded : boolean = !pickerResult.cancelled
-    if (succeeded === true) {
+    if (succeeded) {
       selectedImage = pickerResult.uri
       console.log("selectedImage: " + selectedImage)
     }
@@ -86,10 +84,8 @@ const ObservationComponent = (props: Props) => {
     }
 
     let pickerResult = await ImagePicker.launchCameraAsync()
-    console.log(pickerResult)
-
     let succeeded : boolean = !pickerResult.cancelled
-    if (succeeded === true) {
+    if (succeeded) {
       selectedImage = pickerResult.uri
       console.log("selectedImage: " + selectedImage)
     }

@@ -7,9 +7,6 @@ type Props = {
 }
 
 const ObservationInfoComponent = (props: Props) => {
-  console.log(props.observation)
-  console.log(props.observation.image)
-
   return (
     <View style={Cs.containerWithJustPadding}>
       {Object.keys(props.observation).map((key) => {
