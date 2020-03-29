@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Image } from 'react-native'
 import Cs from '../styles/ContainerStyles'
 
 type Props = {
@@ -7,19 +7,28 @@ type Props = {
 }
 
 const ObservationInfoComponent = (props: Props) => {
+  console.log(props.observation)
+  console.log(props.observation.image)
 
   return (
     <View style={Cs.containerWithJustPadding}>
       {Object.keys(props.observation).map((key) => {
         return (
           <View>
-           {props.observation[key] !== ''
+            {props.observation[key] !== ''
               ? <Text key={key}>{key}: {JSON.stringify(props.observation[key])}</Text>
               : null
             }
           </View>
         )
       })}
+      {props.observation.image !== ''
+        ? <Image
+            source={{ uri: props.observation.image }}
+            style={{ width:100, height: 100}}
+          />
+        : null
+      }
     </View>
   )
 }

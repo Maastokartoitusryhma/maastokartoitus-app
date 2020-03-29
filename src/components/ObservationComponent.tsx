@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, ScrollView, Button, Alert } from 'react-native'
+import { View, Text, ScrollView, Button, Alert, Image } from 'react-native'
 import { useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -54,6 +54,8 @@ const ObservationComponent = (props: Props) => {
     loadSchemaAndSetForm()
   }, [])
 
+  let selectedImage : string = ''
+
   //For react-hook-form
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
   const { t } = useTranslation()
@@ -69,8 +71,12 @@ const ObservationComponent = (props: Props) => {
     let pickerResult = await ImagePicker.launchImageLibraryAsync()
     console.log(pickerResult)
 
-    let result : boolean = !pickerResult.cancelled
-    return result
+    let succeeded : boolean = !pickerResult.cancelled
+    if (succeeded === true) {
+      selectedImage = pickerResult.uri
+      console.log("selectedImage: " + selectedImage)
+    }
+    return succeeded
   }
 
   const useCamera = async () => {
@@ -82,8 +88,12 @@ const ObservationComponent = (props: Props) => {
     let pickerResult = await ImagePicker.launchCameraAsync()
     console.log(pickerResult)
 
-    let result : boolean = !pickerResult.cancelled
-    return result
+    let succeeded : boolean = !pickerResult.cancelled
+    if (succeeded === true) {
+      selectedImage = pickerResult.uri
+      console.log("selectedImage: " + selectedImage)
+    }
+    return succeeded
   }
 
   const onSubmit = (data: { [key: string]: any }) => {
@@ -104,19 +114,21 @@ const ObservationComponent = (props: Props) => {
     console.log('REGISTER DATA:', JSON.stringify(data))
     console.log('EVENT BEFORE:', props.observationEvent)
     console.log('LOCATIONS', props.observationLocations)
+    console.log('IMAGE:', selectedImage)
 
     //clone events from reducer for modification
     const events = _.cloneDeep(props.observationEvent)
     const event = events.pop()
 
-    //Add observation location to rest of observation parameters
+    //Add observation location and selected image to rest of observation parameters
     const newUnit = {
       id: 'observation_' + uuid.v4(),
       ...data,
       unitGathering: {
         geometry: props.observation
       },
-      type: props.type 
+      type: props.type,
+      image: selectedImage
     }
     event.schema.gatherings[0].units.push(newUnit)
     events.push(event)
@@ -151,8 +163,8 @@ const ObservationComponent = (props: Props) => {
       <View style={Cs.observationContainer}>
         <ScrollView>
           <View style={Cs.formSaveButtonContainer}>
-            <Button title={t('attach image')} onPress={attachImage} color={Colors.positiveButton}/>
-            <Button title={t('use camera')} onPress={useCamera} color={Colors.positiveButton}/>
+            <Button title={t('attach image')} onPress={attachImage} color={Colors.positiveButton} />
+            <Button title={t('use camera')} onPress={useCamera} color={Colors.positiveButton} />
           </View>
           <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
           <View style={Cs.formContainer}>
