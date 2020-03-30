@@ -13,6 +13,10 @@ interface RootState {
   observationId: object
 }
 
+interface BasicObject {
+  [key: string]: any
+}
+
 const mapStateToProps = (state: RootState) => {
   const { observationEvent, observationId } = state
   return { observationEvent, observationId }
@@ -37,8 +41,8 @@ type Props = PropsFromRedux & {
 
 const ObservationEventComponent = (props: Props) => {
 
-  const [event, setEvent] = useState(null)
-  const [observations, setObservations] = useState([])
+  const [event, setEvent] = useState<BasicObject | null>(null)
+  const [observations, setObservations] = useState<BasicObject[]>([])
   const { t } = useTranslation()
 
   useEffect(() => {

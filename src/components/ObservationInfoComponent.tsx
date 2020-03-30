@@ -1,24 +1,32 @@
 import React from 'react'
 import { View, Text, Image } from 'react-native'
+import { connect, ConnectedProps } from 'react-redux'
+import { createSchemaObjectComponents } from '../parsers/SchemaObjectParser'
 import Cs from '../styles/ContainerStyles'
 
-type Props = {
+interface RootState {
+  schema: object
+}
+
+const mapStateToProps = (state: RootState) => {
+  const { schema } = state
+  return { schema }
+}
+
+const connector = connect(
+  mapStateToProps,
+)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+type Props = PropsFromRedux & {
   observation: Object
 }
 
 const ObservationInfoComponent = (props: Props) => {
   return (
     <View style={Cs.containerWithJustPadding}>
-      {Object.keys(props.observation).map((key) => {
-        return (
-          <View>
-            {props.observation[key] !== ''
-              ? <Text key={key}>{key}: {JSON.stringify(props.observation[key])}</Text>
-              : null
-            }
-          </View>
-        )
-      })}
+      {createSchemaObjectComponents(props.observation, props.schema.properties.gatherings.items.properties.units.items.properties)}
       {props.observation.image !== ''
         ? <Image
             source={{ uri: props.observation.image }}
@@ -30,4 +38,4 @@ const ObservationInfoComponent = (props: Props) => {
   )
 }
 
-export default ObservationInfoComponent
+export default connector(ObservationInfoComponent)
