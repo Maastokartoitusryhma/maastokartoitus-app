@@ -1,7 +1,7 @@
 import { createPicker, createArray, createInputElement } from '../builders/FormComponentBuilders'
 
 const NestObservationForm = (register: Function, setValue: Function,
-  watch: Function, errors: Object, unregister: Function, defaults: Object | undefined
+  watch: Function, errors: Object, unregister: Function, defaults: Object | undefined, t: Function
 ) => {
 
   let toReturn = []
@@ -11,13 +11,13 @@ const NestObservationForm = (register: Function, setValue: Function,
   let defaultTaxonConfidence = null
 
   const nestTypeDictionary: { [key: string]: any } = {
-    'MY.nestTypeTreeCavity' : 'Kolopesä puussa'
+    'MY.nestTypeTreeCavity' : t('MY.nestTypeTreeCavity')
   }
   const taxonConfidenceDictionary: { [key: string]: any } = {
     '' : '',
-    'MY.taxonConfidenceSure' : 'varma',
-    'MY.taxonConfidenceUnsure' : 'epävarma',
-    'MY.taxonConfidenceSubspeciesUnsure' : 'alalaji epävarma'
+    'MY.taxonConfidenceSure' : t('MY.taxonConfidenceSure'),
+    'MY.taxonConfidenceUnsure' : t('MY.taxonConfidenceUnsure'),
+    'MY.taxonConfidenceSubspeciesUnsure' : t('MY.taxonConfidenceSubspeciesUnsure')
   }
 
   if(defaults !== undefined) {
@@ -32,10 +32,10 @@ const NestObservationForm = (register: Function, setValue: Function,
   if(defaultNestCount === null || defaultNestCount === undefined) { defaultNestCount = '' }
   if(defaultTaxonConfidence === null || defaultTaxonConfidence === undefined) { defaultTaxonConfidence = '' }
 
-  toReturn.push(createPicker('Pesän tyyppi', 'nestType', defaultNestType, register, setValue, watch, errors, unregister, nestTypeDictionary))
-  toReturn.push(createInputElement('Pesän tarkenne', 'nestNotes', '', 'string', defaultNestNotes, register, setValue, watch, errors, unregister, false, undefined))
-  toReturn.push(createInputElement('Pesien/kolojen määrä', 'nestCount', '', 'integer', defaultNestCount, register, setValue, watch, errors, unregister, false, undefined))
-  toReturn.push(createPicker('Onko varmasti liito-oravan pesä?', 'taxonConfidence', defaultTaxonConfidence, register, setValue, watch, errors, unregister, taxonConfidenceDictionary))
+  toReturn.push(createPicker(t('nestType'), 'nestType', defaultNestType, register, setValue, watch, errors, unregister, nestTypeDictionary))
+  toReturn.push(createInputElement(t('nestNotes'), 'nestNotes', '', 'string', defaultNestNotes, register, setValue, watch, errors, unregister, false, undefined))
+  toReturn.push(createInputElement(t('nestCount'), 'nestCount', '', 'integer', defaultNestCount, register, setValue, watch, errors, unregister, false, undefined))
+  toReturn.push(createPicker(t('taxonConfidenceNest'), 'taxonConfidence', defaultTaxonConfidence, register, setValue, watch, errors, unregister, taxonConfidenceDictionary))
   return (toReturn)
 }
 

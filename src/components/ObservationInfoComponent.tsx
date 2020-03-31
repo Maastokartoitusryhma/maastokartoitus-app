@@ -1,16 +1,19 @@
 import React from 'react'
-import { View, Text, Image } from 'react-native'
+import { View, Image } from 'react-native'
 import { connect, ConnectedProps } from 'react-redux'
 import { createSchemaObjectComponents } from '../parsers/SchemaObjectParser'
+import i18n from '../language/i18n'
 import Cs from '../styles/ContainerStyles'
 
 interface RootState {
-  schema: object
+  schemaFi: object
+  schemaEn: object
+  schemaSv: object
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { schema } = state
-  return { schema }
+  const { schemaFi, schemaEn, schemaSv } = state
+  return { schemaFi, schemaEn, schemaSv }
 }
 
 const connector = connect(
@@ -24,9 +27,19 @@ type Props = PropsFromRedux & {
 }
 
 const ObservationInfoComponent = (props: Props) => {
+
+  let schema: object
+  if (i18n.language === 'fi') {
+    schema = props.schemaFi
+  } else if (i18n.language === 'en') {
+    schema = props.schemaEn
+  } else {
+    schema = props.schemaSv
+  }
+
   return (
     <View style={Cs.containerWithJustPadding}>
-      {createSchemaObjectComponents(props.observation, props.schema.properties.gatherings.items.properties.units.items.properties)}
+      {createSchemaObjectComponents(props.observation, schema.properties.gatherings.items.properties.units.items.properties)}
       {props.observation.image !== ''
         ? <Image
             source={{ uri: props.observation.image }}

@@ -28,6 +28,7 @@ import { GeometryCollection } from 'geojson'
 import { parseSchemaToJSONObject } from '../parsers/SchemaToJSONObject'
 import uuid from 'react-native-uuid'
 import _ from 'lodash'
+import i18n from '../language/i18n'
 
 interface RootState {
   position: LocationData
@@ -36,7 +37,9 @@ interface RootState {
   observation: LatLng
   zone: GeometryCollection
   observationEvent: any[]
-  schema: object
+  schemaFi: object
+  schemaEn: object
+  schemaSv: object
 }
 
 interface MyObject {
@@ -44,8 +47,8 @@ interface MyObject {
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, observing, observation, zone, observationEvent, schema } = state
-  return { position, path, observing, observation, zone, observationEvent, schema }
+  const { position, path, observing, observation, zone, observationEvent, schemaFi, schemaEn, schemaSv } = state
+  return { position, path, observing, observation, zone, observationEvent, schemaFi, schemaEn, schemaSv }
 }
 
 const mapDispatchToProps = {
@@ -88,6 +91,7 @@ const HomeComponent = (props: Props) => {
   useEffect(() => {
     loadRegions()
     loadObservationEvents()
+
   }, [])
 
   const loadObservationEvents =  async () => {
@@ -115,7 +119,15 @@ const HomeComponent = (props: Props) => {
   }
   
   const parseObservationEventObject = () => {
-    const fetchedSchema = _.cloneDeep(props.schema)
+    let schema: object
+    if (i18n.language === 'fi') {
+      schema = props.schemaFi
+    } else if (i18n.language === 'en') {
+      schema = props.schemaEn
+    } else {
+      schema = props.schemaSv
+    }
+    const fetchedSchema = _.cloneDeep(schema)
     if (fetchedSchema !== null) {
       //parse schema object
       const schemaObject: MyObject = {} = (parseSchemaToJSONObject(fetchedSchema.properties))
@@ -139,6 +151,11 @@ const HomeComponent = (props: Props) => {
     const observationForm = parseObservationEventObject()
     if (observationForm !== null) {
       console.log('OBSERVATION FORM: ' + JSON.stringify(observationForm))
+      const date = new Date()
+      const dateString = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + " " + date.getHours() + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + ":" + date.getSeconds()
+      console.log('DATE TEST:', dateString)
+      console.log('DATE TEST 2:', new Date(Date.now()).toString())
+      console.log('DATE TEST 3:', new Date(Date.now()).toISOString())
       observationForm.gatheringEvent.dateBegin = new Date(Date.now()).toISOString()
       const region: RegionObject | undefined = regions.find(region => region.id === selectedRegion)
       if (region) {

@@ -65,7 +65,6 @@ const ObservationEventComponent = (props: Props) => {
     return (
       <View style={Cs.singleObservationEventContainer}>
         <ScrollView>
-          <Text>ID: {event.id}</Text>
           <Text>{t('dateBegin')}: {event.schema.gatheringEvent.dateBegin}</Text>
           <Text>{t('dateEnd')}: {event.schema.gatheringEvent.dateEnd}</Text>
           <Text>{t('Zone')}: </Text>

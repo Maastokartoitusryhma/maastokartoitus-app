@@ -142,13 +142,13 @@ const ObservationComponent = (props: Props) => {
 
   const loadSchemaAndSetForm = async () => {
     if(props.type === 'observation') {
-      setForm(ObservationForm(register, setValue, watch, errors, unregister, undefined))
+      setForm(ObservationForm(register, setValue, watch, errors, unregister, undefined, t))
     } else if(props.type === 'trackObservation') {
-      setForm(TrackObservationForm(register, setValue, watch, errors, unregister, undefined))
+      setForm(TrackObservationForm(register, setValue, watch, errors, unregister, undefined, t))
     } else if(props.type === 'fecesObservation') {
-      setForm(FecesObservationForm(register, setValue, watch, errors, unregister, undefined))
+      setForm(FecesObservationForm(register, setValue, watch, errors, unregister, undefined, t))
     } else if(props.type === 'nestObservation') {
-      setForm(NestObservationForm(register, setValue, watch, errors, unregister, undefined))
+      setForm(NestObservationForm(register, setValue, watch, errors, unregister, undefined, t))
     }
   }
 

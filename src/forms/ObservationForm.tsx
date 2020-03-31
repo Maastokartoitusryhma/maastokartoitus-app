@@ -1,7 +1,7 @@
 import { createPicker, createArray, createInputElement } from '../builders/FormComponentBuilders'
 
 const ObservationForm = (register: Function, setValue: Function,
-  watch: Function, errors: Object, unregister: Function, defaults: Object | undefined
+  watch: Function, errors: Object, unregister: Function, defaults: Object | undefined, t: Function
 ) => {
   
   let toReturn = []
@@ -13,20 +13,20 @@ const ObservationForm = (register: Function, setValue: Function,
   
   const taxonConfidenceDictionary: { [key: string]: any } = {
     '' : '',
-    'MY.taxonConfidenceSure' : 'varma',
-    'MY.taxonConfidenceUnsure' : 'epävarma',
-    'MY.taxonConfidenceSubspeciesUnsure' : 'alalaji epävarma'
+    'MY.taxonConfidenceSure' : t('MY.taxonConfidenceSure'),
+    'MY.taxonConfidenceUnsure' : t('MY.taxonConfidenceUnsure'),
+    'MY.taxonConfidenceSubspeciesUnsure' : t('MY.taxonConfidenceSubspeciesUnsure')
   }
   const recordBasisDictionary: { [key: string]: any } = {
     '' : '',
-    'MY.recordBasisPreservedSpecimen' : 'Näyte',
-    'MY.recordBasisHumanObservationPhoto' : 'Valokuvattu',
-    'MY.recordBasisHumanObservationVideo' : 'Videoitu',
-    'MY.recordBasisHumanObservationIndirect' : 'Epäsuora havainto (jäljet, ulosteet, yms)'
+    'MY.recordBasisPreservedSpecimen' : t('MY.recordBasisPreservedSpecimen'),
+    'MY.recordBasisHumanObservationPhoto' : t('MY.recordBasisHumanObservationPhoto'),
+    'MY.recordBasisHumanObservationVideo' : t('MY.recordBasisHumanObservationVideo'),
+    'MY.recordBasisHumanObservationIndirect' : t('MY.recordBasisHumanObservationIndirect')
   }
   const lifeStageDictionary: { [key: string]: any } = {
-    'MY.lifeStageDead' : 'kuollut',
-    'MY.lifeStageAlive' : 'elävä'
+    'MY.lifeStageDead' : t('MY.lifeStageDead'),
+    'MY.lifeStageAlive' : t('MY.lifeStageAlive')
   }
 
   if(defaults !== undefined) {
@@ -43,11 +43,11 @@ const ObservationForm = (register: Function, setValue: Function,
   if(defaultLifeStage === null || defaultLifeStage === undefined) {defaultLifeStage = 'MY.lifeStageAlive'}
   if(defaultNotes === null || defaultNotes === undefined) {defaultNotes = ''}
 
-  toReturn.push(createPicker('Määrityksen varmuus', 'taxonConfidence', defaultTaxonConfidence, register, setValue, watch, errors, unregister, taxonConfidenceDictionary))
-  toReturn.push(createPicker('Havainnointitapa', 'recordBasis', defaultRecordBasis, register, setValue, watch, errors, unregister, recordBasisDictionary))
-  toReturn.push(createInputElement('Määrä', 'count', '', 'string', defaultCount, register, setValue, watch, errors, unregister, false, undefined))
-  toReturn.push(createPicker('Elinvaihe', 'lifeStage', defaultLifeStage, register, setValue, watch, errors, unregister, lifeStageDictionary))
-  toReturn.push(createInputElement('Lisätiedot', 'notes', '', 'string', defaultNotes, register, setValue, watch, errors, unregister, false, undefined))
+  toReturn.push(createPicker(t('taxonConfidence'), 'taxonConfidence', defaultTaxonConfidence, register, setValue, watch, errors, unregister, taxonConfidenceDictionary))
+  toReturn.push(createPicker(t('recordBasis'), 'recordBasis', defaultRecordBasis, register, setValue, watch, errors, unregister, recordBasisDictionary))
+  toReturn.push(createInputElement(t('count'), 'count', '', 'string', defaultCount, register, setValue, watch, errors, unregister, false, undefined))
+  toReturn.push(createPicker(t('lifeStage'), 'lifeStage', defaultLifeStage, register, setValue, watch, errors, unregister, lifeStageDictionary))
+  toReturn.push(createInputElement(t('notes'), 'notes', '', 'string', defaultNotes, register, setValue, watch, errors, unregister, false, undefined))
   
   return (toReturn)
 }

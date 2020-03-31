@@ -10,21 +10,25 @@ import Ts from '../styles/TextStyles'
 import storageController from '../controllers/storageController'
 import { getObservationEventSchema } from '../controllers/formController'
 import { connect, ConnectedProps } from 'react-redux'
-import { newObservationEvent, setSchema } from '../stores/observation/actions'
+import { newObservationEvent, setSchemaFi, setSchemaEn, setSchemaSv } from '../stores/observation/actions'
 
 interface RootState {
   observationEvent: any[],
-  schema: object
+  schemaFi: object
+  schemaEn: object
+  schemaSv: object
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { observationEvent, schema } = state
-  return { observationEvent, schema }
+  const { observationEvent, schemaFi, schemaEn, schemaSv } = state
+  return { observationEvent, schemaFi, schemaEn, schemaSv }
 }
 
 const mapDispatchToProps = {
   newObservationEvent,
-  setSchema
+  setSchemaFi,
+  setSchemaEn,
+  setSchemaSv
 }
 
 const connector = connect(
@@ -52,9 +56,11 @@ const LoginComponent = (props: Props) => {
   // Check if user has previously logged in, redirect to home screen if is
   const loadUserData = async () => {
     const userData = await AsyncStorage.getItem('userData')
+    console.log('USER:', userData)
     if (userData !== null) {
+      i18n.changeLanguage(JSON.parse(userData).defaultLanguage)
       await fetchObservationEvents()
-      await fetchSchemaFromServer()
+      await fetchSchemasFromServer()
       props.onSuccessfulLogin()
     }
   }
@@ -119,9 +125,13 @@ const LoginComponent = (props: Props) => {
     }
   }
 
-  const fetchSchemaFromServer = async () => {
-    const fetchedSchema: object = await getObservationEventSchema(t('language'))
-    props.setSchema(fetchedSchema)
+  const fetchSchemasFromServer = async () => {
+    const schemaInFi: object = await getObservationEventSchema('fi')
+    const schemaInEn: object = await getObservationEventSchema('en')
+    const schemaInSv: object = await getObservationEventSchema('sv')
+    props.setSchemaFi(schemaInFi)
+    props.setSchemaEn(schemaInEn)
+    props.setSchemaSv(schemaInSv)
   }
 
   return (
