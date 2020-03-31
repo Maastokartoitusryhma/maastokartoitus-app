@@ -10,7 +10,9 @@ export const NEW_OBSERVATION_EVENT ='NEW_OBSERVATION_EVENT'
 export const ALL_OBSERVATION_EVENTS = 'ALL_OBSERVATION_EVENTS'
 export const REPLACE_OBSERVATION_EVENTS = 'REPLACE_OBSERVATION_EVENTS'
 export const CLEAR_OBSERVATION_EVENTS = 'CLEAR_OBSERVATION_EVENTS'
-export const SET_SCHEMA ='SET_SCHEMA'
+export const SET_SCHEMA_FI ='SET_SCHEMA_FI'
+export const SET_SCHEMA_EN ='SET_SCHEMA_EN'
+export const SET_SCHEMA_SV ='SET_SCHEMA_SV'
 export const SET_OBSERVATION_ID = 'SET_OBSERVATION_ID'
 export const CLEAR_OBSERVATION_ID = 'CLEAR_OBSERVATION_ID'
 
@@ -59,8 +61,18 @@ interface clearObservationEvents {
   type: typeof CLEAR_OBSERVATION_EVENTS
 }
 
-interface setSchema {
-  type: typeof SET_SCHEMA
+interface setSchemaFi {
+  type: typeof SET_SCHEMA_FI
+  payload: object
+}
+
+interface setSchemaEn {
+  type: typeof SET_SCHEMA_EN
+  payload: object
+}
+
+interface setSchemaSv {
+  type: typeof SET_SCHEMA_SV
   payload: object
 }
 
@@ -83,6 +95,8 @@ export type observationActionTypes = setObservationLocation |
                                      allObservationEvents |
                                      replaceObservationEvents |
                                      clearObservationEvents |
-                                     setSchema |
+                                     setSchemaFi |
+                                     setSchemaEn |
+                                     setSchemaSv |
                                      setObservationId |
                                      clearObservationId

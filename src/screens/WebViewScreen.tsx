@@ -1,28 +1,27 @@
 import React, { Component } from 'react'
-import EditObservationComponent from '../components/EditObservationComponent'
 import Colors from '../styles/Colors'
+import WebViewComponent from '../components/WebViewComponent'
 import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
 
 type Props  = {
   navigation: NavigationStackProp<any, any>
 }
 
-export default class EditObservationScreen extends Component<NavigationStackScreenProps<Props>>  {
-
+export default class WebViewScreen extends Component<NavigationStackScreenProps<Props>>  {
   static navigationOptions = ({ screenProps }: any) => ({
-    title: screenProps.t('edit observation'),
+    title: screenProps.t('login'),
     headerStyle: {
       backgroundColor: Colors.headerBackground
     },
     headerTintColor: Colors.white
   })
 
+  
+
   render() {
-    const { navigate } = this.props.navigation
     return (
-      <EditObservationComponent 
-        onPress={() => navigate('Home')}
-        onEditLocation={() => navigate('Map')}
+      <WebViewComponent
+        loginURL={this.props.navigation.state.params.loginURL}
       />
     )
   }

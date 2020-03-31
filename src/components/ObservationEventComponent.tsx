@@ -13,6 +13,10 @@ interface RootState {
   observationId: object
 }
 
+interface BasicObject {
+  [key: string]: any
+}
+
 const mapStateToProps = (state: RootState) => {
   const { observationEvent, observationId } = state
   return { observationEvent, observationId }
@@ -38,8 +42,8 @@ type Props = PropsFromRedux & {
 
 const ObservationEventComponent = (props: Props) => {
 
-  const [event, setEvent] = useState(null)
-  const [observations, setObservations] = useState([])
+  const [event, setEvent] = useState<BasicObject | null>(null)
+  const [observations, setObservations] = useState<BasicObject[]>([])
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -62,7 +66,6 @@ const ObservationEventComponent = (props: Props) => {
     return (
       <View style={Cs.singleObservationEventContainer}>
         <ScrollView>
-          <Text>ID: {event.id}</Text>
           <Text>{t('dateBegin')}: {event.schema.gatheringEvent.dateBegin}</Text>
           <Text>{t('dateEnd')}: {event.schema.gatheringEvent.dateEnd}</Text>
           <Text>{t('Zone')}: </Text>
@@ -78,7 +81,7 @@ const ObservationEventComponent = (props: Props) => {
           {observations.map(observation =>
             <View>
               <ObservationInfoComponent key={observation.id} observation={observation} />
-              <Button title={'Muokkaa havaintoa'} onPress={() => {
+              <Button title={t('edit observation')} onPress={() => {
                 const id = {
                   eventId: event.id,
                   unitId: observation.id

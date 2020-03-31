@@ -9,7 +9,9 @@ import { observationActionTypes,
         TOGGLE_OBSERVING,
         NEW_OBSERVATION_EVENT,
         ALL_OBSERVATION_EVENTS,
-        SET_SCHEMA,
+        SET_SCHEMA_FI,
+        SET_SCHEMA_EN,
+        SET_SCHEMA_SV,
         REPLACE_OBSERVATION_EVENTS,
         CLEAR_OBSERVATION_EVENTS,
         SET_OBSERVATION_ID,
@@ -61,8 +63,18 @@ export const clearObservationEvents = () : observationActionTypes => ({
   type: CLEAR_OBSERVATION_EVENTS
 })
 
-export const setSchema = (schema : object) : observationActionTypes => ({
-  type: SET_SCHEMA,
+export const setSchemaFi = (schema : object) : observationActionTypes => ({
+  type: SET_SCHEMA_FI,
+  payload: schema
+})
+
+export const setSchemaEn = (schema : object) : observationActionTypes => ({
+  type: SET_SCHEMA_EN,
+  payload: schema
+})
+
+export const setSchemaSv = (schema : object) : observationActionTypes => ({
+  type: SET_SCHEMA_SV,
   payload: schema
 })
 

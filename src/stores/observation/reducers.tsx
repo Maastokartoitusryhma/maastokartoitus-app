@@ -6,7 +6,9 @@ import { observationActionTypes,
         TOGGLE_OBSERVING,
         NEW_OBSERVATION_EVENT,
         ALL_OBSERVATION_EVENTS,
-        SET_SCHEMA,
+        SET_SCHEMA_FI,
+        SET_SCHEMA_EN,
+        SET_SCHEMA_SV,
         CLEAR_LOCATIONS,
         REPLACE_OBSERVATION_EVENTS,
         CLEAR_OBSERVATION_EVENTS,
@@ -67,11 +69,29 @@ const observationEventsReducer = (state: any[] = [], action : observationActionT
   }
 }
 
-const schemaReducer = (state = null, action : observationActionTypes) => {
+const schemaFiReducer = (state = null, action : observationActionTypes) => {
   switch (action.type) {
-    case SET_SCHEMA:
+    case SET_SCHEMA_FI:
       return action.payload
-    default: 
+    default:
+      return state
+  }
+}
+
+const schemaEnReducer = (state = null, action : observationActionTypes) => {
+  switch (action.type) {
+    case SET_SCHEMA_EN:
+      return action.payload
+    default:
+      return state
+  }
+}
+
+const schemaSvReducer = (state = null, action : observationActionTypes) => {
+  switch (action.type) {
+    case SET_SCHEMA_SV:
+      return action.payload
+    default:
       return state
   }
 }
@@ -92,6 +112,8 @@ export {
   observationLocationsReducer,
   observingReducer, 
   observationEventsReducer,
-  schemaReducer,
+  schemaFiReducer,
+  schemaEnReducer,
+  schemaSvReducer,
   observationIdReducer, 
 }

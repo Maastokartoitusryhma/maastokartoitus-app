@@ -7,6 +7,7 @@ import MapScreen from '../screens/MapScreen'
 import ObservationScreen from '../screens/ObservationScreen'
 import ObservationEventScreen from '../screens/ObservationEventScreen'
 import LoginScreen from '../screens/LoginScreen'
+import WebViewScreen from '../screens/WebViewScreen';
 import EditObservationScreen from '../screens/EditObservationScreen'
 import EditObservationEventScreen from '../screens/EditObservationEventScreen'
 
@@ -18,7 +19,8 @@ const MainNavigator = createStackNavigator(
     Observation: ObservationScreen,
     ObservationEvent: ObservationEventScreen,
     EditObservation: EditObservationScreen,
-    EditObservationEvent: EditObservationEventScreen
+    EditObservationEvent: EditObservationEventScreen,
+    WebView: WebViewScreen
   },
   {
     initialRouteName: 'Login'

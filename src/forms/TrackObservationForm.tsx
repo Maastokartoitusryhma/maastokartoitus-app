@@ -1,7 +1,7 @@
 import { createPicker, createArray, createInputElement } from '../builders/FormComponentBuilders'
 
 const TrackObservationForm = (register: Function, setValue: Function,
-  watch: Function, errors: Object, unregister: Function, defaults: Object | undefined
+  watch: Function, errors: Object, unregister: Function, defaults: Object | undefined, t: Function
 ) => {
 
   let toReturn = []
@@ -9,10 +9,10 @@ const TrackObservationForm = (register: Function, setValue: Function,
   let defaultNotes = null
 
   const indirectObservationTypeDictionary: { [key: string]: any } = {
-    'MY.indirectObservationTypeSnowTracks' : 'Lumijälkiä',
-    'MY.indirectObservationTypeUrine' : 'Virtsajälkiä',
-    'MY.indirectObservationTypeFeasting' : 'Syönnöksiä',
-    'MY.indirectObservationTypeFoodStock' : 'Ruokavarasto'
+    'MY.indirectObservationTypeSnowTracks' : t('MY.indirectObservationTypeSnowTracks'),
+    'MY.indirectObservationTypeUrine' : t('MY.indirectObservationTypeUrine'),
+    'MY.indirectObservationTypeFeasting' : t('MY.indirectObservationTypeFeasting'),
+    'MY.indirectObservationTypeFoodStock' : t('MY.indirectObservationTypeFoodStock')
   }
 
   if(defaults !== undefined) {
@@ -23,8 +23,8 @@ const TrackObservationForm = (register: Function, setValue: Function,
   if(defaultIndirectObservationType === null) { defaultIndirectObservationType = 'MY.indirectObservationTypeSnowTracks' }
   if(defaultNotes === null) { defaultNotes = '' }
 
-  toReturn.push(createPicker('Jälkiä', 'indirectObservationType', defaultIndirectObservationType , register, setValue, watch, errors, unregister, indirectObservationTypeDictionary))
-  toReturn.push(createInputElement('Lisätiedot', 'notes', '', 'string', defaultNotes, register, setValue, watch, errors, unregister, false, undefined))
+  toReturn.push(createPicker(t('indirectObservationType'), 'indirectObservationType', defaultIndirectObservationType , register, setValue, watch, errors, unregister, indirectObservationTypeDictionary))
+  toReturn.push(createInputElement(t('notes'), 'notes', '', 'string', defaultNotes, register, setValue, watch, errors, unregister, false, undefined))
   return (toReturn)
 }
 

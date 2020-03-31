@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, ScrollView, Button, Alert } from 'react-native'
+import { View, Text, ScrollView, Button, Alert, Image } from 'react-native'
 import { useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -16,6 +16,7 @@ import Colors from '../styles/Colors'
 import Modal from 'react-native-modal'
 import _ from 'lodash'
 import uuid from 'react-native-uuid'
+import * as ImagePicker from 'expo-image-picker'
 
 interface RootState {
   observation: Point
@@ -53,11 +54,43 @@ const ObservationComponent = (props: Props) => {
     initForm()
   }, [])
 
+  let selectedImage : string = ''
+
   //For react-hook-form
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
   const { t } = useTranslation()
   const [form, setForm] = useState()
   const [showModal, setShowModal] = useState(false)
+
+  const attachImage = async () => {
+    let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync()
+    if (permissionResult.granted === false) {
+      return false
+    }
+
+    let pickerResult = await ImagePicker.launchImageLibraryAsync()
+    let succeeded : boolean = !pickerResult.cancelled
+    if (succeeded) {
+      selectedImage = pickerResult.uri
+      console.log("selectedImage: " + selectedImage)
+    }
+    return succeeded
+  }
+
+  const useCamera = async () => {
+    let permissionResult = await ImagePicker.requestCameraPermissionsAsync()
+    if (permissionResult.granted === false) {
+      return false
+    }
+
+    let pickerResult = await ImagePicker.launchCameraAsync()
+    let succeeded : boolean = !pickerResult.cancelled
+    if (succeeded) {
+      selectedImage = pickerResult.uri
+      console.log("selectedImage: " + selectedImage)
+    }
+    return succeeded
+  }
 
   const onSubmit = (data: { [key: string]: any }) => {
     if(!('taxonConfidence' in data)) {
@@ -77,19 +110,21 @@ const ObservationComponent = (props: Props) => {
     console.log('REGISTER DATA:', JSON.stringify(data))
     console.log('EVENT BEFORE:', props.observationEvent)
     console.log('LOCATIONS', props.observationLocations)
+    console.log('IMAGE:', selectedImage)
 
     //clone events from reducer for modification
     const events = _.cloneDeep(props.observationEvent)
     const event = events.pop()
 
-    //Add observation location to rest of observation parameters
+    //Add observation location and selected image to rest of observation parameters
     const newUnit = {
       id: 'observation_' + uuid.v4(),
       ...data,
       unitGathering: {
         geometry: props.observation
       },
-      type: props.type 
+      type: props.type,
+      image: selectedImage
     }
     event.schema.gatherings[0].units.push(newUnit)
     events.push(event)
@@ -107,13 +142,13 @@ const ObservationComponent = (props: Props) => {
 
   const initForm = async () => {
     if(props.type === 'observation') {
-      setForm(ObservationForm(register, setValue, watch, errors, unregister, undefined))
+      setForm(ObservationForm(register, setValue, watch, errors, unregister, undefined, t))
     } else if(props.type === 'trackObservation') {
-      setForm(TrackObservationForm(register, setValue, watch, errors, unregister, undefined))
+      setForm(TrackObservationForm(register, setValue, watch, errors, unregister, undefined, t))
     } else if(props.type === 'fecesObservation') {
-      setForm(FecesObservationForm(register, setValue, watch, errors, unregister, undefined))
+      setForm(FecesObservationForm(register, setValue, watch, errors, unregister, undefined, t))
     } else if(props.type === 'nestObservation') {
-      setForm(NestObservationForm(register, setValue, watch, errors, unregister, undefined))
+      setForm(NestObservationForm(register, setValue, watch, errors, unregister, undefined, t))
     }
   }
 
@@ -123,6 +158,10 @@ const ObservationComponent = (props: Props) => {
     return (
       <View style={Cs.observationContainer}>
         <ScrollView>
+          <View style={Cs.formSaveButtonContainer}>
+            <Button title={t('attach image')} onPress={attachImage} color={Colors.positiveButton} />
+            <Button title={t('use camera')} onPress={useCamera} color={Colors.positiveButton} />
+          </View>
           <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
           <View style={Cs.formContainer}>
             {form}
