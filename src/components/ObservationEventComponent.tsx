@@ -33,6 +33,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
   id: string
   onPressObservation: () => void
+  onPressObservationEvent: () => void
 }
 
 const ObservationEventComponent = (props: Props) => {
@@ -65,6 +66,14 @@ const ObservationEventComponent = (props: Props) => {
           <Text>{t('dateBegin')}: {event.schema.gatheringEvent.dateBegin}</Text>
           <Text>{t('dateEnd')}: {event.schema.gatheringEvent.dateEnd}</Text>
           <Text>{t('Zone')}: </Text>
+          <Button title={'Muokkaa havaintotapahtumaa'} onPress={() => {
+            const id = {
+              eventId: event.id,
+              unitId: ''
+            }
+            props.setObservationId(id)
+            props.onPressObservationEvent()
+          }} color={Colors.positiveButton}/>
           <Text style={Ts.observationText}>{t('Observations')}:</Text>
           {observations.map(observation =>
             <View>

@@ -28,7 +28,7 @@ export const createPicker = (
 
 export const createArray = (
   title: string, objectTitle: string, parentObjectTitle: string, type: string,
-  defaultValue: string, register: Function, setValue: Function,
+  defaultValue: Array<Object>|undefined, register: Function, setValue: Function,
   watch: Function, errors: Object, unregister: Function
   ) => {
   const key = title + ' ' + uuid.v4()
@@ -42,10 +42,14 @@ export const createArray = (
     register({ name: parentObjectTitle }) 
     setValue(parentObjectTitle, []) // Adds empty array to register
   }
-  const inputElements = [createInputElement(
-    key, objectTitle, parentObjectTitle, type, defaultValue,
-    register, setValue, watch, errors, unregister, true, callbackFunction
-  )]
+
+  let inputElements: Array<Object> = []
+  if(defaultValue) {
+    defaultValue.forEach((value) => inputElements.push(createInputElement(
+      key, objectTitle, parentObjectTitle, type, value,
+      register, setValue, watch, errors, unregister, true, callbackFunction)))
+  }
+
   return <FormArrayComponent
     key={title} title={title} objectTitle={objectTitle} parentObjectTitle={parentObjectTitle}
     inputType={type} register={register} setValue={setValue} watch={watch} errors={errors}
@@ -59,8 +63,6 @@ export const createInputElement = (
   setValue: Function, watch: Function, errors: Object,
   unregister: Function, isArrayItem: boolean, callbackFunction: Function|undefined
   ) => {
-  
-  console.log('BUILDER DEFAULT VALUE: ', defaultValue)
   
   if (type === 'string') {
     return <FormInputComponent

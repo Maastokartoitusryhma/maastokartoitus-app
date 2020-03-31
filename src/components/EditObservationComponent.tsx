@@ -50,13 +50,17 @@ const EditObservationComponent = (props: Props) => {
   const [ observations, setObservations ] = useState(null)
   const [ indexOfEditedObservation, setIndexOfEditedObservation ] = useState(null)
   const [ observation, setObservation ] = useState(null)
+  //For react-hook-form
+  const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
+  const { t } = useTranslation()
+  const [form, setForm] = useState()
+  const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
-    initVariables()
-    loadSchemaAndSetForm()
+    init()
   }, [])
 
-  const initVariables = () => {
+  const init = () => {
     //clone events from reducer for modification
     const eventClone = _.cloneDeep(props.observationEvent)
     setEvents(eventClone)
@@ -72,13 +76,18 @@ const EditObservationComponent = (props: Props) => {
     setIndexOfEditedObservation(observationIndex)
     const observationClone = observationsClone[observationIndex]
     setObservation(observationClone)
-  }
 
-  //For react-hook-form
-  const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
-  const { t } = useTranslation()
-  const [form, setForm] = useState()
-  const [showModal, setShowModal] = useState(false)
+    //set the form
+    if(observationClone.type === 'observation') {
+      setForm(ObservationForm(register, setValue, watch, errors, unregister, observationClone))
+    } else if(observationClone.type === 'trackObservation') {
+      setForm(TrackObservationForm(register, setValue, watch, errors, unregister, observationClone))
+    } else if(observationClone.type === 'fecesObservation') {
+      setForm(FecesObservationForm(register, setValue, watch, errors, unregister, observationClone))
+    } else if(observationClone.type === 'nestObservation') {
+      setForm(NestObservationForm(register, setValue, watch, errors, unregister, observationClone))
+    }
+  }
 
   const onSubmit = (data: { [key: string]: any }) => {
     if(!('taxonConfidence' in data)) {
@@ -94,9 +103,6 @@ const EditObservationComponent = (props: Props) => {
       data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
     }
 
-    console.log('REGISTER DATA:', JSON.stringify(data))
-    console.log('EVENT BEFORE:', props.observationEvent)
-
     //replace the data of the unit that's being edited while keeping its id, unitGathering and type values
     const editedUnit = {
       id: observation.id,
@@ -109,28 +115,13 @@ const EditObservationComponent = (props: Props) => {
 
     //replace events with modified list
     props.replaceObservationEvents(events)
-    
-    console.log('EVENT AFTER:', props.observationEvent)
 
     storageController.save('observationEvents', events)
     props.clearObservationId()
     setShowModal(true)
   }
 
-  const loadSchemaAndSetForm = async () => {
-    if(observation.type === 'observation') {
-      setForm(ObservationForm(register, setValue, watch, errors, unregister, observation))
-    } else if(observation.type === 'trackObservation') {
-      setForm(TrackObservationForm(register, setValue, watch, errors, unregister, observation))
-    } else if(observation.type === 'fecesObservation') {
-      setForm(FecesObservationForm(register, setValue, watch, errors, unregister, observation))
-    } else if(observation.type === 'nestObservation') {
-      setForm(NestObservationForm(register, setValue, watch, errors, unregister, observation))
-    }
-  }
-
   if (form === undefined) {
-    loadSchemaAndSetForm()
     return <View><Text>Ladataan...</Text></View>
   } else {
     return (

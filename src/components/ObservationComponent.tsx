@@ -50,7 +50,7 @@ const ObservationComponent = (props: Props) => {
 
   useEffect(() => {
     props.addToObservationLocations(props.observation)
-    loadSchemaAndSetForm()
+    initForm()
   }, [])
 
   //For react-hook-form
@@ -105,7 +105,7 @@ const ObservationComponent = (props: Props) => {
     setShowModal(true)
   }
 
-  const loadSchemaAndSetForm = async () => {
+  const initForm = async () => {
     if(props.type === 'observation') {
       setForm(ObservationForm(register, setValue, watch, errors, unregister, undefined))
     } else if(props.type === 'trackObservation') {
