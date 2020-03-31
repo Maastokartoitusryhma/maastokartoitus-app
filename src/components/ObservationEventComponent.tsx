@@ -79,7 +79,7 @@ const ObservationEventComponent = (props: Props) => {
           }} color={Colors.positiveButton}/>
           <Text style={Ts.observationText}>{t('Observations')}:</Text>
           {observations.map(observation =>
-            <View>
+            <View key={observation.id}>
               <ObservationInfoComponent key={observation.id} observation={observation} />
               <Button title={t('edit observation')} onPress={() => {
                 const id = {
