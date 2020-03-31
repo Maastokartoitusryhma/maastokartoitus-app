@@ -41,5 +41,8 @@
   "feces": "avföring",
   "nest": "bo",
   "observation saved": "Observationen sparades!",
-  "login text": "Logga in för att använda applikationen."
+  "login text": "Logga in för att använda applikationen.",
+  "edit observation": "Redigera observationen",
+  "edit location": "Förändra platsen",
+  "cancel": "Avbryt"
 }

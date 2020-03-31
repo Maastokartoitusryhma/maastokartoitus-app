@@ -43,5 +43,8 @@
   "feces": "papana",
   "nest": "pesä",
   "observation saved": "Havainnon tallentaminen onnistui!",
-  "login text": "Käyttääksesi sovellusta, sinun tulee kirjautua sisään."
+  "login text": "Käyttääksesi sovellusta, sinun tulee kirjautua sisään.",
+  "edit observation": "Muokkaa havaintoa",
+  "edit location": "Muuta sijaintia",
+  "cancel": "Peruuta"
 }

@@ -225,9 +225,9 @@ const MapComponent = (props: Props) => {
           {props.editing ?
             <>
               <View style={Cs.observationTypeButton}>
-                <Button title = {t('submit')} onPress = {() => submitEdit()}/>
+                <Button title = {t('save')} onPress = {() => submitEdit()}/>
               </View>
-              <View>
+              <View style={Cs.observationTypeButton}>
                 <Button title = {t('cancel')} onPress = {() => cancelEdit()}/>
               </View>
             </> :

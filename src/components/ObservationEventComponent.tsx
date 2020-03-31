@@ -73,7 +73,7 @@ const ObservationEventComponent = (props: Props) => {
           {observations.map(observation =>
             <View>
               <ObservationInfoComponent key={observation.id} observation={observation} />
-              <Button title={'Muokkaa havaintoa'} onPress={() => {
+              <Button title={t('edit observation')} onPress={() => {
                 const id = {
                   eventId: event.id,
                   unitId: observation.id

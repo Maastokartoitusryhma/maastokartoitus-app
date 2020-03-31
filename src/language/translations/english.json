@@ -43,6 +43,8 @@
   "feces": "feces",
   "nest": "nest",
   "observation saved": "Observation was saved successfully!",
-  "login text": "You need to log in to use the application."
-
+  "login text": "You need to log in to use the application.",
+  "edit observation": "Edit observation",
+  "edit location": "Change location",
+  "cancel": "Cancel"
 }

@@ -165,7 +165,7 @@ const EditObservationComponent = (props: Props) => {
             {form}
           </View>
           <View style={Cs.formSaveButtonContainer}>
-            <Button title={t('edit observation')} onPress={handleSubmit(onSubmit)} color={Colors.positiveButton}/>
+            <Button title={t('save')} onPress={handleSubmit(onSubmit)} color={Colors.positiveButton}/>
           </View>
           <Modal isVisible={showModal}>
             <View style={Cs.observationAddModal}>
