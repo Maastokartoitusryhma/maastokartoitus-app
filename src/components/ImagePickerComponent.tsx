@@ -52,6 +52,10 @@ const ImagePickerComponent = (props: Props) => {
     return attachImage(true)
   }
 
+  const removeImage = () => {
+    props.setImage('')
+  }
+
   return (
     <View style={Cs.formSaveButtonContainer}>
       <Button title={t('attach image')} onPress={imageFromLibrary} color={Colors.positiveButton} />
@@ -62,6 +66,12 @@ const ImagePickerComponent = (props: Props) => {
             source={{ uri: props.image }}
             style={{ width: 100, height: 100 }}
           />
+        :
+          null
+      }
+      { props.image !== ''
+        ?
+          <Button title={t('remove image')} onPress={removeImage} color={Colors.positiveButton} />
         :
           null
       }
