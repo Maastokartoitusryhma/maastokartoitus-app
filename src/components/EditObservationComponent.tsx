@@ -17,6 +17,8 @@ import Ts from '../styles/TextStyles'
 import Colors from '../styles/Colors'
 import Modal from 'react-native-modal'
 import _ from 'lodash'
+import ImagePickerComponent from './ImagePickerComponent'
+
 
 interface BasicObject {
   [key: string]: any
@@ -61,6 +63,8 @@ const EditObservationComponent = (props: Props) => {
   const [ form, setForm ] = useState<any | null>(null)
   const [ observation, setObservation ] = useState<BasicObject | null>(null)
   const [ events, setEvents ] = useState<any[]>([])
+  const [ image, setImage ] = useState<string>('')
+
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
   const { t } = useTranslation()
 
@@ -82,6 +86,8 @@ const EditObservationComponent = (props: Props) => {
     setIndexOfEditedObservation(observationIndex)
     const observationClone = observationsClone[observationIndex]
     setObservation(observationClone)
+    const imageClone = observationsClone[observationIndex].image
+    setImage(imageClone)
   }
 
 
@@ -99,6 +105,8 @@ const EditObservationComponent = (props: Props) => {
       if (observation.type === 'fecesObservation') {
         data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
       }
+
+      console.log('data.image = ', data.image)
       
       //console.log('REGISTER DATA:', JSON.stringify(data))
       //console.log('EVENT BEFORE:', props.observationEvent)
@@ -177,6 +185,7 @@ const EditObservationComponent = (props: Props) => {
     return (
       <View style={Cs.observationContainer}>
         <ScrollView>
+          <ImagePickerComponent image={image} setImage={setImage} />
           <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
           <View style={Cs.buttonContainer}>
             <Button title={t('edit location')} onPress={() => handleChangeToMap()}></Button>
