@@ -92,15 +92,19 @@ const ObservationComponent = (props: Props) => {
   }
 
   const onSubmit = (data: { [key: string]: any }) => {
+    //all observations must have taxon confidence field so it is added here if it's missing
     if(!('taxonConfidence' in data)) {
       data['taxonConfidence'] = 'MY.taxonConfidenceSure'
     }
+    //all observations must have the flying squirrel taxon id so it is added here if it's missing
     if(!('identifications' in data)) {
       data['identifications'] = [{'taxonID': 'MX.48243'}]
     }
+    //record basis is indirect observation by default
     if(!('recordBasis' in data)) {
       data['recordBasis'] = 'MY.recordBasisHumanObservationIndirect'
     }
+    //indirect observation type is feces by default if the observation type is feces
     if(props.type === 'fecesObservation') {
       data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
     }
@@ -115,7 +119,7 @@ const ObservationComponent = (props: Props) => {
     const events = _.cloneDeep(props.observationEvent)
     const event = events.pop()
 
-    //Add observation location and image to rest of observation parameters
+    //Add observation location, type and image to rest of observation parameters
     const newUnit = {
       id: 'observation_' + uuid.v4(),
       ...data,
@@ -128,14 +132,13 @@ const ObservationComponent = (props: Props) => {
     event.schema.gatherings[0].units.push(newUnit)
     events.push(event)
 
-    //replace events with modified list
+    //replace events with the modified copy
     props.replaceObservationEvents(events)
+
     console.log('EVENT AFTER:', props.observationEvent)
 
-    props.clearObservationLocation()
-
-    //AsyncStorage
     storageController.save('observationEvents', events)
+    props.clearObservationLocation()
     setShowModal(true)
   }
 
