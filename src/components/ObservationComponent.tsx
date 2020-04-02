@@ -5,7 +5,7 @@ import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Point } from 'geojson'
 import storageController from '../controllers/storageController'
-import { replaceObservationEvents, clearObservationLocation, addToObservationLocations, removeFromObservationLocations } from '../stores/observation/actions'
+import { replaceObservationEvents, clearObservationLocation, removeFromObservationLocations } from '../stores/observation/actions'
 import ObservationForm from '../forms/ObservationForm'
 import TrackObservationForm from '../forms/TrackObservationForm'
 import FecesObservationForm from '../forms/FecesObservationForm'
@@ -32,7 +32,6 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = {
   replaceObservationEvents,
   clearObservationLocation,
-  addToObservationLocations,
   removeFromObservationLocations
 }
 
@@ -50,7 +49,6 @@ type Props = PropsFromRedux & {
 const ObservationComponent = (props: Props) => {
 
   useEffect(() => {
-    props.addToObservationLocations(props.observation)
     initForm()
   }, [])
 

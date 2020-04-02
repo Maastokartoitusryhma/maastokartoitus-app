@@ -1,15 +1,12 @@
 import { observationActionTypes, 
         SET_OBSERVATION,
         CLEAR_OBSERVATION,
-        ADD_TO_LOCATIONS,
-        REMOVE_FROM_LOCATIONS,
         TOGGLE_OBSERVING,
         NEW_OBSERVATION_EVENT,
         ALL_OBSERVATION_EVENTS,
         SET_SCHEMA_FI,
         SET_SCHEMA_EN,
         SET_SCHEMA_SV,
-        CLEAR_LOCATIONS,
         REPLACE_OBSERVATION_EVENTS,
         CLEAR_OBSERVATION_EVENTS,
         SET_OBSERVATION_ID,
@@ -23,21 +20,6 @@ const observationReducer = (state = null, action : observationActionTypes) => {
       return action.payload
     case CLEAR_OBSERVATION:
       return null
-    default:
-      return state
-  }
-}
-
-const observationLocationsReducer = (state: Point[] = [], action : observationActionTypes) => {
-  switch (action.type) {
-    case ADD_TO_LOCATIONS:
-      const newState = [...state, action.payload]
-      return newState
-    case REMOVE_FROM_LOCATIONS:
-      const filteredState = state.filter(p => p !== action.payload)
-      return filteredState
-      case CLEAR_LOCATIONS:
-      return []
     default:
       return state
   }
@@ -109,7 +91,6 @@ const observationIdReducer = (state = null, action : observationActionTypes) => 
 
 export { 
   observationReducer, 
-  observationLocationsReducer,
   observingReducer, 
   observationEventsReducer,
   schemaFiReducer,

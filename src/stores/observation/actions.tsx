@@ -27,20 +27,6 @@ export const clearObservationLocation = () : observationActionTypes => ({
   type: CLEAR_OBSERVATION
 })
 
-export const addToObservationLocations = (point : Point | null) : observationActionTypes => ({
-  type: ADD_TO_LOCATIONS,
-  payload: point
-})
-
-export const removeFromObservationLocations = (point: Point | null ) : observationActionTypes => ({
-  type: REMOVE_FROM_LOCATIONS,
-  payload: point
-})
-
-export const clearObservationLocations = () : observationActionTypes => ({
-  type: CLEAR_LOCATIONS
-})
-
 export const toggleObserving = () : observationActionTypes => ({
   type: TOGGLE_OBSERVING
 })

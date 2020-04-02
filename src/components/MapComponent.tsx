@@ -10,7 +10,6 @@ import Geojson from 'react-native-typescript-geojson'
 import { 
   setObservationLocation, 
   clearObservationLocation, 
-  addToObservationLocations,
   removeFromObservationLocations
 } from '../stores/observation/actions' 
 import {
@@ -33,7 +32,6 @@ interface RootState {
   region: Region
   observation: Point
   observationEvent: Object[]
-  observationLocations: Point[]
   zone: GeometryCollection
   centered: boolean
   maptype: 'topographic' | 'satellite'
@@ -41,14 +39,13 @@ interface RootState {
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, region, observation, observationEvent, observationLocations, zone, centered, maptype, editing } = state
-  return { position, path, region, observation, observationEvent, observationLocations, zone, centered, maptype, editing }
+  const { position, path, region, observation, observationEvent, zone, centered, maptype, editing } = state
+  return { position, path, region, observation, observationEvent, zone, centered, maptype, editing }
 }
 
 const mapDispatchToProps = {
   setRegion,
   setObservationLocation,
-  addToObservationLocations,
   removeFromObservationLocations,
   clearObservationLocation,
   toggleCentered,
@@ -230,7 +227,7 @@ const MapComponent = (props: Props) => {
 
     const units = props.observationEvent[props.observationEvent.length - 1]
                   .schema.gatherings[0].units
-    return units.map(unit => {
+    return units.map((unit: Object) => {
       const geometry = unit.unitGathering.geometry
       let color      
       switch (unit.type) {
