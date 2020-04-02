@@ -19,9 +19,12 @@ export default class WebViewScreen extends Component<NavigationStackScreenProps<
   
 
   render() {
+    const { navigate } = this.props.navigation
+
     return (
       <WebViewComponent
         loginURL={this.props.navigation.state.params.loginURL}
+        onTimeout = {() => navigate('Login')}
       />
     )
   }
