@@ -9,5 +9,9 @@ export default {
   positiveButton:       '#5CB85C',
   negativeButton:       '#D9534F',
   inputBorder:          '#DEDEDE',
-  blueBackground:       '#D9EDF7'
+  blueBackground:       '#D9EDF7',
+  obsColor:             '#0000CD',
+  trackColor:           '#FFD700',
+  fecesColor:           '#7CFC00',
+  nestColor:            '#800080',
 }
