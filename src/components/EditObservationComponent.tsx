@@ -65,13 +65,10 @@ const EditObservationComponent = (props: Props) => {
   const { t } = useTranslation()
 
   useEffect(() => {
-    initVariables()
-    loadSchemaAndSetForm()
+    init()
   }, [])
 
-  
-
-  const initVariables = async () => {
+  const init = () => {
     //clone events from reducer for modification
     const eventsClone: any[] = _.cloneDeep(props.observationEvent)
     setEvents(eventsClone)

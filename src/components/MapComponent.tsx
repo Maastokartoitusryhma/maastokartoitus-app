@@ -10,7 +10,6 @@ import Geojson from 'react-native-typescript-geojson'
 import { 
   setObservationLocation, 
   clearObservationLocation, 
-  addToObservationLocations,
   removeFromObservationLocations
 } from '../stores/observation/actions' 
 import {
@@ -32,7 +31,7 @@ interface RootState {
   path: LocationData[]
   region: Region
   observation: Point
-  observationLocations: Point[]
+  observationEvent: Object[]
   zone: GeometryCollection
   centered: boolean
   maptype: 'topographic' | 'satellite'
@@ -40,14 +39,13 @@ interface RootState {
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, region, observation, observationLocations, zone, centered, maptype, editing } = state
-  return { position, path, region, observation, observationLocations, zone, centered, maptype, editing }
+  const { position, path, region, observation, observationEvent, zone, centered, maptype, editing } = state
+  return { position, path, region, observation, observationEvent, zone, centered, maptype, editing }
 }
 
 const mapDispatchToProps = {
   setRegion,
   setObservationLocation,
-  addToObservationLocations,
   removeFromObservationLocations,
   clearObservationLocation,
   toggleCentered,
@@ -156,6 +154,7 @@ const MapComponent = (props: Props) => {
     props.onPressEditing()
   }
 
+  //draws user position to map
   const locationOverlay = () => (props.position !== null ? (
     <Marker
       onPress={(event) => markObservation(event.nativeEvent.coordinate)}
@@ -173,6 +172,7 @@ const MapComponent = (props: Props) => {
     : null
   )
 
+  //draws user path to map
   const pathOverlay = () => (props.path.length !== 1 ?
     <Polyline
       coordinates = { props.path.map((location: LocationData) => ({
@@ -186,6 +186,7 @@ const MapComponent = (props: Props) => {
     : null
   )
 
+  //draws currently selected point to map
   const targetOverlay  = () => (props.observation ?
     <Geojson 
       geojson = {wrapGeometryInFC(props.observation)}
@@ -193,6 +194,7 @@ const MapComponent = (props: Props) => {
     : null
   )
 
+  //draws observation zone to map
   const zoneOverlay = () => (props.zone ?
     <Geojson 
       geojson = {convertGC2FC(props.zone)}
@@ -204,6 +206,7 @@ const MapComponent = (props: Props) => {
     : null
   )
 
+  //if topomap is selected draws its tiles on map
   const tileOverlay = () => (props.maptype === 'topographic' ?
       <UrlTile
         urlTemplate = {urlTemplate}
@@ -212,11 +215,47 @@ const MapComponent = (props: Props) => {
     : null
   )
 
-  const observationLocationsOverlay = () => (
-    props.observationLocations.map(location =>
-      <Geojson key={uuid.v4()} geojson={wrapGeometryInFC(location)} />
-    )
-  )
+  //draws past obserations in same gatheringevent to map
+  const observationLocationsOverlay = () => {
+    if (
+      props.observationEvent.length <= 0 || 
+      props.observationEvent[props.observationEvent.length - 1]
+      .schema.gatherings[0].units.length <= 0
+    ) {
+      return null
+    }
+
+    const units = props.observationEvent[props.observationEvent.length - 1]
+                  .schema.gatherings[0].units
+    return units.map((unit: Object) => {
+      const geometry = unit.unitGathering.geometry
+      let color      
+      switch (unit.type) {
+        case 'observation':
+          color = Colors.obsColor
+          break
+        case 'trackObservation':
+          color = Colors.trackColor
+          break
+        case 'fecesObservation':
+          color = Colors.fecesColor
+          break
+        case 'nestObservation':
+          color = Colors.nestColor
+          break
+        default:
+          color = '#000000'
+      }
+
+      return(
+        <Geojson 
+          key={uuid.v4()} 
+          geojson={wrapGeometryInFC(unit.unitGathering.geometry)}
+          pinColor={color}
+        />
+      )
+    })
+  }
 
   const observationButtonsOverlay = () => (        
     <View style = {Cs.observationTypeButtonsContainer}>

@@ -5,7 +5,7 @@ import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Point } from 'geojson'
 import storageController from '../controllers/storageController'
-import { replaceObservationEvents, clearObservationLocation, addToObservationLocations, removeFromObservationLocations } from '../stores/observation/actions'
+import { replaceObservationEvents, clearObservationLocation, removeFromObservationLocations } from '../stores/observation/actions'
 import ObservationForm from '../forms/ObservationForm'
 import TrackObservationForm from '../forms/TrackObservationForm'
 import FecesObservationForm from '../forms/FecesObservationForm'
@@ -32,7 +32,6 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = {
   replaceObservationEvents,
   clearObservationLocation,
-  addToObservationLocations,
   removeFromObservationLocations
 }
 
@@ -50,17 +49,15 @@ type Props = PropsFromRedux & {
 const ObservationComponent = (props: Props) => {
 
   useEffect(() => {
-    props.addToObservationLocations(props.observation)
-    loadSchemaAndSetForm()
+    initForm()
   }, [])
-
-  let selectedImage : string = ''
 
   //For react-hook-form
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
   const { t } = useTranslation()
   const [form, setForm] = useState()
   const [showModal, setShowModal] = useState(false)
+  const [image, setImage] = useState('')
 
   const attachImage = async () => {
     let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync()
@@ -71,8 +68,8 @@ const ObservationComponent = (props: Props) => {
     let pickerResult = await ImagePicker.launchImageLibraryAsync()
     let succeeded : boolean = !pickerResult.cancelled
     if (succeeded) {
-      selectedImage = pickerResult.uri
-      console.log("selectedImage: " + selectedImage)
+      setImage(pickerResult.uri)
+      console.log("image: " + image)
     }
     return succeeded
   }
@@ -86,22 +83,26 @@ const ObservationComponent = (props: Props) => {
     let pickerResult = await ImagePicker.launchCameraAsync()
     let succeeded : boolean = !pickerResult.cancelled
     if (succeeded) {
-      selectedImage = pickerResult.uri
-      console.log("selectedImage: " + selectedImage)
+      setImage(pickerResult.uri)
+      console.log("image: " + image)
     }
     return succeeded
   }
 
   const onSubmit = (data: { [key: string]: any }) => {
+    //all observations must have taxon confidence field so it is added here if it's missing
     if (!('taxonConfidence' in data)) {
       data['taxonConfidence'] = 'MY.taxonConfidenceSure'
     }
+    //all observations must have the flying squirrel taxon id so it is added here if it's missing
     if (!('identifications' in data)) {
       data['identifications'] = [{'taxonID': 'MX.48243'}]
     }
+    //record basis is indirect observation by default
     if (!('recordBasis' in data)) {
       data['recordBasis'] = 'MY.recordBasisHumanObservationIndirect'
     }
+    //indirect observation type is feces by default if the observation type is feces
     if (props.type === 'fecesObservation') {
       data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
     }
@@ -110,7 +111,7 @@ const ObservationComponent = (props: Props) => {
     console.log('REGISTER DATA:', data)
     console.log('EVENT BEFORE:', props.observationEvent)
     console.log('LOCATIONS', props.observationLocations)
-    console.log('IMAGE:', selectedImage)
+    console.log('IMAGE:', image)
 
     //clone events from reducer for modification
     const events = _.cloneDeep(props.observationEvent)
@@ -132,7 +133,7 @@ const ObservationComponent = (props: Props) => {
         lolifeDroppingsType: data.lolifeDroppingsType,
         lolifeDroppingsCount: data.lolifeDroppingsCount,
       },
-      image: selectedImage
+      image: image
     } : {
       id: 'observation_' + uuid.v4(),
       type: props.type,
@@ -140,25 +141,24 @@ const ObservationComponent = (props: Props) => {
       unitGathering: {
         geometry: props.observation
       },
-      image: selectedImage
+      image: image
     }
 
     console.log('NEW UNIT:', newUnit)
     event.schema.gatherings[0].units.push(newUnit)
     events.push(event)
 
-    //replace events with modified list
+    //replace events with the modified copy
     props.replaceObservationEvents(events)
+
     console.log('EVENT AFTER:', props.observationEvent)
 
-    props.clearObservationLocation()
-
-    //AsyncStorage
     storageController.save('observationEvents', events)
+    props.clearObservationLocation()
     setShowModal(true)
   }
 
-  const loadSchemaAndSetForm = async () => {
+  const initForm = async () => {
     if(props.type === 'observation') {
       setForm(ObservationForm(register, setValue, watch, errors, unregister, undefined, t))
     } else if(props.type === 'trackObservation') {
@@ -176,10 +176,21 @@ const ObservationComponent = (props: Props) => {
     return (
       <View style={Cs.observationContainer}>
         <ScrollView>
+
           <View style={Cs.formSaveButtonContainer}>
             <Button title={t('attach image')} onPress={attachImage} color={Colors.positiveButton} />
             <Button title={t('use camera')} onPress={useCamera} color={Colors.positiveButton} />
+            { image !== ''
+              ?
+                <Image
+                  source={{ uri: image }}
+                  style={{ width: 100, height: 100 }}
+                />
+              :
+                null
+            }
           </View>
+
           <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
           <View style={Cs.formContainer}>
             {form}

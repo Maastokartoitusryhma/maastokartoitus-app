@@ -20,7 +20,11 @@ const findSchemaObject = (objectKey: string, objectValue: any, schemaObject: Bas
       case 'boolean':
       case 'integer':
       case 'string':
-        componentArray.push(<SchemaObjectComponent key={objectKey} name={objectKey} value={objectValue} schemaObject={schemaObject}></SchemaObjectComponent>)
+        componentArray.push(
+          <SchemaObjectComponent
+            key={objectKey} name={objectKey} value={objectValue} 
+            schemaObject={schemaObject}>
+          </SchemaObjectComponent>)
         break
       case 'array':
         if (!schemaObject['title'] && Array.isArray(objectValue)) {
@@ -29,7 +33,12 @@ const findSchemaObject = (objectKey: string, objectValue: any, schemaObject: Bas
             findSchemaObject(objectKey, item, schemaObject, componentArray)
           })          
         } else {
-          componentArray.push(<SchemaObjectComponent key={objectKey} name={objectKey} value={JSON.stringify(objectValue)} schemaObject={schemaObject}></SchemaObjectComponent>)
+          componentArray.push(
+            <SchemaObjectComponent 
+              key={objectKey} name={objectKey}
+              value={JSON.stringify(objectValue)}
+              schemaObject={schemaObject}>
+            </SchemaObjectComponent>)
         }
         break
       case 'object':
@@ -39,13 +48,23 @@ const findSchemaObject = (objectKey: string, objectValue: any, schemaObject: Bas
             findSchemaObject(key, objectValue[key], subSchemaObject, componentArray)
           })          
         } else {
-          componentArray.push(<SchemaObjectComponent key={objectKey} name={objectKey} value={JSON.stringify(objectValue)} schemaObject={schemaObject}></SchemaObjectComponent>)
+          componentArray.push(
+            <SchemaObjectComponent
+              key={objectKey} name={objectKey}
+              value={JSON.stringify(objectValue)}
+              schemaObject={schemaObject}>
+            </SchemaObjectComponent>)
         }
         break
       default:
     }
   } else if (objectKey !== 'id' && objectKey !== 'type') { // user doesn't need to see id or type
     //this js object does not have a match in the schema
-    componentArray.push(<SchemaObjectComponent key={objectKey} name={objectKey} value={JSON.stringify(objectValue)} schemaObject={null}></SchemaObjectComponent>)
+    componentArray.push(
+      <SchemaObjectComponent
+        key={objectKey} name={objectKey}
+        value={JSON.stringify(objectValue)}
+        schemaObject={null}>
+      </SchemaObjectComponent>)
   }
 }
