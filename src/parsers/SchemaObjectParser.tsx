@@ -5,11 +5,11 @@ interface BasicObject {
   [key: string]: any
 }
 
-export const createSchemaObjectComponents = (JSObject: BasicObject, schema: BasicObject) => {
+export const createSchemaObjectComponents = (JSONObject: BasicObject, schema: BasicObject) => {
   const returnArray: Array<any> = []
-  Object.keys(JSObject).forEach((key) => {
-    let objectKey = key
-    findSchemaObject(objectKey, JSObject[objectKey], schema[objectKey], returnArray)
+  Object.keys(JSONObject).forEach((key) => {
+    const objectKey = key
+    findSchemaObject(objectKey, JSONObject[objectKey], schema[objectKey], returnArray)
   })
   return returnArray    
  }
@@ -44,8 +44,8 @@ const findSchemaObject = (objectKey: string, objectValue: any, schemaObject: Bas
       case 'object':
         if (!schemaObject['title'] && typeof(objectValue) === 'object') {
           Object.keys(objectValue).forEach(key => {
-            schemaObject = schemaObject['properties'][key]
-            findSchemaObject(key, objectValue[key], schemaObject, componentArray)
+            const subSchemaObject = schemaObject['properties'][key]
+            findSchemaObject(key, objectValue[key], subSchemaObject, componentArray)
           })          
         } else {
           componentArray.push(
@@ -58,7 +58,7 @@ const findSchemaObject = (objectKey: string, objectValue: any, schemaObject: Bas
         break
       default:
     }
-  } else {
+  } else if (objectKey !== 'id' && objectKey !== 'type') { // user doesn't need to see id or type
     //this js object does not have a match in the schema
     componentArray.push(
       <SchemaObjectComponent

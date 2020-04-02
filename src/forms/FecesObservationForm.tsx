@@ -34,9 +34,9 @@ const FecesObservationForm = (
 
   //inserting the default values into the variables in fields where a default value exists
   if (defaults !== undefined) {
-    if (defaults.lolifeDroppingsType !== undefined) { defaultLolifeDroppingsType = defaults.lolifeDroppingsType }
-    if (defaults.lolifeDroppingsCount !== undefined) { defaultLolifeDroppingsCount = defaults.lolifeDroppingsCount }
-    if (defaults.lolifeDroppingsQuality !== undefined) { defaultLolifeDroppingsQuality = defaults.lolifeDroppingsQuality }
+    if (defaults.unitFact.lolifeDroppingsType !== undefined) { defaultLolifeDroppingsType = defaults.unitFact.lolifeDroppingsType }
+    if (defaults.unitFact.lolifeDroppingsCount !== undefined) { defaultLolifeDroppingsCount = defaults.unitFact.lolifeDroppingsCount }
+    if (defaults.unitFact.lolifeDroppingsQuality !== undefined) { defaultLolifeDroppingsQuality = defaults.unitFact.lolifeDroppingsQuality }
   }
 
   //inserting the hardcoded default options from the schema to the variables in case where there was no default value from the user

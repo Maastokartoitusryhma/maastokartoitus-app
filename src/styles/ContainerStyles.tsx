@@ -145,6 +145,27 @@ const ContainerStyles = StyleSheet.create({
     paddingTop: 20,
     justifyContent: 'center',
     flexDirection: 'row',
+  },
+  observationListLine: {
+    padding: 2,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  observationPropertyTitle: {
+    width: '40%'
+  },
+  observationPropertyValue: {
+    width: '60%'
+  },
+  observationInfoContainer: {
+    padding: 5,
+    backgroundColor: Colors.blueBackground,
+    alignItems: 'center',
+    justifyContent: 'space-around'
+  },
+  editObservationButtonContainer: {
+    padding: 5,
+    width: '75%'
   }
 })
 

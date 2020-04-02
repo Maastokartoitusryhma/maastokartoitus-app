@@ -69,33 +69,47 @@ const ObservationEventComponent = (props: Props) => {
           <Text>{t('dateBegin')}: {event.schema.gatheringEvent.dateBegin}</Text>
           <Text>{t('dateEnd')}: {event.schema.gatheringEvent.dateEnd}</Text>
           <Text>{t('Zone')}: </Text>
-          <Button title={'Muokkaa havaintotapahtumaa'} onPress={() => {
-            const id = {
-              eventId: event.id,
-              unitId: ''
-            }
+          <Button
+            title={'Muokkaa havaintotapahtumaa'}
+            color={Colors.neutralButton}
+            onPress={() => {
+              const id = {
+                eventId: event.id,
+                unitId: ''
+              }
             props.setObservationId(id)
             props.onPressObservationEvent()
-          }} color={Colors.positiveButton}/>
+            }}
+          />
+          <View style={{padding: 5}}></View>
           <Text style={Ts.observationText}>{t('Observations')}:</Text>
           {observations.map(observation =>
             <View key={observation.id}>
-              <ObservationInfoComponent key={observation.id} observation={observation} />
-              <Button title={t('edit observation')} onPress={() => {
-                const id = {
-                  eventId: event.id,
-                  unitId: observation.id
+              <ObservationInfoComponent
+                observation={observation}
+                button={
+                  <Button
+                    title={t('edit observation')}
+                    color={Colors.neutralButton}
+                    onPress={() => {
+                      const id = {
+                        eventId: event.id,
+                        unitId: observation.id
+                      }
+                      props.setObservationId(id)
+                      props.onPressObservation()
+                    }}
+                  />
                 }
-                props.setObservationId(id)
-                props.onPressObservation()
-              }} color={Colors.positiveButton}/>
+              />
+              <View style={{padding: 5}}></View>
             </View>
           )}
         </ScrollView>
       </View>
     )
   }
-  
 }
 
 export default connector(ObservationEventComponent)
+

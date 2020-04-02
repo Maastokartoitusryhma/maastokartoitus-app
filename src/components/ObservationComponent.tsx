@@ -91,24 +91,24 @@ const ObservationComponent = (props: Props) => {
 
   const onSubmit = (data: { [key: string]: any }) => {
     //all observations must have taxon confidence field so it is added here if it's missing
-    if(!('taxonConfidence' in data)) {
+    if (!('taxonConfidence' in data)) {
       data['taxonConfidence'] = 'MY.taxonConfidenceSure'
     }
     //all observations must have the flying squirrel taxon id so it is added here if it's missing
-    if(!('identifications' in data)) {
+    if (!('identifications' in data)) {
       data['identifications'] = [{'taxonID': 'MX.48243'}]
     }
     //record basis is indirect observation by default
-    if(!('recordBasis' in data)) {
+    if (!('recordBasis' in data)) {
       data['recordBasis'] = 'MY.recordBasisHumanObservationIndirect'
     }
     //indirect observation type is feces by default if the observation type is feces
-    if(props.type === 'fecesObservation') {
+    if (props.type === 'fecesObservation') {
       data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
     }
     
     console.log('POINT:', props.observation)
-    console.log('REGISTER DATA:', JSON.stringify(data))
+    console.log('REGISTER DATA:', data)
     console.log('EVENT BEFORE:', props.observationEvent)
     console.log('LOCATIONS', props.observationLocations)
     console.log('IMAGE:', image)
@@ -117,16 +117,34 @@ const ObservationComponent = (props: Props) => {
     const events = _.cloneDeep(props.observationEvent)
     const event = events.pop()
 
-    //Add observation location, type and image to rest of observation parameters
-    const newUnit = {
+    //Add observation location and selected image to rest of observation parameters
+    const newUnit = props.type === 'fecesObservation' ? {
       id: 'observation_' + uuid.v4(),
+      type: props.type,
+      identifications: data.identifications,
+      indirectObservationType: data.indirectObservationType,
+      recordBasis: data.recordBasis,
+      taxonConfidence: data.taxonConfidence,
+      unitGathering: {
+        geometry: props.observation
+      },
+      unitFact: {
+        lolifeDroppingsQuality: data.lolifeDroppingsQuality,
+        lolifeDroppingsType: data.lolifeDroppingsType,
+        lolifeDroppingsCount: data.lolifeDroppingsCount,
+      },
+      image: image
+    } : {
+      id: 'observation_' + uuid.v4(),
+      type: props.type,
       ...data,
       unitGathering: {
         geometry: props.observation
       },
-      type: props.type,
       image: image
     }
+
+    console.log('NEW UNIT:', newUnit)
     event.schema.gatherings[0].units.push(newUnit)
     events.push(event)
 

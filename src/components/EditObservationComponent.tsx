@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, ScrollView, Button, Alert } from 'react-native'
+import { View, Text, ScrollView, Button } from 'react-native'
 import { useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -18,10 +18,14 @@ import Colors from '../styles/Colors'
 import Modal from 'react-native-modal'
 import _ from 'lodash'
 
+interface BasicObject {
+  [key: string]: any
+}
+
 interface RootState {
   observation: Point
   observationEvent: any[]
-  observationId: object
+  observationId: BasicObject
   editing: boolean
 }
 
@@ -51,18 +55,14 @@ type Props = PropsFromRedux & {
 
 
 const EditObservationComponent = (props: Props) => {
-  //states that store the list of all event, the event that's being edited and the observation that's being edited
-  const [ events, setEvents ] = useState(null)
-  const [ indexOfEditedEvent, setIndexOfEditedEvent ] = useState(null)
-  const [ event, setEvent ] = useState(null)
-  const [ observations, setObservations ] = useState(null)
-  const [ indexOfEditedObservation, setIndexOfEditedObservation ] = useState(null)
-  const [ observation, setObservation ] = useState(null)
-  //for react-hook-form
+  const [ indexOfEditedEvent, setIndexOfEditedEvent ] = useState<number>(-1)
+  const [ indexOfEditedObservation, setIndexOfEditedObservation ] = useState<number>(-1)
+  const [ showModal, setShowModal ] = useState<boolean>(false)
+  const [ form, setForm ] = useState<any | null>(null)
+  const [ observation, setObservation ] = useState<BasicObject | null>(null)
+  const [ events, setEvents ] = useState<any[]>([])
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
   const { t } = useTranslation()
-  const [form, setForm] = useState()
-  const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
     init()
@@ -70,85 +70,108 @@ const EditObservationComponent = (props: Props) => {
 
   const init = () => {
     //clone events from reducer for modification
-    const eventClone = _.cloneDeep(props.observationEvent)
-    setEvents(eventClone)
+    const eventsClone: any[] = _.cloneDeep(props.observationEvent)
+    setEvents(eventsClone)
     //find the correct event by id
-    const eventIndex = eventClone.findIndex(event => event.id === props.observationId.eventId)
+    const eventIndex: number = eventsClone.findIndex((event: BasicObject) => event.id === props.observationId.eventId)
     setIndexOfEditedEvent(eventIndex)
-    const searchedEvent = eventClone[eventIndex]
-    setEvent(searchedEvent)
+    const searchedEvent: BasicObject = eventsClone[eventIndex]
     //find the correct observation by id
     const observationsClone = searchedEvent.schema.gatherings[0].units
-    setObservations(observationsClone)
-    const observationIndex = observationsClone.findIndex(observation => observation.id === props.observationId.unitId)
+    const observationIndex: number = observationsClone.findIndex((observation: BasicObject) => observation.id === props.observationId.unitId)
     setIndexOfEditedObservation(observationIndex)
     const observationClone = observationsClone[observationIndex]
     setObservation(observationClone)
-
-    //set the form
-    if(observationClone.type === 'observation') {
-      setForm(ObservationForm(register, setValue, watch, errors, unregister, observationClone))
-    } else if(observationClone.type === 'trackObservation') {
-      setForm(TrackObservationForm(register, setValue, watch, errors, unregister, observationClone))
-    } else if(observationClone.type === 'fecesObservation') {
-      setForm(FecesObservationForm(register, setValue, watch, errors, unregister, observationClone))
-    } else if(observationClone.type === 'nestObservation') {
-      setForm(NestObservationForm(register, setValue, watch, errors, unregister, observationClone))
-    }    
   }
 
-  const onSubmit = (data: { [key: string]: any }) => {
-    //all observations must have taxon confidence field so it is added here if it's missing
-    if(!('taxonConfidence' in data)) {
-      data['taxonConfidence'] = 'MY.taxonConfidenceSure'
-    }
-    //all observations must have the flying squirrel taxon id so it is added here if it's missing
-    if(!('identifications' in data)) {
-      data['identifications'] = [{'taxonID': 'MX.48243'}]
-    }
-    //record basis is indirect observation by default
-    if(!('recordBasis' in data)) {
-      data['recordBasis'] = 'MY.recordBasisHumanObservationIndirect'
-    }
-    //indirect observation type is feces by default if the observation type is feces
-    if(observation.type === 'fecesObservation') {
-      data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
-    }
 
-    //replace the data of the unit that's being edited while keeping its id, unitGathering and type values
-    const editedUnit = {
-      id: observation.id,
-      ...data,
-      unitGathering: observation.unitGathering,
-      type: observation.type
+  const onSubmit = (data: { [key: string]: any }) => {
+    if (observation !== null) {
+      if (!('taxonConfidence' in data)) {
+        data['taxonConfidence'] = 'MY.taxonConfidenceSure'
+      }
+      if (!('identifications' in data)) {
+        data['identifications'] = [{'taxonID': 'MX.48243'}]
+      }
+      if (!('recordBasis' in data)) {
+        data['recordBasis'] = 'MY.recordBasisHumanObservationIndirect'
+      }
+      if (observation.type === 'fecesObservation') {
+        data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
+      }
+      
+      //console.log('REGISTER DATA:', JSON.stringify(data))
+      //console.log('EVENT BEFORE:', props.observationEvent)
+  
+      //replace the data of the unit that's being edited while keeping its id, unitGathering and type values
+      const editedUnit = observation.type === 'fecesObservation' ? {
+        id: observation.id,
+        type: observation.type,
+        identifications: data.identifications,
+        indirectObservationType: data.indirectObservationType,
+        recordBasis: data.recordBasis,
+        taxonConfidence: data.taxonConfidence,
+        unitGathering: observation.unitGathering,
+        unitFact: {
+          lolifeDroppingsQuality: data.lolifeDroppingsQuality,
+          lolifeDroppingsType: data.lolifeDroppingsType,
+          lolifeDroppingsCount: data.lolifeDroppingsCount,
+        }
+      } : {
+        id: observation.id,
+        type: observation.type,
+        ...data,
+        unitGathering: observation.unitGathering
+      }
+      
+      //if editing-flag is true try to replace location with new location, and clear editing-flag
+      if (props.editing) {
+        props.observation ? editedUnit.unitGathering.geometry = props.observation : null
+        props.clearObservationLocation()
+        props.toggleEditing()
+      }
+
+      events[indexOfEditedEvent].schema.gatherings[0].units[indexOfEditedObservation] = editedUnit
+  
+      //replace events with modified list
+      props.replaceObservationEvents(events)
+      
+      //console.log('EVENT AFTER:', props.observationEvent)
+  
+      storageController.save('observationEvents', events)
+      props.clearObservationId()
+      setShowModal(true)
     }
     
-    //if editing-flag is true try to replace location with new location, and clear editing-flag
-    if (props.editing) {
-      props.observation ? editedUnit.unitGathering.geometry = props.observation : null
-      props.clearObservationLocation()
-      props.toggleEditing()
+  }
+
+  
+
+  const loadSchemaAndSetForm = async () => {
+    if (observation !== null) {
+      if (observation.type === 'observation') {
+        setForm(ObservationForm(register, setValue, watch, errors, unregister, observation, t))
+      } else if (observation.type === 'trackObservation') {
+        setForm(TrackObservationForm(register, setValue, watch, errors, unregister, observation, t))
+      } else if (observation.type === 'fecesObservation') {
+        setForm(FecesObservationForm(register, setValue, watch, errors, unregister, observation, t))
+      } else if (observation.type === 'nestObservation') {
+        setForm(NestObservationForm(register, setValue, watch, errors, unregister, observation, t))
+      }
     }
-
-    //find the edited observation by id and replace it
-    events[indexOfEditedEvent].schema.gatherings[0].units[indexOfEditedObservation] = editedUnit
-
-    //replace events with the modified copy
-    props.replaceObservationEvents(events)
-
-    storageController.save('observationEvents', events)
-    props.clearObservationId()
-    setShowModal(true)
   }
 
   //redirects navigator to map for selection of new observation location
   const handleChangeToMap = () => {
-    props.setObservationLocation(observation.unitGathering.geometry)
-    props.editing ? null : props.toggleEditing()
-    props.onEditLocation()
+    if (observation !== null) {
+      props.setObservationLocation(observation.unitGathering.geometry)
+      props.editing ? null : props.toggleEditing()
+      props.onEditLocation()
+    }
   }
 
-  if (form === undefined) {
+  if (form === null) {
+    loadSchemaAndSetForm()
     return <View><Text>Ladataan...</Text></View>
   } else {
     return (
