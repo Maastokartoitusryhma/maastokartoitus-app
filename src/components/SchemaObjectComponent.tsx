@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text } from 'react-native'
+import Cs from '../styles/ContainerStyles'
+import Ts from '../styles/TextStyles'
 
 interface BasicObject {
   [key: string]: any
@@ -38,10 +40,13 @@ const SchemaObjectComponent = (props: Props) => {
   }
 
   return (
-    <View>
-      <Text key={props.name}>
-        {label === '' ? props.name : label}:
-         {text === '' ? props.value : text}</Text>
+    <View style={Cs.observationListLine}>
+      <View style={Cs.observationPropertyTitle}>
+        <Text style={Ts.boldText}>{label === '' ? props.name : label}</Text>
+      </View>
+      <View style={Cs.observationPropertyValue}>
+      <Text>{text === '' ? props.value : text}</Text>
+      </View>
     </View>
   )
 }

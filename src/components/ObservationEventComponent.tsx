@@ -68,18 +68,28 @@ const ObservationEventComponent = (props: Props) => {
           <Text>{t('dateBegin')}: {event.schema.gatheringEvent.dateBegin}</Text>
           <Text>{t('dateEnd')}: {event.schema.gatheringEvent.dateEnd}</Text>
           <Text>{t('Zone')}: </Text>
+          <View style={{padding: 5}}></View>
           <Text style={Ts.observationText}>{t('Observations')}:</Text>
           {observations.map(observation =>
-            <View>
-              <ObservationInfoComponent key={observation.id} observation={observation} />
-              <Button title={t('edit observation')} onPress={() => {
-                const id = {
-                  eventId: event.id,
-                  unitId: observation.id
+            <View key={observation.id}>
+              <ObservationInfoComponent
+                observation={observation}
+                button={
+                  <Button
+                    title={t('edit observation')}
+                    color={Colors.neutralButton}
+                    onPress={() => {
+                      const id = {
+                        eventId: event.id,
+                        unitId: observation.id
+                      }
+                      props.setObservationId(id)
+                      props.onPressObservation()
+                    }}
+                  />
                 }
-                props.setObservationId(id)
-                props.onPressObservation()
-              }} color={Colors.positiveButton}/>
+              />
+              <View style={{padding: 5}}></View>
             </View>
           )}
         </ScrollView>

@@ -5,6 +5,8 @@ const FecesObservationForm = (
   watch: Function, errors: Object, 
   unregister: Function, defaults: Object | undefined, t: Function) => {
 
+    console.log(defaults)
+
   let toReturn = []
   let defaultLolifeDroppingsType = null
   let defaultLolifeDroppingsCount = null
@@ -31,11 +33,11 @@ const FecesObservationForm = (
   }
 
   if (defaults !== undefined) {
-    if (defaults.lolifeDroppingsType !== undefined) { defaultLolifeDroppingsType = defaults.lolifeDroppingsType }
-    if (defaults.lolifeDroppingsCount !== undefined) { defaultLolifeDroppingsCount = defaults.lolifeDroppingsCount }
-    if (defaults.lolifeDroppingsQuality !== undefined) { defaultLolifeDroppingsQuality = defaults.lolifeDroppingsQuality }
+    if (defaults.unitFact.lolifeDroppingsType !== undefined) { defaultLolifeDroppingsType = defaults.unitFact.lolifeDroppingsType }
+    if (defaults.unitFact.lolifeDroppingsCount !== undefined) { defaultLolifeDroppingsCount = defaults.unitFact.lolifeDroppingsCount }
+    if (defaults.unitFact.lolifeDroppingsQuality !== undefined) { defaultLolifeDroppingsQuality = defaults.unitFact.lolifeDroppingsQuality }
   }
-
+  
   if (defaultLolifeDroppingsType === null || defaultLolifeDroppingsType === undefined) { defaultLolifeDroppingsType =  '' }
   if (defaultLolifeDroppingsCount === null || defaultLolifeDroppingsCount === undefined) { defaultLolifeDroppingsCount = '' }
   if (defaultLolifeDroppingsQuality === null || defaultLolifeDroppingsQuality === undefined) { defaultLolifeDroppingsQuality = '' }

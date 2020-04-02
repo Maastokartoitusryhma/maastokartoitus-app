@@ -93,21 +93,21 @@ const ObservationComponent = (props: Props) => {
   }
 
   const onSubmit = (data: { [key: string]: any }) => {
-    if(!('taxonConfidence' in data)) {
+    if (!('taxonConfidence' in data)) {
       data['taxonConfidence'] = 'MY.taxonConfidenceSure'
     }
-    if(!('identifications' in data)) {
+    if (!('identifications' in data)) {
       data['identifications'] = [{'taxonID': 'MX.48243'}]
     }
-    if(!('recordBasis' in data)) {
+    if (!('recordBasis' in data)) {
       data['recordBasis'] = 'MY.recordBasisHumanObservationIndirect'
     }
-    if(props.type === 'fecesObservation') {
+    if (props.type === 'fecesObservation') {
       data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
     }
     
     console.log('POINT:', props.observation)
-    console.log('REGISTER DATA:', JSON.stringify(data))
+    console.log('REGISTER DATA:', data)
     console.log('EVENT BEFORE:', props.observationEvent)
     console.log('LOCATIONS', props.observationLocations)
     console.log('IMAGE:', selectedImage)
@@ -117,15 +117,33 @@ const ObservationComponent = (props: Props) => {
     const event = events.pop()
 
     //Add observation location and selected image to rest of observation parameters
-    const newUnit = {
+    const newUnit = props.type === 'fecesObservation' ? {
       id: 'observation_' + uuid.v4(),
+      type: props.type,
+      identifications: data.identifications,
+      indirectObservationType: data.indirectObservationType,
+      recordBasis: data.recordBasis,
+      taxonConfidence: data.taxonConfidence,
+      unitGathering: {
+        geometry: props.observation
+      },
+      unitFact: {
+        lolifeDroppingsQuality: data.lolifeDroppingsQuality,
+        lolifeDroppingsType: data.lolifeDroppingsType,
+        lolifeDroppingsCount: data.lolifeDroppingsCount,
+      },
+      image: selectedImage
+    } : {
+      id: 'observation_' + uuid.v4(),
+      type: props.type,
       ...data,
       unitGathering: {
         geometry: props.observation
       },
-      type: props.type,
       image: selectedImage
     }
+
+    console.log('NEW UNIT:', newUnit)
     event.schema.gatherings[0].units.push(newUnit)
     events.push(event)
 

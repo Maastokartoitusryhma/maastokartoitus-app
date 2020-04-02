@@ -24,6 +24,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & {
   observation: Object
+  button: any
 }
 
 const ObservationInfoComponent = (props: Props) => {
@@ -38,7 +39,7 @@ const ObservationInfoComponent = (props: Props) => {
   }
 
   return (
-    <View style={Cs.containerWithJustPadding}>
+    <View style={Cs.observationInfoContainer}>
       {createSchemaObjectComponents(props.observation, schema.properties.gatherings.items.properties.units.items.properties)}
       {props.observation.image !== ''
         ? <Image
@@ -47,6 +48,9 @@ const ObservationInfoComponent = (props: Props) => {
           />
         : null
       }
+      <View style={Cs.editObservationButtonContainer}>
+        {props.button}
+      </View>
     </View>
   )
 }

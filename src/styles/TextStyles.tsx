@@ -41,6 +41,9 @@ const TextStyles = StyleSheet.create({
   },
   loginLanguage: {
     padding: 10
+  },
+  boldText: {
+    fontWeight: 'bold'
   }
 })
 
