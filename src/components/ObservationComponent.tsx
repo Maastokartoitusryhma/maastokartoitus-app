@@ -16,7 +16,8 @@ import Colors from '../styles/Colors'
 import Modal from 'react-native-modal'
 import _ from 'lodash'
 import uuid from 'react-native-uuid'
-import * as ImagePicker from 'expo-image-picker'
+import ImagePickerComponent from './ImagePickerComponent'
+
 
 interface RootState {
   observation: Point
@@ -58,36 +59,6 @@ const ObservationComponent = (props: Props) => {
   const [form, setForm] = useState()
   const [showModal, setShowModal] = useState(false)
   const [image, setImage] = useState('')
-
-  const attachImage = async () => {
-    let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync()
-    if (permissionResult.granted === false) {
-      return false
-    }
-
-    let pickerResult = await ImagePicker.launchImageLibraryAsync()
-    let succeeded : boolean = !pickerResult.cancelled
-    if (succeeded) {
-      setImage(pickerResult.uri)
-      console.log("image: " + image)
-    }
-    return succeeded
-  }
-
-  const useCamera = async () => {
-    let permissionResult = await ImagePicker.requestCameraPermissionsAsync()
-    if (permissionResult.granted === false) {
-      return false
-    }
-
-    let pickerResult = await ImagePicker.launchCameraAsync()
-    let succeeded : boolean = !pickerResult.cancelled
-    if (succeeded) {
-      setImage(pickerResult.uri)
-      console.log("image: " + image)
-    }
-    return succeeded
-  }
 
   const onSubmit = (data: { [key: string]: any }) => {
     //all observations must have taxon confidence field so it is added here if it's missing
@@ -177,27 +148,18 @@ const ObservationComponent = (props: Props) => {
       <View style={Cs.observationContainer}>
         <ScrollView>
 
-          <View style={Cs.formSaveButtonContainer}>
-            <Button title={t('attach image')} onPress={attachImage} color={Colors.positiveButton} />
-            <Button title={t('use camera')} onPress={useCamera} color={Colors.positiveButton} />
-            { image !== ''
-              ?
-                <Image
-                  source={{ uri: image }}
-                  style={{ width: 100, height: 100 }}
-                />
-              :
-                null
-            }
-          </View>
+          <ImagePickerComponent image={image} setImage={setImage} />
 
           <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
+
           <View style={Cs.formContainer}>
             {form}
           </View>
+
           <View style={Cs.formSaveButtonContainer}>
             <Button title={t('save observation')} onPress={handleSubmit(onSubmit)} color={Colors.positiveButton}/>
           </View>
+
           <Modal isVisible={showModal}>
             <View style={Cs.observationAddModal}>
               <Text style={Cs.containerWithJustPadding}>{t('observation saved')}</Text>
