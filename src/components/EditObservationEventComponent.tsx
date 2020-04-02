@@ -38,6 +38,7 @@ type Props = PropsFromRedux & {
 }
 
 const EditObservationEventComponent = (props: Props) => {
+  //states that store the list of all event, the event that's being edited
   const [ events, setEvents ] = useState(null)
   const [ indexOfEditedEvent, setIndexOfEditedEvent ] = useState(null)
   const [ event, setEvent ] = useState(null)
@@ -66,9 +67,8 @@ const EditObservationEventComponent = (props: Props) => {
   }
 
   const onSubmit = (data: { [key: string]: any }) => {
-    console.log('REGISTER DATA:', JSON.stringify(data))
-    console.log('EVENT BEFORE:', props.observationEvent)
-
+    
+    //change data of legPublic field from string to boolean because we don't have boolean form components 
     let legPublic = data.legPublic
     if(data.legPublic === 'true') {
       legPublic = true
@@ -76,6 +76,7 @@ const EditObservationEventComponent = (props: Props) => {
       legPublic = false
     }
 
+    //build the new schema based on the data from the form while leaving the gatherings unedited
     const editedSchema = {
       editors: data.editors,
       secureLevel: data.secureLevel,
@@ -89,15 +90,17 @@ const EditObservationEventComponent = (props: Props) => {
       gatherings: event.schema.gatherings
     }
 
+    //build the event by replacing its schema with the modified one
     const editedEvent = {
       id: event.id,
       sentToServer: event.sentToServer,
       schema: editedSchema
     }
 
+    //find the edited event by id and replace it
     events[indexOfEditedEvent] = editedEvent
 
-    //replace events with modified list
+    //replace events with the modified copy
     props.replaceObservationEvents(events)
 
     storageController.save('observationEvents', events)

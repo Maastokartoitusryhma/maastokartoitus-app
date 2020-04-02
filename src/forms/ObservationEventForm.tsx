@@ -4,6 +4,7 @@ const ObservationEventForm = (register: Function, setValue: Function,
   watch: Function, errors: Object, unregister: Function, defaults: Object | undefined
 ) => {
   
+  //variables for the possible default values of the fields
   let toReturn = []
   let defaultLeg = null
   let defaultLegPublic = null
@@ -13,6 +14,7 @@ const ObservationEventForm = (register: Function, setValue: Function,
   let defaultDateEnd = null
   let defaultKeywords = null
 
+  //hardcoded options for each picker (enum) component
   const legPublicDictionary: { [key: string]: any } = {
     'true' : 'Kyllä',
     'false' : 'Ei'
@@ -23,6 +25,7 @@ const ObservationEventForm = (register: Function, setValue: Function,
     'MX.secureLevelKM10' : '10 km'
   }
 
+  //inserting the default values into the variables in fields where a default value exists
   if(defaults !== undefined) {
     if(defaults.gatheringEvent.leg !== undefined) { defaultLeg = defaults.gatheringEvent.leg }
     if(defaults.gatheringEvent.legPublic !== undefined) { defaultLegPublic = defaults.gatheringEvent.legPublic }
@@ -33,6 +36,7 @@ const ObservationEventForm = (register: Function, setValue: Function,
     if(defaults.keywords !== undefined) { defaultKeywords = defaults.keywords }
   }
 
+  //inserting the hardcoded default options from the schema to the variables in case where there was no default value from the user
   if(defaultLeg === null || defaultLeg === undefined) { defaultLeg = '' }
   if(defaultLegPublic === null || defaultLegPublic === undefined) { defaultLegPublic = 'false' }
   if(defaultEditors === null || defaultEditors === undefined) { defaultEditors = '' }
@@ -41,6 +45,7 @@ const ObservationEventForm = (register: Function, setValue: Function,
   if(defaultDateEnd === null || defaultDateEnd === undefined) { defaultDateEnd = '' }
   if(defaultKeywords === null || defaultKeywords === undefined) { defaultKeywords = '' }
 
+  //creating the actual form elements, they're hardcoded and use the above variables to define the default values
   toReturn.push(createArray('Havainnoijat', '', 'leg', 'string', defaultLeg, register, setValue, watch, errors, unregister))
   toReturn.push(createPicker('Havainnoijien nimet ovat julkisia', 'legPublic', defaultLegPublic, register, setValue, watch, errors, unregister, legPublicDictionary))
   toReturn.push(createArray('Muokkausoikeus', '', 'editors', 'string', defaultEditors, register, setValue, watch, errors, unregister))

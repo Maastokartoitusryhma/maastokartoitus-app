@@ -51,13 +51,14 @@ type Props = PropsFromRedux & {
 
 
 const EditObservationComponent = (props: Props) => {
+  //states that store the list of all event, the event that's being edited and the observation that's being edited
   const [ events, setEvents ] = useState(null)
   const [ indexOfEditedEvent, setIndexOfEditedEvent ] = useState(null)
   const [ event, setEvent ] = useState(null)
   const [ observations, setObservations ] = useState(null)
   const [ indexOfEditedObservation, setIndexOfEditedObservation ] = useState(null)
   const [ observation, setObservation ] = useState(null)
-  //For react-hook-form
+  //for react-hook-form
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
   const { t } = useTranslation()
   const [form, setForm] = useState()
@@ -97,15 +98,19 @@ const EditObservationComponent = (props: Props) => {
   }
 
   const onSubmit = (data: { [key: string]: any }) => {
+    //all observations must have taxon confidence field so it is added here if it's missing
     if(!('taxonConfidence' in data)) {
       data['taxonConfidence'] = 'MY.taxonConfidenceSure'
     }
+    //all observations must have the flying squirrel taxon id so it is added here if it's missing
     if(!('identifications' in data)) {
       data['identifications'] = [{'taxonID': 'MX.48243'}]
     }
+    //record basis is indirect observation by default
     if(!('recordBasis' in data)) {
       data['recordBasis'] = 'MY.recordBasisHumanObservationIndirect'
     }
+    //indirect observation type is feces by default if the observation type is feces
     if(observation.type === 'fecesObservation') {
       data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
     }
@@ -125,9 +130,10 @@ const EditObservationComponent = (props: Props) => {
       props.toggleEditing()
     }
 
+    //find the edited observation by id and replace it
     events[indexOfEditedEvent].schema.gatherings[0].units[indexOfEditedObservation] = editedUnit
 
-    //replace events with modified list
+    //replace events with the modified copy
     props.replaceObservationEvents(events)
 
     storageController.save('observationEvents', events)

@@ -43,6 +43,7 @@ export const createArray = (
     setValue(parentObjectTitle, []) // Adds empty array to register
   }
 
+  //if there are default values for the array, we iterate them, create the according input elements and pass the elements to FormArrayComponent 
   let inputElements: Array<Object> = []
   if(defaultValue) {
     defaultValue.forEach((value) => inputElements.push(createInputElement(
