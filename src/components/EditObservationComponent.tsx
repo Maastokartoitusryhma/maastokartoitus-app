@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Point } from 'geojson'
 import storageController from '../controllers/storageController'
 import { replaceObservationEvents, clearObservationId } from '../stores/observation/actions'
-import { toggleEditing } from '../stores/map/actions'
+import { setEditing } from '../stores/map/actions'
 import { setObservationLocation, clearObservationLocation } from '../stores/observation/actions'
 import ObservationForm from '../forms/ObservationForm'
 import TrackObservationForm from '../forms/TrackObservationForm'
@@ -28,7 +28,7 @@ interface RootState {
   observation: Point
   observationEvent: any[]
   observationId: BasicObject
-  editing: boolean
+  editing: boolean[]
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -39,7 +39,7 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = {
   replaceObservationEvents,
   clearObservationId,
-  toggleEditing,
+  setEditing,
   setObservationLocation,
   clearObservationLocation,
 }
@@ -70,6 +70,13 @@ const EditObservationComponent = (props: Props) => {
 
   useEffect(() => {
     init()
+    //Cleanup when component unmounts, ensures that if navigator back-button
+    //is used observationLocation and editing-flags are returned to defaults
+    return () => {
+      props.clearObservationLocation()
+      props.setEditing([false, false])
+      console.log("CLEANUP FIRED")
+    }
   }, [])
 
   const init = () => {
@@ -131,12 +138,13 @@ const EditObservationComponent = (props: Props) => {
         ...data,
         unitGathering: observation.unitGathering
       }
-      
-      //if editing-flag is true try to replace location with new location, and clear editing-flag
-      if (props.editing) {
+
+      //if editing-flag 1st and 2nd elements are true replace location with new location, and clear editing-flag
+      if (props.editing[0] && props.editing[1]) {
         props.observation ? editedUnit.unitGathering.geometry = props.observation : null
         props.clearObservationLocation()
-        props.toggleEditing()
+        props.setEditing([false, false])
+        console.log('LOC MODIFIED')
       }
 
       events[indexOfEditedEvent].schema.gatherings[0].units[indexOfEditedObservation] = editedUnit
@@ -173,7 +181,7 @@ const EditObservationComponent = (props: Props) => {
   const handleChangeToMap = () => {
     if (observation !== null) {
       props.setObservationLocation(observation.unitGathering.geometry)
-      props.editing ? null : props.toggleEditing()
+      props.setEditing([true, false])
       props.onEditLocation()
     }
   }

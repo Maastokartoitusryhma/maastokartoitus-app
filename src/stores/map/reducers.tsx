@@ -6,7 +6,7 @@ import { mapActionTypes,
         SET_REGION,
         TOGGLE_ZONE,
         CLEAR_REGION,
-        TOGGLE_EDITING,
+        SET_EDITING,
         } from './types'
 
 const initialRegion = { 
@@ -55,10 +55,10 @@ const zoomZoneReducer = (state = true, action: mapActionTypes) => {
   }  
 }
 
-const editingReducer = (state = false, action: mapActionTypes) => {
+const editingReducer = (state = [false, false], action: mapActionTypes) => {
   switch (action.type) {
-    case TOGGLE_EDITING: 
-      const newState = !state
+    case SET_EDITING: 
+      const newState = action.payload
       return newState
     default:
       return state

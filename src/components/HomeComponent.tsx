@@ -89,7 +89,6 @@ const HomeComponent = (props: Props) => {
   useEffect(() => {
     loadRegions()
     loadObservationEvents()
-
   }, [])
 
   const loadObservationEvents =  async () => {

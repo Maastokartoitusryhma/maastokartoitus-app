@@ -8,7 +8,7 @@ import { mapActionTypes,
         SET_REGION,
         TOGGLE_ZONE,
         CLEAR_REGION,
-        TOGGLE_EDITING,
+        SET_EDITING,
         } from './types'
 
 export const setRegion = (region: Region) : mapActionTypes => ({
@@ -41,6 +41,7 @@ export const toggleMaptype = () : mapActionTypes => ({
   type: TOGGLE_MAPTYPE
 })
 
-export const toggleEditing = () : mapActionTypes => ({
-  type: TOGGLE_EDITING
+export const setEditing = (editing: boolean[]) : mapActionTypes => ({
+  type: SET_EDITING,
+  payload: editing
 })
