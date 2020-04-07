@@ -8,7 +8,7 @@ import Cs from '../styles/ContainerStyles'
 import Bs from '../styles/ButtonStyles'
 import Ts from '../styles/TextStyles'
 import storageController from '../controllers/storageController'
-import { getObservationEventSchema } from '../controllers/formController'
+import { getObservationEventSchema } from '../controllers/documentController'
 import { connect, ConnectedProps } from 'react-redux'
 import { newObservationEvent, setSchemaFi, setSchemaEn, setSchemaSv } from '../stores/observation/actions'
 
