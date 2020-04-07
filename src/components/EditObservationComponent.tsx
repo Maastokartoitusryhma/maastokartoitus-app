@@ -113,8 +113,6 @@ const EditObservationComponent = (props: Props) => {
         data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
       }
 
-      console.log('data.image = ', data.image)
-      
       //console.log('REGISTER DATA:', JSON.stringify(data))
       //console.log('EVENT BEFORE:', props.observationEvent)
   
@@ -131,12 +129,14 @@ const EditObservationComponent = (props: Props) => {
           lolifeDroppingsQuality: data.lolifeDroppingsQuality,
           lolifeDroppingsType: data.lolifeDroppingsType,
           lolifeDroppingsCount: data.lolifeDroppingsCount,
-        }
+        },
+        image: image
       } : {
         id: observation.id,
         type: observation.type,
         ...data,
-        unitGathering: observation.unitGathering
+        unitGathering: observation.unitGathering,
+        image: image
       }
 
       //if editing-flag 1st and 2nd elements are true replace location with new location, and clear editing-flag
