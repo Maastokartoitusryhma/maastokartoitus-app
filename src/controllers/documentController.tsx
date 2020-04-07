@@ -59,8 +59,14 @@ export const getSingleObservationSchema = async (language: string) => {
 }
 
 export const postObservationEvent = async (observationEvent: BasicObject) => {
-  console.log('EVENT TO SEND: ', observationEvent)
-  
+  const event = observationEvent.schema
+  console.log('EVENT TO SEND: ', event)
+  const units = observationEvent.schema.gatherings[0].units
+  units.forEach((observation: BasicObject) => {
+    delete observation.id
+    delete observation.type
+  })
+  console.log('UNITS TO SEND: ', units)
   //Remove unnecessary fields
   //Axios.post(event)
   //Check that response is 200
