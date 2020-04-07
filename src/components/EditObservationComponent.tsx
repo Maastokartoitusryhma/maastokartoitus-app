@@ -70,8 +70,8 @@ const EditObservationComponent = (props: Props) => {
 
   useEffect(() => {
     init()
-    //Cleanup when component unmounts, ensures that if navigator back-button
-    //is used observationLocation and editing-flags are returned to defaults
+    // Cleanup when component unmounts, ensures that if navigator back-button
+    // is used observationLocation and editing-flags are returned to defaults
     return () => {
       props.clearObservationLocation()
       props.setEditing([false, false])
@@ -80,14 +80,14 @@ const EditObservationComponent = (props: Props) => {
   }, [])
 
   const init = () => {
-    //clone events from reducer for modification
+    // clone events from reducer for modification
     const eventsClone: any[] = _.cloneDeep(props.observationEvent)
     setEvents(eventsClone)
-    //find the correct event by id
+    // find the correct event by id
     const eventIndex: number = eventsClone.findIndex((event: BasicObject) => event.id === props.observationId.eventId)
     setIndexOfEditedEvent(eventIndex)
     const searchedEvent: BasicObject = eventsClone[eventIndex]
-    //find the correct observation by id
+    // find the correct observation by id
     const observationsClone = searchedEvent.schema.gatherings[0].units
     const observationIndex: number = observationsClone.findIndex((observation: BasicObject) => observation.id === props.observationId.unitId)
     setIndexOfEditedObservation(observationIndex)
@@ -113,10 +113,10 @@ const EditObservationComponent = (props: Props) => {
         data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
       }
 
-      //console.log('REGISTER DATA:', JSON.stringify(data))
-      //console.log('EVENT BEFORE:', props.observationEvent)
+      // console.log('REGISTER DATA:', JSON.stringify(data))
+      // console.log('EVENT BEFORE:', props.observationEvent)
   
-      //replace the data of the unit that's being edited while keeping its id, unitGathering and type values
+      // replace the data of the unit that's being edited while keeping its id, unitGathering and type values
       const editedUnit = observation.type === 'fecesObservation' ? {
         id: observation.id,
         type: observation.type,
@@ -139,7 +139,7 @@ const EditObservationComponent = (props: Props) => {
         image: image
       }
 
-      //if editing-flag 1st and 2nd elements are true replace location with new location, and clear editing-flag
+      // if editing-flag 1st and 2nd elements are true replace location with new location, and clear editing-flag
       if (props.editing[0] && props.editing[1]) {
         props.observation ? editedUnit.unitGathering.geometry = props.observation : null
         props.clearObservationLocation()
@@ -149,10 +149,10 @@ const EditObservationComponent = (props: Props) => {
 
       events[indexOfEditedEvent].schema.gatherings[0].units[indexOfEditedObservation] = editedUnit
   
-      //replace events with modified list
+      // replace events with modified list
       props.replaceObservationEvents(events)
       
-      //console.log('EVENT AFTER:', props.observationEvent)
+      // console.log('EVENT AFTER:', props.observationEvent)
   
       storageController.save('observationEvents', events)
       props.clearObservationId()
@@ -177,7 +177,7 @@ const EditObservationComponent = (props: Props) => {
     }
   }
 
-  //redirects navigator to map for selection of new observation location
+  // redirects navigator to map for selection of new observation location
   const handleChangeToMap = () => {
     if (observation !== null) {
       props.setObservationLocation(observation.unitGathering.geometry)
