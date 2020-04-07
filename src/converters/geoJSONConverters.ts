@@ -41,6 +41,15 @@ const pointConstructor = (lng: number, lat: number) => {
   return point
 }
 
+const latLngConstructor = (lng: number, lat: number) => {
+  const latlng: LatLng = {
+    latitude: lat,
+    longitude: lng
+  }
+
+  return latlng
+}
+
 const lineStringConstructor = (points: any[]) => {
   const lineString: LineString = {
     type: 'LineString',
@@ -91,6 +100,12 @@ const convertLatLngToPoint = (coord: LatLng) => {
   return point
 }
 
+const convertPointToLatLng = (point: Point) => {
+  const latlng = latLngConstructor(point.coordinates[0], point.coordinates[1])
+
+  return latlng
+}
+
 const convertLatLngArrToLineString = (coords: LatLng[]) => {
   const points: any[] = []
 
@@ -109,4 +124,4 @@ const convertLatLngArrToPolygon = (coords: LatLng[]) => {
   const polygon = polygonConstructor(points, [])
 }
 
-export {wrapGeometryInFC, convertFC2GC, convertGC2FC, convertLatLngToPoint }
+export {wrapGeometryInFC, convertFC2GC, convertGC2FC, convertLatLngToPoint, convertPointToLatLng }
