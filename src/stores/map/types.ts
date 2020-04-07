@@ -8,7 +8,7 @@ export const CLEAR_OBS_ZONE = 'CLEAR_OBS_ZONE'
 export const TOGGLE_CENTERED = 'TOGGLE_CENTERED'
 export const TOGGLE_MAPTYPE = 'TOGGLE_MAPTYPE'
 export const TOGGLE_ZONE  = 'TOGGLE_ZONE'
-export const TOGGLE_EDITING = 'TOGGLE_EDITING'
+export const SET_EDITING = 'SET_EDITING'
 
 interface setRegion {
   type: typeof SET_REGION
@@ -40,8 +40,9 @@ interface toggleZoomToZone {
   type: typeof TOGGLE_ZONE
 }
 
-interface toggleEditing {
-  type: typeof TOGGLE_EDITING
+interface setEditing {
+  type: typeof SET_EDITING
+  payload: boolean[]
 }
 
 export type mapActionTypes = setRegion |
@@ -51,4 +52,4 @@ export type mapActionTypes = setRegion |
                                      toggleCentered |
                                      toggleMaptype |
                                      toggleZoomToZone |
-                                     toggleEditing
+                                     setEditing

@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next'
 import ObservationInfoComponent from './ObservationInfoComponent'
 import { postObservationEvent } from '../controllers/documentController' 
 import Colors from '../styles/Colors'
+import { parseDate } from '../utilities/dateHelper'
 
 interface RootState {
   observationEvent: any[]
@@ -67,8 +68,8 @@ const ObservationEventComponent = (props: Props) => {
     return (
       <View style={Cs.singleObservationEventContainer}>
         <ScrollView>
-          <Text>{t('dateBegin')}: {event.schema.gatheringEvent.dateBegin}</Text>
-          <Text>{t('dateEnd')}: {event.schema.gatheringEvent.dateEnd}</Text>
+          <Text>{t('dateBegin')}: {parseDate(event.schema.gatheringEvent.dateBegin)}</Text>
+          <Text>{t('dateEnd')}: {parseDate(event.schema.gatheringEvent.dateEnd)}</Text>
           <Text>{t('Zone')}: </Text>
           <Button
             title={'Muokkaa havaintotapahtumaa'}

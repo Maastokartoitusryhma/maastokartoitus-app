@@ -44,6 +44,9 @@ const TextStyles = StyleSheet.create({
   },
   boldText: {
     fontWeight: 'bold'
+  },
+  indentedText: {
+    paddingLeft: 10
   }
 })
 

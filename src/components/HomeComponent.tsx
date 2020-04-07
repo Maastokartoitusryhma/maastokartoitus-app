@@ -89,10 +89,18 @@ const HomeComponent = (props: Props) => {
   useEffect(() => {
     loadRegions()
     loadObservationEvents()
+  }, [props.observationEvent])
 
-  }, [])
+  const loadRegions = async () => {
+    const response = await regionController.getRegions()
+    if (response !== null) {
+      setRegions(response.results)
+      setSelectedRegion(response.results[0].id)
+      setSelectedObservationZone(response.results[0].id)
+    }
+  }
 
-  const loadObservationEvents =  async () => {
+  const loadObservationEvents = () => {
     props.allObservationEvents()
     if (props.observationEvent !== null) {
       const events: Array<Element> = []
@@ -107,15 +115,6 @@ const HomeComponent = (props: Props) => {
     }
   }
 
-  const loadRegions = async () => {
-    const response = await regionController.getRegions()
-    if (response !== null) {
-      setRegions(response.results)
-      setSelectedRegion(response.results[0].id)
-      setSelectedObservationZone(response.results[0].id)
-    }
-  }
-  
   const parseObservationEventObject = () => {
     let schema: object
     if (i18n.language === 'fi') {
@@ -148,13 +147,8 @@ const HomeComponent = (props: Props) => {
     
     const observationForm = parseObservationEventObject()
     if (observationForm !== null) {
-      console.log('OBSERVATION FORM: ' + JSON.stringify(observationForm))
-      const date = new Date()
-      const dateString = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + " " + date.getHours() + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + ":" + date.getSeconds()
-      console.log('DATE TEST:', dateString)
-      console.log('DATE TEST 2:', new Date(Date.now()).toString())
-      console.log('DATE TEST 3:', new Date(Date.now()).toISOString())
-      observationForm.gatheringEvent.dateBegin = new Date(Date.now()).toISOString()
+      //console.log('OBSERVATION FORM: ' + JSON.stringify(observationForm))
+      observationForm.gatheringEvent.dateBegin = setDate()
       const region: RegionObject | undefined = regions.find(region => region.id === selectedRegion)
       if (region) {
         observationForm.gatherings[0].geometry = region.geometry.geometries[0]
@@ -175,10 +169,8 @@ const HomeComponent = (props: Props) => {
 
   const finishObservationEvent = () => {
     const events = _.cloneDeep(props.observationEvent)
-    console.log(events)
     const event = events.pop()
-    console.log(JSON.stringify(event))
-    event.schema.gatheringEvent.dateEnd = new Date(Date.now()).toISOString()
+    event.schema.gatheringEvent.dateEnd = setDate()
     events.push(event)
 
     //replace events with modified list
@@ -187,7 +179,18 @@ const HomeComponent = (props: Props) => {
     props.toggleObserving()
     props.clearObservationLocation()
     stopLocationAsync()
-    loadObservationEvents()
+    props.allObservationEvents
+    //loadObservationEvents()
+  }
+
+  const setDate = () => {
+    const date = new Date()
+    const year = date.getFullYear()
+    const month = (date.getMonth() + 1) < 10 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)
+    const day = date.getDate() < 10 ? ("0" + date.getDate()) : date.getDate()
+    const hours = date.getHours() <  10 ? ("0" + date.getHours()) : date.getHours()
+    const minutes = date.getMinutes() < 10 ? ("0" + date.getMinutes()) : date.getMinutes()
+    return year + "-" + month + "-" + day + "T" + hours + ":" + minutes
   }
 
   const setSelectedObservationZone = (id: string) => {

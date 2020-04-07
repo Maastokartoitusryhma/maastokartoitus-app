@@ -9,14 +9,13 @@ import { wrapGeometryInFC, convertGC2FC, convertLatLngToPoint } from '../convert
 import Geojson from 'react-native-typescript-geojson'
 import { 
   setObservationLocation, 
-  clearObservationLocation, 
-  removeFromObservationLocations
+  clearObservationLocation,
 } from '../stores/observation/actions' 
 import {
   setRegion,
   toggleCentered,
   toggleMaptype,
-  toggleEditing,
+  setEditing,
 } from '../stores/map/actions'
 import Colors from '../styles/Colors'
 import { MaterialIcons } from '@expo/vector-icons'
@@ -35,7 +34,7 @@ interface RootState {
   zone: GeometryCollection
   centered: boolean
   maptype: 'topographic' | 'satellite'
-  editing: boolean
+  editing: boolean[]
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -46,11 +45,10 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = {
   setRegion,
   setObservationLocation,
-  removeFromObservationLocations,
   clearObservationLocation,
   toggleCentered,
   toggleMaptype,
-  toggleEditing,
+  setEditing,
 }
 
 const connector = connect(
@@ -76,6 +74,12 @@ const MapComponent = (props: Props) => {
       followUser()
     }
   })
+
+  //ensures that if user stops editing old point with cancel-button or 
+  //navigators back-button rditing-flags are reset to false, and observation
+  //location is cleared 
+  useEffect(() => {
+  },[])
 
   //reference for mapView
   let mapView: MapView | null = null
@@ -137,20 +141,18 @@ const MapComponent = (props: Props) => {
   //clears observation location from its reducer, and removes it from the list
   //of locations in observationEvent
   const cancelObservation = () => {
-    props.removeFromObservationLocations(props.observation)
     props.clearObservationLocation()
   }
 
   //redirects navigator back to edit page of single observation
   const submitEdit = () => {
+    props.setEditing([true, true])
     props.onPressEditing()
   }
 
-  //redirects navigator back to edit page, sets edit-flag to false and clears
-  //selected observation location from reducer
+  //redirects navigator back to edit page and set editing-flags to false
   const cancelEdit = () => {
-    props.clearObservationLocation()
-    props.toggleEditing()
+    props.setEditing([false, false])
     props.onPressEditing()
   }
 
@@ -218,6 +220,7 @@ const MapComponent = (props: Props) => {
   //draws past obserations in same gatheringevent to map
   const observationLocationsOverlay = () => {
     if (
+      props.editing[0] ||
       props.observationEvent.length <= 0 || 
       props.observationEvent[props.observationEvent.length - 1]
       .schema.gatherings[0].units.length <= 0
@@ -261,7 +264,7 @@ const MapComponent = (props: Props) => {
     <View style = {Cs.observationTypeButtonsContainer}>
       <View
         style={Cs.observationTypeButtonsColumn}>
-          {props.editing ?
+          {props.editing[0] ?
             <>
               <View style={Cs.observationTypeButton}>
                 <Button title = {t('save')} onPress = {() => submitEdit()}/>

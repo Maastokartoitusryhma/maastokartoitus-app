@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Point } from 'geojson'
 import storageController from '../controllers/storageController'
 import { replaceObservationEvents, clearObservationId } from '../stores/observation/actions'
-import { toggleEditing } from '../stores/map/actions'
+import { setEditing } from '../stores/map/actions'
 import { setObservationLocation, clearObservationLocation } from '../stores/observation/actions'
 import ObservationForm from '../forms/ObservationForm'
 import TrackObservationForm from '../forms/TrackObservationForm'
@@ -17,6 +17,8 @@ import Ts from '../styles/TextStyles'
 import Colors from '../styles/Colors'
 import Modal from 'react-native-modal'
 import _ from 'lodash'
+import ImagePickerComponent from './ImagePickerComponent'
+
 
 interface BasicObject {
   [key: string]: any
@@ -26,7 +28,7 @@ interface RootState {
   observation: Point
   observationEvent: any[]
   observationId: BasicObject
-  editing: boolean
+  editing: boolean[]
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -37,7 +39,7 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = {
   replaceObservationEvents,
   clearObservationId,
-  toggleEditing,
+  setEditing,
   setObservationLocation,
   clearObservationLocation,
 }
@@ -61,11 +63,20 @@ const EditObservationComponent = (props: Props) => {
   const [ form, setForm ] = useState<any | null>(null)
   const [ observation, setObservation ] = useState<BasicObject | null>(null)
   const [ events, setEvents ] = useState<any[]>([])
+  const [ image, setImage ] = useState<string>('')
+
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
   const { t } = useTranslation()
 
   useEffect(() => {
     init()
+    //Cleanup when component unmounts, ensures that if navigator back-button
+    //is used observationLocation and editing-flags are returned to defaults
+    return () => {
+      props.clearObservationLocation()
+      props.setEditing([false, false])
+      console.log("CLEANUP FIRED")
+    }
   }, [])
 
   const init = () => {
@@ -82,6 +93,8 @@ const EditObservationComponent = (props: Props) => {
     setIndexOfEditedObservation(observationIndex)
     const observationClone = observationsClone[observationIndex]
     setObservation(observationClone)
+    const imageClone = observationsClone[observationIndex].image
+    setImage(imageClone)
   }
 
 
@@ -99,6 +112,8 @@ const EditObservationComponent = (props: Props) => {
       if (observation.type === 'fecesObservation') {
         data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
       }
+
+      console.log('data.image = ', data.image)
       
       //console.log('REGISTER DATA:', JSON.stringify(data))
       //console.log('EVENT BEFORE:', props.observationEvent)
@@ -123,12 +138,13 @@ const EditObservationComponent = (props: Props) => {
         ...data,
         unitGathering: observation.unitGathering
       }
-      
-      //if editing-flag is true try to replace location with new location, and clear editing-flag
-      if (props.editing) {
+
+      //if editing-flag 1st and 2nd elements are true replace location with new location, and clear editing-flag
+      if (props.editing[0] && props.editing[1]) {
         props.observation ? editedUnit.unitGathering.geometry = props.observation : null
         props.clearObservationLocation()
-        props.toggleEditing()
+        props.setEditing([false, false])
+        console.log('LOC MODIFIED')
       }
 
       events[indexOfEditedEvent].schema.gatherings[0].units[indexOfEditedObservation] = editedUnit
@@ -165,7 +181,7 @@ const EditObservationComponent = (props: Props) => {
   const handleChangeToMap = () => {
     if (observation !== null) {
       props.setObservationLocation(observation.unitGathering.geometry)
-      props.editing ? null : props.toggleEditing()
+      props.setEditing([true, false])
       props.onEditLocation()
     }
   }
@@ -177,6 +193,7 @@ const EditObservationComponent = (props: Props) => {
     return (
       <View style={Cs.observationContainer}>
         <ScrollView>
+          <ImagePickerComponent image={image} setImage={setImage} />
           <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
           <View style={Cs.buttonContainer}>
             <Button title={t('edit location')} onPress={() => handleChangeToMap()}></Button>
