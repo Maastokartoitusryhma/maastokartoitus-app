@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Colors from '../styles/Colors'
 import LoginComponent from '../components/LoginComponent'
-import { getSingleObservationSchema } from '../controllers/formController'
+import { getSingleObservationSchema } from '../controllers/documentController'
 import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
 
 type Props  = {

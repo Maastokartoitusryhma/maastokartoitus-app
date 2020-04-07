@@ -6,6 +6,7 @@ import { connect, ConnectedProps } from 'react-redux'
 import { allObservationEvents, setObservationId } from '../stores/observation/actions'
 import { useTranslation } from 'react-i18next'
 import ObservationInfoComponent from './ObservationInfoComponent'
+import { postObservationEvent } from '../controllers/documentController' 
 import Colors from '../styles/Colors'
 
 interface RootState {
@@ -79,6 +80,14 @@ const ObservationEventComponent = (props: Props) => {
               }
             props.setObservationId(id)
             props.onPressObservationEvent()
+            }}
+          />
+          <View style={{padding: 5}}></View>
+          <Button
+            title={'Lähetä palvelimelle'}
+            color={Colors.neutralButton}
+            onPress={() => {
+              postObservationEvent(event)
             }}
           />
           <View style={{padding: 5}}></View>

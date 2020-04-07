@@ -1,5 +1,10 @@
 import ApolloClient, { gql } from 'apollo-boost'
 import { Alert } from 'react-native'
+import axios from 'axios'
+
+interface BasicObject {
+  [key: string]: any
+}
 
 const setClient = (language: string) => {
   return new ApolloClient({
@@ -51,4 +56,14 @@ export const getSingleObservationSchema = async (language: string) => {
     Alert.alert(error)
     return null
   }
+}
+
+export const postObservationEvent = async (observationEvent: BasicObject) => {
+  console.log('EVENT TO SEND: ', observationEvent)
+  
+  //Remove unnecessary fields
+  //Axios.post(event)
+  //Check that response is 200
+  //Set sentToServer true
+  //Use the method that checks that there's not over 5 sent events stored in async
 }
