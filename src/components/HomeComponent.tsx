@@ -157,7 +157,6 @@ const HomeComponent = (props: Props) => {
     
     const observationEventObject = {
       id: 'observationEvent_' + uuid.v4(),
-      sentToServer: false,
       schema: observationForm
     }
 
