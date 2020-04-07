@@ -5,7 +5,7 @@ import { Button, View, TouchableHighlight } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { LocationData } from 'expo-location'
 import { GeometryCollection, Point } from 'geojson'
-import { wrapGeometryInFC, convertGC2FC, convertLatLngToPoint } from '../converters/geoJSONConverters'
+import { wrapGeometryInFC, convertGC2FC, convertLatLngToPoint, convertPointToLatLng } from '../converters/geoJSONConverters'
 import Geojson from 'react-native-typescript-geojson'
 import { 
   setObservationLocation, 
@@ -188,10 +188,14 @@ const MapComponent = (props: Props) => {
     : null
   )
 
-  //draws currently selected point to map
+  //draws currently selected point to map & enables dragabilty to finetune its
+  //position
   const targetOverlay  = () => (props.observation ?
-    <Geojson 
-      geojson = {wrapGeometryInFC(props.observation)}
+    <Marker 
+      draggable = {true}
+      coordinate = {convertPointToLatLng(props.observation)}
+      onDragEnd = {(event) => markObservation(event.nativeEvent.coordinate)}
+      zIndex = {8}
     />
     : null
   )
