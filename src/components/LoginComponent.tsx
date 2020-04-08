@@ -11,6 +11,7 @@ import storageController from '../controllers/storageController'
 import { getObservationEventSchema } from '../controllers/documentController'
 import { connect, ConnectedProps } from 'react-redux'
 import { newObservationEvent, setSchemaFi, setSchemaEn, setSchemaSv } from '../stores/observation/actions'
+import { setPersonToken } from '../stores/user/actions'
 
 interface RootState {
   observationEvent: any[],
@@ -28,7 +29,8 @@ const mapDispatchToProps = {
   newObservationEvent,
   setSchemaFi,
   setSchemaEn,
-  setSchemaSv
+  setSchemaSv,
+  setPersonToken
 }
 
 const connector = connect(
@@ -56,7 +58,12 @@ const LoginComponent = (props: Props) => {
   // Check if user has previously logged in, redirect to home screen if is
   const loadUserData = async () => {
     const userData = await AsyncStorage.getItem('userData')
+    const personToken = await AsyncStorage.getItem('personToken')
     console.log('USER:', userData)
+    console.log('PERSONTOKEN:', personToken)
+    if (personToken !== null) {
+      props.setPersonToken(personToken)
+    }
     if (userData !== null) {
       i18n.changeLanguage(JSON.parse(userData).defaultLanguage)
       await fetchObservationEvents()
@@ -82,6 +89,8 @@ const LoginComponent = (props: Props) => {
       const result = await userController.postTmpToken(tmpToken)
       if (result.token !== undefined) { // Login is successful and personToken is returned in result
         getUserInfo(result.token)
+        console.log('Saving token to redux: ', result.token)
+        props.setPersonToken(result.token)
       } else {
         setTimeout(() => {
           run()
@@ -95,7 +104,7 @@ const LoginComponent = (props: Props) => {
   const getUserInfo = async (token: string) => {
     const userObject = await userController.getUserByPersonToken(token)
     if (userObject.error === undefined) {
-      await storeUserData(JSON.stringify(userObject))
+      await storeUserData(JSON.stringify(userObject), token)
       loadUserData()
     } else {
       console.log('SOME ERROR')
@@ -103,9 +112,10 @@ const LoginComponent = (props: Props) => {
   }
 
   // Save user data to storage
-  const storeUserData = async (userObject: string) => {
+  const storeUserData = async (userObject: string, personToken: string) => {
     try {
       await AsyncStorage.setItem('userData', userObject)
+      await AsyncStorage.setItem('personToken', personToken)
     } catch (e) {
       console.log('Error saving user data to storage: ', e)
     }

@@ -60,15 +60,27 @@ export const getSingleObservationSchema = async (language: string) => {
 
 export const postObservationEvent = async (observationEvent: BasicObject) => {
   const event = observationEvent.schema
-  console.log('EVENT TO SEND: ', event)
   const units = observationEvent.schema.gatherings[0].units
+
+  // remove unnecessary fields
   units.forEach((observation: BasicObject) => {
     delete observation.id
     delete observation.type
   })
   console.log('UNITS TO SEND: ', units)
-  //Remove unnecessary fields
-  //Axios.post(event)
+
+  event.gatherings[0].units = units
+  console.log('EVENT TO SEND: ', event)
+
+  try {
+    const response = await axios.post(`https://apitest.laji.fi/v0/documents/validate?formID=MHL.45`, event)
+    //Alert.alert('RESPONSE: ', JSON.stringify(response))
+    console.log(response)
+  } catch (error) {
+    //Alert.alert(error)
+    console.log(error)
+  }
+
   //Check that response is 200
   //Set sentToServer true
   //Use the method that checks that there's not over 5 sent events stored in async

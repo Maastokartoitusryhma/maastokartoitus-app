@@ -3,6 +3,7 @@ import { positionReducer, pathReducer } from './position/reducers'
 import { observationReducer, observingReducer,
   observationEventsReducer, schemaFiReducer, schemaEnReducer, schemaSvReducer, observationIdReducer } from './observation/reducers'
 import { regionReducer, zoneReducer, centeringReducer, maptypeReducer, editingReducer} from './map/reducers'
+import { userReducer } from './user/reducers'
 
 export default combineReducers({
   region: regionReducer,
@@ -19,4 +20,5 @@ export default combineReducers({
   schemaSv: schemaSvReducer,
   observationId: observationIdReducer,
   editing: editingReducer,
+  user: userReducer
 })
