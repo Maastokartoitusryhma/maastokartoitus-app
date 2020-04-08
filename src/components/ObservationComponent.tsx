@@ -96,6 +96,7 @@ const ObservationComponent = (props: Props) => {
       indirectObservationType: data.indirectObservationType,
       recordBasis: data.recordBasis,
       taxonConfidence: data.taxonConfidence,
+      notes: data.notes,
       unitGathering: {
         geometry: props.observation
       },

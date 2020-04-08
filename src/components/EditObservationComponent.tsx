@@ -124,6 +124,7 @@ const EditObservationComponent = (props: Props) => {
         indirectObservationType: data.indirectObservationType,
         recordBasis: data.recordBasis,
         taxonConfidence: data.taxonConfidence,
+        notes: data.notes,
         unitGathering: observation.unitGathering,
         unitFact: {
           lolifeDroppingsQuality: data.lolifeDroppingsQuality,
