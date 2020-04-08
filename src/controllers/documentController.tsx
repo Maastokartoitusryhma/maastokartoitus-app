@@ -1,6 +1,7 @@
 import ApolloClient, { gql } from 'apollo-boost'
 import { Alert } from 'react-native'
 import axios from 'axios'
+import temporaryForm from '../../temporaryForm.json'
 
 interface BasicObject {
   [key: string]: any
@@ -58,7 +59,7 @@ export const getSingleObservationSchema = async (language: string) => {
   }
 }
 
-export const postObservationEvent = async (observationEvent: BasicObject) => {
+export const postObservationEvent = async (observationEvent: BasicObject, token: string) => {
   const event = observationEvent.schema
   const units = observationEvent.schema.gatherings[0].units
 
@@ -67,21 +68,25 @@ export const postObservationEvent = async (observationEvent: BasicObject) => {
     delete observation.id
     delete observation.type
   })
-  console.log('UNITS TO SEND: ', units)
 
   event.gatherings[0].units = units
   console.log('EVENT TO SEND: ', event)
 
+  const accessToken = 'R7uWGymPsmJ2ItzJphThYBcqLc6dBVDBfdUEGSRYq8aChwRvi34zvfJyrXTTUHFB'
+
+  let response = null
   try {
-    const response = await axios.post(`https://apitest.laji.fi/v0/documents/validate?formID=MHL.45`, event)
-    //Alert.alert('RESPONSE: ', JSON.stringify(response))
+    let url = `https://apitest.laji.fi/v0/documents/validate?formID=MHL.45&personToken=${token}&access_token=${accessToken}`
+    console.log('URL: ' + url)
+
+    // let stringified = JSON.stringify(event)
+    // let parsed = JSON.parse(stringified)
+    let formData = event
+    console.log('FORM DATA: ' + formData)
+
+    response = await axios.post(url, formData)
     console.log(response)
   } catch (error) {
-    //Alert.alert(error)
-    console.log(error)
+    console.log('ERROR: ' + error)
   }
-
-  //Check that response is 200
-  //Set sentToServer true
-  //Use the method that checks that there's not over 5 sent events stored in async
 }
