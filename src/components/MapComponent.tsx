@@ -227,7 +227,7 @@ const MapComponent = (props: Props) => {
     : null
   )
 
-  console.log(props.zone)
+  //console.log(props.zone)
 
   //draws past observations in same gatheringevent to map, markers are draggable 
   const observationLocationsOverlay = () => {

@@ -17,6 +17,7 @@ import {
   editingReducer
 } from './map/reducers'
 import { userReducer } from './user/reducers'
+import { messageReducer } from './other/reducers'
 
 export default combineReducers({
   region: regionReducer,
@@ -33,5 +34,6 @@ export default combineReducers({
   schemaSv: schemaSvReducer,
   observationId: observationIdReducer,
   editing: editingReducer,
-  user: userReducer
+  user: userReducer,
+  message: messageReducer
 })
