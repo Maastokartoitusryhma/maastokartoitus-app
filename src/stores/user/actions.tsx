@@ -1,4 +1,5 @@
-import { userActionTypes,
+import {
+  userActionTypes,
   GET_PERSON_TOKEN,
   SET_PERSON_TOKEN,
   CLEAR_PERSON_TOKEN
