@@ -85,5 +85,9 @@
   "lolifeDroppingsType": "Papanahavainnon tyyppi",
   "lolifeDroppingsCount": "Papanamäärä",
   "lolifeDroppingsQuality": "Papanoiden laatu",
-  "loading": "Ladataan..."
+  "loading": "Ladataan...",
+  "zoneInList": "Alue",
+  "observationsInList": "Havaintoja",
+  "piece": "kpl",
+  "pieces": "kpl"
 }

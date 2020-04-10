@@ -85,5 +85,9 @@
   "lolifeDroppingsType": "Droppings type",
   "lolifeDroppingsCount": "Droppings count",
   "lolifeDroppingsQuality": "Droppings quality",
-  "loading": "Loading..."
+  "loading": "Loading...",
+  "zoneInList": "Zone",
+  "observationsInList": "Observations",
+  "piece": "pc",
+  "pieces": "pcs"
 }

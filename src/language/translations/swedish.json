@@ -82,5 +82,9 @@
   "lolifeDroppingsType": "Typ av paprikasikt",
   "lolifeDroppingsCount": "Spillning räknar",
   "lolifeDroppingsQuality": "Spillningkvalitet",
-  "loading": "Laddar..."
+  "loading": "Laddar...",
+  "zoneInList": "Platsen",
+  "observationsInList": "Observationer",
+  "piece": "st",
+  "pieces": "st"
 }

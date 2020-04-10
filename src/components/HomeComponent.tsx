@@ -106,11 +106,7 @@ const HomeComponent = (props: Props) => {
     if (props.observationEvent !== null) {
       const events: Array<Element> = []
       props.observationEvent.forEach(event => {
-        const id = event.id
-        const dateBegin = event.schema.gatheringEvent.dateBegin
-        const dateEnd = event.schema.gatheringEvent.dateEnd
-        const observationCount = event.schema.gatherings[0].units.length
-        events.push(<ObservationEventListComponent key={id} id={id} dateBegin={dateBegin} dateEnd={dateEnd} observationCount={observationCount} onPress={() => props.onPressObservationEvent(id)} />)
+        events.push(<ObservationEventListComponent key={event.id} observationEvent={event} onPress={() => props.onPressObservationEvent(event.id)} />)
       })
       setObservationEvents(events)
     }
@@ -125,7 +121,7 @@ const HomeComponent = (props: Props) => {
     } else {
       schema = props.schemaSv
     }
-    const fetchedSchema = _.cloneDeep(schema)
+    const fetchedSchema: MyObject = _.cloneDeep(schema)
     if (fetchedSchema !== null) {
       //parse schema object
       const schemaObject: MyObject = {} = (parseSchemaToJSONObject(fetchedSchema.properties))
@@ -148,11 +144,11 @@ const HomeComponent = (props: Props) => {
     
     const observationForm = parseObservationEventObject()
     if (observationForm !== null) {
-      //console.log('OBSERVATION FORM: ' + JSON.stringify(observationForm))
       observationForm.gatheringEvent.dateBegin = setDate()
       const region: RegionObject | undefined = regions.find(region => region.id === selectedRegion)
       if (region) {
         observationForm.gatherings[0].geometry = region.geometry.geometries[0]
+        observationForm.gatherings[0].locality = region.name
       }  
     }
     

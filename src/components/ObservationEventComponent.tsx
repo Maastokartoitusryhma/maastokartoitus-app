@@ -72,7 +72,7 @@ const ObservationEventComponent = (props: Props) => {
         <ScrollView>
           <Text>{t('dateBegin')}: {parseDate(event.schema.gatheringEvent.dateBegin)}</Text>
           <Text>{t('dateEnd')}: {parseDate(event.schema.gatheringEvent.dateEnd)}</Text>
-          <Text>{t('Zone')}: </Text>
+          <Text>{t('Zone')}: {event.schema.gatherings[0].locality}</Text>
           <Button
             title={'Muokkaa havaintotapahtumaa'}
             color={Colors.neutralButton}
