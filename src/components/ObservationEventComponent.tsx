@@ -4,28 +4,40 @@ import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import { connect, ConnectedProps } from 'react-redux'
 import { allObservationEvents, setObservationId } from '../stores/observation/actions'
+import { getPersonToken } from '../stores/user/actions'
 import { useTranslation } from 'react-i18next'
 import ObservationInfoComponent from './ObservationInfoComponent'
+import { postObservationEvent } from '../controllers/documentController' 
 import Colors from '../styles/Colors'
 import { parseDate } from '../utilities/dateHelper'
 
-interface RootState {
-  observationEvent: any[]
-  observationId: object
+type UserObject = {
+  id: string
+  fullName: string
+  emailAddress: string
+  defaultLanguage: string
 }
 
 interface BasicObject {
   [key: string]: any
 }
 
+interface RootState {
+  observationEvent: any[]
+  observationId: BasicObject
+  user: UserObject
+  token: string
+}
+
 const mapStateToProps = (state: RootState) => {
-  const { observationEvent, observationId } = state
-  return { observationEvent, observationId }
+  const { observationEvent, observationId, user, token } = state
+  return { observationEvent, observationId, user, token }
 }
 
 const mapDispatchToProps = {
   allObservationEvents,
-  setObservationId
+  setObservationId,
+  getPersonToken
 }
 
 const connector = connect(
@@ -80,6 +92,14 @@ const ObservationEventComponent = (props: Props) => {
               }
             props.setObservationId(id)
             props.onPressObservationEvent()
+            }}
+          />
+          <View style={{padding: 5}}></View>
+          <Button
+            title={'Lähetä palvelimelle'}
+            color={Colors.neutralButton}
+            onPress={() => {
+              postObservationEvent(event, props.token)
             }}
           />
           <View style={{padding: 5}}></View>

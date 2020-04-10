@@ -5,7 +5,7 @@ import { Button, View, TouchableHighlight } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { LocationData } from 'expo-location'
 import { GeometryCollection, Point } from 'geojson'
-import { wrapGeometryInFC, convertGC2FC, convertLatLngToPoint } from '../converters/geoJSONConverters'
+import { wrapGeometryInFC, convertGC2FC, convertLatLngToPoint, convertPointToLatLng } from '../converters/geoJSONConverters'
 import Geojson from 'react-native-typescript-geojson'
 import { 
   setObservationLocation, 
@@ -156,6 +156,12 @@ const MapComponent = (props: Props) => {
     props.onPressEditing()
   }
 
+  //will eventually be used to update location for old observation in the 
+  //observationEvent as a result of dragging observation marker
+  const updateObservationLocation = (coordinates: LatLng, obsId: string, unitId: string) => {
+    console.log(JSON.stringify(coordinates) + ' ' + obsId + ' ' + unitId)
+  }
+
   //draws user position to map
   const locationOverlay = () => (props.position !== null ? (
     <Marker
@@ -188,10 +194,14 @@ const MapComponent = (props: Props) => {
     : null
   )
 
-  //draws currently selected point to map
+  //draws currently selected point to map & enables dragabilty to finetune its
+  //position
   const targetOverlay  = () => (props.observation ?
-    <Geojson 
-      geojson = {wrapGeometryInFC(props.observation)}
+    <Marker 
+      draggable = {true}
+      coordinate = {convertPointToLatLng(props.observation)}
+      onDragEnd = {(event) => markObservation(event.nativeEvent.coordinate)}
+      zIndex = {2}
     />
     : null
   )
@@ -217,7 +227,9 @@ const MapComponent = (props: Props) => {
     : null
   )
 
-  //draws past obserations in same gatheringevent to map
+  //console.log(props.zone)
+
+  //draws past observations in same gatheringevent to map, markers are draggable 
   const observationLocationsOverlay = () => {
     if (
       props.editing[0] ||
@@ -228,11 +240,15 @@ const MapComponent = (props: Props) => {
       return null
     }
 
+    const obsId = props.observationEvent[props.observationEvent.length - 1].id
     const units = props.observationEvent[props.observationEvent.length - 1]
                   .schema.gatherings[0].units
+
     return units.map((unit: Object) => {
-      const geometry = unit.unitGathering.geometry
-      let color      
+      const coordinate = convertPointToLatLng(unit.unitGathering.geometry)
+      const unitId = unit.id
+      let color
+
       switch (unit.type) {
         case 'observation':
           color = Colors.obsColor
@@ -251,10 +267,13 @@ const MapComponent = (props: Props) => {
       }
 
       return(
-        <Geojson 
-          key={uuid.v4()} 
-          geojson={wrapGeometryInFC(unit.unitGathering.geometry)}
-          pinColor={color}
+        <Marker 
+          key={uuid.v4()}
+          draggable = {true} 
+          coordinate = {coordinate}
+          pinColor = {color}
+          onDragEnd = {(event) => updateObservationLocation(event.nativeEvent.coordinate, obsId, unitId)}
+          zIndex = {-1}
         />
       )
     })
@@ -313,8 +332,8 @@ const MapComponent = (props: Props) => {
         {locationOverlay()}
         {targetOverlay()}
         {pathOverlay()}
-        {zoneOverlay()}
         {tileOverlay()}
+        {zoneOverlay()}
         {observationLocationsOverlay()}
       </MapView>
       <View

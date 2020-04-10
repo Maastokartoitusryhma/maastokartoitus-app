@@ -1,9 +1,23 @@
 import { combineReducers } from 'redux'
 import { positionReducer, pathReducer } from './position/reducers'
-import { observationReducer, observingReducer,
-  observationEventsReducer, schemaFiReducer, schemaEnReducer, schemaSvReducer, observationIdReducer } from './observation/reducers'
-import { regionReducer, zoneReducer, centeringReducer, maptypeReducer, editingReducer} from './map/reducers'
-import { userReducer } from './user/reducers'
+import {
+  observationReducer, 
+  observingReducer,
+  observationEventsReducer,
+  schemaFiReducer, 
+  schemaEnReducer,
+  schemaSvReducer,
+  observationIdReducer
+} from './observation/reducers'
+import {
+  regionReducer,
+  zoneReducer,
+  centeringReducer,
+  maptypeReducer,
+  editingReducer
+} from './map/reducers'
+import { userReducer, tokenReducer } from './user/reducers'
+import { messageReducer } from './other/reducers'
 
 export default combineReducers({
   region: regionReducer,
@@ -20,5 +34,7 @@ export default combineReducers({
   schemaSv: schemaSvReducer,
   observationId: observationIdReducer,
   editing: editingReducer,
-  user: userReducer
+  user: userReducer,
+  token: tokenReducer,
+  message: messageReducer
 })

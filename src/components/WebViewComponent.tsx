@@ -3,7 +3,7 @@ import WebView from 'react-native-webview'
 import userController from '../controllers/userController'
 import storageController from '../controllers/storageController'
 import { connect, ConnectedProps } from 'react-redux'
-import { setUser } from '../stores/user/actions'
+import { setUser, setPersonToken } from '../stores/user/actions'
 
 type UserObject = {
   id: string
@@ -13,16 +13,18 @@ type UserObject = {
 }
 
 interface RootState {
-  user: UserObject
+  user: UserObject,
+  token: string
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { user } = state
-  return { user }
+  const { user, token } = state
+  return { user, token }
 }
 
 const mapDispatchToProps = {
-  setUser
+  setUser,
+  setPersonToken
 }
 
 const connector = connect(
@@ -62,7 +64,7 @@ const WebViewComponent = (props: Props) => {
     const result = await userController.postTmpToken(tmpToken)
     if (result.token !== undefined) { // Check if login is successful and personToken is returned in result
       const userData = await getUserInfo(result.token)
-      await storeUserData(userData)
+      await storeUserData(userData, result.token)
     }
   }
 
@@ -78,10 +80,12 @@ const WebViewComponent = (props: Props) => {
   }
 
   // Store fetched user info to storage and reducer
-  const storeUserData = async (userData: UserObject) => {
+  const storeUserData = async (userData: UserObject, personToken: string) => {
     try {
       await storageController.save('userData', userData)
+      await storageController.save('personToken', personToken)
       props.setUser(userData)
+      props.setPersonToken(personToken)
     } catch (e) {
       console.log('Error saving user data to storage or reducer: ', e)
     }

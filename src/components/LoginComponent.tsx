@@ -3,10 +3,10 @@ import { View, Button, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import userController from '../controllers/userController'
 import storageController from '../controllers/storageController'
-import { getObservationEventSchema } from '../controllers/formController'
+import { getObservationEventSchema } from '../controllers/documentController'
 import { connect, ConnectedProps } from 'react-redux'
 import { replaceObservationEvents, newObservationEvent, setSchemaFi, setSchemaEn, setSchemaSv } from '../stores/observation/actions'
-import { setUser } from '../stores/user/actions'
+import { setUser, setPersonToken } from '../stores/user/actions'
 import Colors from '../styles/Colors'
 import Cs from '../styles/ContainerStyles'
 import Bs from '../styles/ButtonStyles'
@@ -26,11 +26,12 @@ interface RootState {
   schemaEn: object
   schemaSv: object
   user: UserObject
+  token: string
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { observationEvent, schemaFi, schemaEn, schemaSv, user } = state
-  return { observationEvent, schemaFi, schemaEn, schemaSv, user }
+  const { observationEvent, schemaFi, schemaEn, schemaSv, user, token } = state
+  return { observationEvent, schemaFi, schemaEn, schemaSv, user, token }
 }
 
 const mapDispatchToProps = {
@@ -39,7 +40,8 @@ const mapDispatchToProps = {
   setSchemaFi,
   setSchemaEn,
   setSchemaSv,
-  setUser
+  setUser,
+  setPersonToken
 }
 
 const connector = connect(
@@ -65,11 +67,15 @@ const LoginComponent = (props: Props) => {
 
   // Check if user has previously logged in, redirect to home screen if is
   const loadData = async () => {
-    const userData: UserObject = await storageController.fetch('userData')
-    if (userData !== null) { // User data found from storage ==> user has logged in previously
+    const userData = await storageController.fetch('userData')
+    const personToken = await storageController.fetch('personToken')
+    if (userData !== null && personToken !== null) { // User data found from storage ==> user has logged in previously
       setLoggingIn(true)
       if (props.user === null) { // Set user data to reducer if it's not already there
         props.setUser(userData)
+      }
+      if (props.token === null) {
+        props.setPersonToken(personToken)
       }
       i18n.changeLanguage(userData.defaultLanguage)
       await fetchObservationEvents()
