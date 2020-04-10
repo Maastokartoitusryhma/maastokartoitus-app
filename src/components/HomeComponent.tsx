@@ -4,6 +4,7 @@ import UserInfoComponent from './UserInfoComponent'
 import ObservationEventListComponent from './ObservationEventListElementComponent'
 import { useTranslation } from 'react-i18next'
 import regionController from '../controllers/regionController'
+import storageController from '../controllers/storageController'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import Color from '../styles/Colors'
@@ -175,11 +176,11 @@ const HomeComponent = (props: Props) => {
     //replace events with modified list
     props.replaceObservationEvents(events)
 
+    storageController.save('observationEvents', events)
     props.toggleObserving()
     props.clearObservationLocation()
     stopLocationAsync()
     props.allObservationEvents
-    //loadObservationEvents()
   }
 
   const setDate = () => {

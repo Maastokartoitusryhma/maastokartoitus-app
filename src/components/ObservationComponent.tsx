@@ -5,15 +5,16 @@ import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Point } from 'geojson'
 import storageController from '../controllers/storageController'
-import { replaceObservationEvents, clearObservationLocation, removeFromObservationLocations } from '../stores/observation/actions'
+import { replaceObservationEvents, clearObservationLocation } from '../stores/observation/actions'
+import { setMessageContent, setMessageVisibilityTrue } from '../stores/other/actions'
 import ObservationForm from '../forms/ObservationForm'
 import TrackObservationForm from '../forms/TrackObservationForm'
 import FecesObservationForm from '../forms/FecesObservationForm'
 import NestObservationForm from '../forms/NestObservationForm'
+import MessageComponent from './MessageComponent'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import Colors from '../styles/Colors'
-import Modal from 'react-native-modal'
 import _ from 'lodash'
 import uuid from 'react-native-uuid'
 import ImagePickerComponent from './ImagePickerComponent'
@@ -33,7 +34,8 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = {
   replaceObservationEvents,
   clearObservationLocation,
-  removeFromObservationLocations
+  setMessageContent,
+  setMessageVisibilityTrue
 }
 
 const connector = connect(
@@ -57,7 +59,6 @@ const ObservationComponent = (props: Props) => {
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
   const { t } = useTranslation()
   const [form, setForm] = useState()
-  const [showModal, setShowModal] = useState(false)
   const [image, setImage] = useState('')
 
   const onSubmit = (data: { [key: string]: any }) => {
@@ -78,11 +79,11 @@ const ObservationComponent = (props: Props) => {
       data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
     }
     
-    console.log('POINT:', props.observation)
-    console.log('REGISTER DATA:', data)
-    console.log('EVENT BEFORE:', props.observationEvent)
-    console.log('LOCATIONS', props.observationLocations)
-    console.log('IMAGE:', image)
+    //console.log('POINT:', props.observation)
+    //console.log('REGISTER DATA:', data)
+    //console.log('EVENT BEFORE:', props.observationEvent)
+    //console.log('LOCATIONS', props.observationLocations)
+    //console.log('IMAGE:', image)
 
     //clone events from reducer for modification
     const events = _.cloneDeep(props.observationEvent)
@@ -116,18 +117,19 @@ const ObservationComponent = (props: Props) => {
       image: image
     }
 
-    console.log('NEW UNIT:', newUnit)
+    //console.log('NEW UNIT:', newUnit)
     event.schema.gatherings[0].units.push(newUnit)
     events.push(event)
 
     //replace events with the modified copy
     props.replaceObservationEvents(events)
 
-    console.log('EVENT AFTER:', props.observationEvent)
+    //console.log('EVENT AFTER:', props.observationEvent)
 
     storageController.save('observationEvents', events)
     props.clearObservationLocation()
-    setShowModal(true)
+    props.setMessageContent(t('observation saved'))
+    props.setMessageVisibilityTrue()  
   }
 
   const initForm = async () => {
@@ -160,21 +162,7 @@ const ObservationComponent = (props: Props) => {
           <View style={Cs.formSaveButtonContainer}>
             <Button title={t('save observation')} onPress={handleSubmit(onSubmit)} color={Colors.positiveButton}/>
           </View>
-
-          <Modal isVisible={showModal}>
-            <View style={Cs.observationAddModal}>
-              <Text style={Cs.containerWithJustPadding}>{t('observation saved')}</Text>
-              <View style={{ width: '20%'}}>
-                <Button
-                  title='OK'
-                  color={Colors.neutralColor}
-                  onPress={() => {
-                  setShowModal(!showModal)
-                  props.onPress()
-                }} />
-              </View>
-            </View>
-          </Modal>
+          <MessageComponent onPress={props.onPress}/>
         </ScrollView>
       </View>
     )
