@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Colors from '../styles/Colors'
 import LoginComponent from '../components/LoginComponent'
-import { getSingleObservationSchema } from '../controllers/documentController'
 import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
 
 type Props  = {
@@ -18,11 +17,10 @@ export default class LoginScreen extends Component<NavigationStackScreenProps<Pr
   })
 
   render() {
-    //getSingleObservationSchema()
     return (
       <LoginComponent
-        onPressLogin={(loginURL: string) => {
-          this.props.navigation.navigate('WebView', { loginURL }) // Redirect to login web view
+        onPressLogin={(result: any) => {
+          this.props.navigation.navigate('WebView', { result }) // Redirect to login web view
         }}
         onSuccessfulLogin={() => {
           this.props.navigation.replace('Home')

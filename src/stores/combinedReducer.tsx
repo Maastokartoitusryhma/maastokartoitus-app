@@ -16,7 +16,7 @@ import {
   maptypeReducer,
   editingReducer
 } from './map/reducers'
-import { userReducer } from './user/reducers'
+import { userReducer, tokenReducer } from './user/reducers'
 import { messageReducer } from './other/reducers'
 
 export default combineReducers({
@@ -35,5 +35,6 @@ export default combineReducers({
   observationId: observationIdReducer,
   editing: editingReducer,
   user: userReducer,
+  token: tokenReducer,
   message: messageReducer
 })

@@ -11,6 +11,13 @@ import { postObservationEvent } from '../controllers/documentController'
 import Colors from '../styles/Colors'
 import { parseDate } from '../utilities/dateHelper'
 
+type UserObject = {
+  id: string
+  fullName: string
+  emailAddress: string
+  defaultLanguage: string
+}
+
 interface BasicObject {
   [key: string]: any
 }
@@ -18,12 +25,13 @@ interface BasicObject {
 interface RootState {
   observationEvent: any[]
   observationId: BasicObject
-  user: BasicObject
+  user: UserObject
+  token: string
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { observationEvent, observationId, user } = state
-  return { observationEvent, observationId, user }
+  const { observationEvent, observationId, user, token } = state
+  return { observationEvent, observationId, user, token }
 }
 
 const mapDispatchToProps = {
@@ -64,7 +72,7 @@ const ObservationEventComponent = (props: Props) => {
         <ScrollView>
           <Text>{t('dateBegin')}: {parseDate(event.schema.gatheringEvent.dateBegin)}</Text>
           <Text>{t('dateEnd')}: {parseDate(event.schema.gatheringEvent.dateEnd)}</Text>
-          <Text>{t('Zone')}: </Text>
+          <Text>{t('Zone')}: {event.schema.gatherings[0].locality}</Text>
           <Button
             title={'Muokkaa havaintotapahtumaa'}
             color={Colors.neutralButton}
@@ -82,7 +90,7 @@ const ObservationEventComponent = (props: Props) => {
             title={'Lähetä palvelimelle'}
             color={Colors.neutralButton}
             onPress={() => {
-              postObservationEvent(event, props.user.personToken)
+              postObservationEvent(event, props.token)
             }}
           />
           <View style={{padding: 5}}></View>

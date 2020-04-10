@@ -4,24 +4,33 @@ import Ts from '../styles/TextStyles'
 import { useTranslation } from 'react-i18next'
 import { parseDate } from '../utilities/dateHelper'
 
+interface BasicObject {
+  [key: string]: any
+}
+
 interface Props {
-  id: string
-  dateBegin: string
-  dateEnd: string
-  observationCount: number
+  observationEvent: BasicObject
   onPress: () => void
 }
 
 const ObservationEventListElementComponent = (props: Props) => {
 
   const { t } = useTranslation()
+  console.log(props.observationEvent)
+  const dateBegin = props.observationEvent.schema.gatheringEvent.dateBegin
+  const dateEnd = props.observationEvent.schema.gatheringEvent.dateEnd
+  const observationCount = props.observationEvent.schema.gatherings[0].units.length
+  const observationZone = props.observationEvent.schema.gatherings[0].locality
 
   return (
     <TouchableOpacity onPress={props.onPress}>
       <View style={Ts.observationEventListElement}>
-        <Text>{parseDate(props.dateBegin)} - {parseDate(props.dateEnd)}</Text>
+        <Text>{parseDate(dateBegin)} - {parseDate(dateEnd)}</Text>
         <Text style={Ts.indentedText}>
-          {props.observationCount} {props.observationCount === 1 ? t('singleObservation') : t('observations')}
+          {t('zoneInList') + ": " + observationZone}
+        </Text>
+        <Text style={Ts.indentedText}>
+          {t('observationsInList') + ": " + observationCount + " " + (observationCount === 1 ? t('piece') : t('pieces'))}
         </Text>
       </View>
     </TouchableOpacity>
