@@ -21,7 +21,7 @@ export default class EditObservationScreen extends Component<NavigationStackScre
     const { navigate } = this.props.navigation
     return (
       <EditObservationComponent 
-        onPress={() => navigate('Home')}
+        onPress={(id: string) => navigate('ObservationEvent', {id})}
         onEditLocation={() => navigate('Map')}
       />
     )
