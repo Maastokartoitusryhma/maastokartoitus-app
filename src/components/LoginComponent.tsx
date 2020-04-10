@@ -124,7 +124,7 @@ const LoginComponent = (props: Props) => {
   const fetchObservationEvents = async () => {
 
     // Uncomment the following line to delete everything in storage:
-    //await storageController.remove('observationEvents')
+    // await storageController.remove('observationEvents')
     // ------------------------------------------------------------
 
     const observationEvents: Array<Object> = await storageController.fetch('observationEvents')

@@ -78,6 +78,10 @@ const ObservationComponent = (props: Props) => {
     if (props.type === 'fecesObservation') {
       data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
     }
+    //if observation type is nest, change nestCount to integer
+    if(props.type === 'nestObservation') {
+      data['nestCount'] = parseInt(data['nestCount'])
+    }
     
     //console.log('POINT:', props.observation)
     //console.log('REGISTER DATA:', data)

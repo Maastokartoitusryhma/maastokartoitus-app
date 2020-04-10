@@ -70,23 +70,15 @@ export const postObservationEvent = async (observationEvent: BasicObject, token:
   })
 
   event.gatherings[0].units = units
-  console.log('EVENT TO SEND: ', event)
 
   const accessToken = 'R7uWGymPsmJ2ItzJphThYBcqLc6dBVDBfdUEGSRYq8aChwRvi34zvfJyrXTTUHFB'
-
-  let response = null
+  let url = `https://apitest.laji.fi/v0/documents?personToken=${token}&access_token=${accessToken}&validationErrorFormat=remote`
+  
   try {
-    let url = `https://apitest.laji.fi/v0/documents/validate?formID=MHL.45&personToken=${token}&access_token=${accessToken}`
-    console.log('URL: ' + url)
-
-    // let stringified = JSON.stringify(event)
-    // let parsed = JSON.parse(stringified)
-    let formData = event
-    console.log('FORM DATA: ' + formData)
-
-    response = await axios.post(url, formData)
-    console.log(response)
+    //console.log('URL: ' + url)
+    let response = await axios.post(url, event)
+    //console.log(response)
   } catch (error) {
-    console.log('ERROR: ' + error)
+    //console.log('ERROR: ' + error)
   }
 }

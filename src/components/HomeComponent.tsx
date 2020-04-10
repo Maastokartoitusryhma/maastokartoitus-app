@@ -150,6 +150,7 @@ const HomeComponent = (props: Props) => {
     if (observationForm !== null) {
       //console.log('OBSERVATION FORM: ' + JSON.stringify(observationForm))
       observationForm.gatheringEvent.dateBegin = setDate()
+      observationForm.formID = 'MHL.45'
       const region: RegionObject | undefined = regions.find(region => region.id === selectedRegion)
       if (region) {
         observationForm.gatherings[0].geometry = region.geometry.geometries[0]
