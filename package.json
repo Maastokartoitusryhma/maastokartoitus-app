@@ -17,6 +17,7 @@
     "@types/react-native-uuid": "^1.4.0",
     "apollo-boost": "^0.4.7",
     "axios": "^0.19.2",
+    "axios-retry": "^3.1.2",
     "buffer": "^5.4.3",
     "expo": "~36.0.0",
     "expo-image-picker": "^8.1.0",

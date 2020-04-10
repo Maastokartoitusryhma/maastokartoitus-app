@@ -81,5 +81,6 @@
   "MY.lolifeDroppingsQuality3" : "Nya och gula",
   "lolifeDroppingsType": "Typ av paprikasikt",
   "lolifeDroppingsCount": "Spillning räknar",
-  "lolifeDroppingsQuality": "Spillningkvalitet"
+  "lolifeDroppingsQuality": "Spillningkvalitet",
+  "loading": "Laddar..."
 }

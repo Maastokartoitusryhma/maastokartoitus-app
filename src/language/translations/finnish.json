@@ -84,7 +84,6 @@
   "MY.lolifeDroppingsQuality3" : "Tuoreita ja keltaisia",
   "lolifeDroppingsType": "Papanahavainnon tyyppi",
   "lolifeDroppingsCount": "Papanamäärä",
-  "lolifeDroppingsQuality": "Papanoiden laatu"
-
-
+  "lolifeDroppingsQuality": "Papanoiden laatu",
+  "loading": "Ladataan..."
 }

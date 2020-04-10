@@ -84,5 +84,6 @@
   "MY.lolifeDroppingsQuality3" : "Fresh and yellow",
   "lolifeDroppingsType": "Droppings type",
   "lolifeDroppingsCount": "Droppings count",
-  "lolifeDroppingsQuality": "Droppings quality"
+  "lolifeDroppingsQuality": "Droppings quality",
+  "loading": "Loading..."
 }

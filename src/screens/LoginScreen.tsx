@@ -18,11 +18,10 @@ export default class LoginScreen extends Component<NavigationStackScreenProps<Pr
   })
 
   render() {
-    //getSingleObservationSchema()
     return (
       <LoginComponent
-        onPressLogin={(loginURL: string) => {
-          this.props.navigation.navigate('WebView', { loginURL }) // Redirect to login web view
+        onPressLogin={(result: any) => {
+          this.props.navigation.navigate('WebView', { result }) // Redirect to login web view
         }}
         onSuccessfulLogin={() => {
           this.props.navigation.replace('Home')

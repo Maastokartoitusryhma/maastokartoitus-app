@@ -8,6 +8,7 @@ type Props  = {
 }
 
 export default class WebViewScreen extends Component<NavigationStackScreenProps<Props>>  {
+
   static navigationOptions = ({ screenProps }: any) => ({
     title: screenProps.t('login'),
     headerStyle: {
@@ -16,15 +17,30 @@ export default class WebViewScreen extends Component<NavigationStackScreenProps<
     headerTintColor: Colors.white
   })
 
-  
+  timer = 0
+
+  componentWillUnmount() {
+    console.log('unmount')
+    console.log('clear interval', this.timer)
+    // Wait for 3 seconds so that login can be finished
+    setTimeout(() => {
+      clearInterval(this.timer)
+    }, 3000)
+    
+  }
 
   render() {
     const { navigate } = this.props.navigation
 
+    const callback = (data: number) => {
+      this.timer = data
+    }
+
     return (
       <WebViewComponent
-        loginURL={this.props.navigation.state.params.loginURL}
+        result={this.props.navigation.state.params.result}
         onTimeout = {() => navigate('Login')}
+        callback={callback}
       />
     )
   }

@@ -6,7 +6,7 @@ const ButtonStyles = StyleSheet.create({
     padding: 10,
   },
   loginButton: {
-    width: '50%',
+    width: '60%',
     padding: 10,
   },
 })

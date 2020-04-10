@@ -1,18 +1,37 @@
 import React, { useState, useEffect } from 'react'
-import { Text, Button, View, AsyncStorage } from 'react-native'
+import { Text, Button, View } from 'react-native'
 import { connect, ConnectedProps } from 'react-redux'
 import { clearObservationEvents } from '../stores/observation/actions'
 import Colors from '../styles/Colors'
 import { useTranslation } from 'react-i18next'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
+import { removeUser } from '../stores/user/actions'
+import storageController from '../controllers/storageController'
+
+type UserObject = {
+  id: string
+  fullName: string
+  emailAddress: string
+  defaultLanguage: string
+}
+
+interface RootState {
+  user: UserObject
+}
+
+const mapStateToProps = (state: RootState) => {
+  const { user } = state
+  return { user }
+}
 
 const mapDispatchToProps = {
-  clearObservationEvents
+  clearObservationEvents,
+  removeUser
 }
 
 const connector = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )
 
@@ -25,16 +44,6 @@ type Props = PropsFromRedux & {
 const UserInfoComponent = (props: Props) => {
 
   const { t } = useTranslation()
-  const [userInfo, setUserInfo] = useState<Object|null>(null)
-
-  useEffect(() => {
-    fetchUserInfo()
-  }, [])
-
-  const fetchUserInfo = async () => {
-    const fetchedUserInfo: string|null = await AsyncStorage.getItem('userData')
-    setUserInfo(JSON.parse(fetchedUserInfo || '{}'))
-  }
 
   const logout = () => {
     clearUserData()
@@ -42,12 +51,13 @@ const UserInfoComponent = (props: Props) => {
     props.onLogout()
   }
 
-  // Remove user data from storage
+  // Remove user data from storage and reducer
   const clearUserData = async () => {
     try {
-      await AsyncStorage.removeItem('userData')
+      await storageController.remove('userData')
+      props.removeUser()
     } catch (e) {
-      console.log('Error removing user data from storage: ', e)
+      console.log('Error removing user data from storage or reducer: ', e)
     }
   }
 
@@ -56,10 +66,7 @@ const UserInfoComponent = (props: Props) => {
       <View style={Cs.userInfoContainer}>
         <View style={Ts.userInfoTitle}>
           <Text style={Ts.loggedIn}>
-            {userInfo !== null
-              ? (t('loggedin') + userInfo.fullName)
-              : null
-            }
+            {props.user != null ? t('loggedin') + props.user.fullName : null}
           </Text>
         </View>
         <View style={Cs.logoutButtonContainer}>
