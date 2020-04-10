@@ -1,72 +1,84 @@
-{  
+{
   "editors": [],
-  "gatheringEvent": {
-    "dateBegin": "2020-03-22T17:17:32.139Z",
-    "dateEnd": "2020-03-22T19:20:22.137Z",
-    "leg": [],
+  "gatheringEvent":  {
+    "dateBegin": "2020-04-10T14:35",
+    "dateEnd": "2020-04-10T14:36",
+    "leg":  [],
     "legPublic": false
   },
-  "gatherings": [
-    {
+  "gatherings":  [
+     {
       "gatheringType": "",
-      "geometry": {
-        "coordinates": [
-          [
-            [
-              24.961908,
-              60.202511
+      "geometry":  {
+        "coordinates":  [
+           [
+             [
+              24.61392,
+              60.21356
             ],
-            [
-              24.965364,
-              60.205118
+             [
+              24.612893,
+              60.213147
             ],
-            [
-              24.9642,
-              60.206324
+             [
+              24.61121,
+              60.213748
             ],
-            [
-              24.961623,
-              60.206023
+             [
+              24.609806,
+              60.212368
             ],
-            [
-              24.959503,
-              60.205098
+             [
+              24.60982,
+              60.21108
             ],
-            [
-              24.959768,
-              60.203668
+             [
+              24.610777,
+              60.21065
             ],
-            [
-              24.961908,
-              60.202511
+             [
+              24.61348,
+              60.210909
+            ],
+             [
+              24.615092,
+              60.212017
+            ],
+             [
+              24.615646,
+              60.213118
+            ],
+             [
+              24.61392,
+              60.21356
             ]
           ]
         ],
         "type": "Polygon"
       },
-      "habitat": [],
-      "images": [],
+      "habitat":  [],
+      "images":  [],
       "locality": "",
       "notes": "",
-      "units": [
-        {
-          "count": "",
-          "id": "observation_85b893e3-d7d8-491e-9302-58b70091890b",
-          "identifications": [
-            {
+      "units":  [
+         {
+          "identifications":  [
+             {
               "taxonID": "MX.48243"
             }
           ],
-          "lifeStage": "MY.lifeStageAlive",
-          "notes": "",
-          "recordBasis": "",
-          "taxonConfidence": "MY.taxonConfidenceSure",
-          "type": "observation",
-          "unitGathering": {
-            "geometry": {
-              "coordinates": [
-                24.971149675548077,
-                60.20194060203687
+          "image": "",
+          "nestCount": 2,
+          "nestNotes": "Testi.",
+          "nestType": "MY.nestTypeTreeCavity",
+          "notes": "Testi.",
+          "recordBasis": "MY.recordBasisHumanObservationIndirect",
+          "taxonConfidence": "MY.taxonConfidenceUnsure",
+          "unitGathering":  {
+            "geometry":  {
+              "coordinates":  [
+                24.61214739829302,
+                60.21262662730624
               ],
               "type": "Point"
             }
@@ -75,6 +87,6 @@
       ]
     }
   ],
-  "keywords": [],
+  "keywords":  [],
   "secureLevel": "MX.secureLevelNone"
 }
