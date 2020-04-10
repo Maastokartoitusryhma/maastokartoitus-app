@@ -57,9 +57,17 @@ const ImagePickerComponent = (props: Props) => {
   }
 
   return (
-    <View style={Cs.formSaveButtonContainer}>
-      <Button title={t('attach image')} onPress={imageFromLibrary} color={Colors.positiveButton} />
-      <Button title={t('use camera')} onPress={imageFromCamera} color={Colors.positiveButton} />
+    <View style={ Cs.formSaveButtonContainer }>
+      <Button
+        title={ t('attach image') }
+        onPress={ imageFromLibrary }
+        color={ Colors.positiveButton }
+      />
+      <Button
+        title={ t('use camera') }
+        onPress={ imageFromCamera }
+        color={ Colors.positiveButton }
+      />
       { props.image !== ''
         ?
           <Image
@@ -71,7 +79,7 @@ const ImagePickerComponent = (props: Props) => {
       }
       { props.image !== ''
         ?
-          <Button title={t('remove image')} onPress={removeImage} color={Colors.positiveButton} />
+          <Button title={ t('remove image') } onPress={ removeImage } color={ Colors.positiveButton } />
         :
           null
       }
