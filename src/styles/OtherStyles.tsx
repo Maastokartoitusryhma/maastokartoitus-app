@@ -19,6 +19,12 @@ const OtherStyles = StyleSheet.create({
   touchableHiglightStyle: {
     backgroundColor: Colors.headerBackground,
     borderRadius: 5
+  },
+  datePicker: {
+    borderColor: Colors.inputBorder,
+    borderWidth: 1,
+    height: 40,
+    width: '100%',
   }
 })
 

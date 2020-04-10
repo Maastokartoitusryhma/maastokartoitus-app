@@ -64,7 +64,7 @@ export const createInputElement = (
   setValue: Function, watch: Function, errors: Object,
   unregister: Function, isArrayItem: boolean, callbackFunction: Function|undefined
   ) => {
-  
+
   if (type === 'string') {
     return <FormInputComponent
       key={title} title={title} objectTitle={objectTitle}

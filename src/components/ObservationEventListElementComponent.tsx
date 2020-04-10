@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import Ts from '../styles/TextStyles'
 import { useTranslation } from 'react-i18next'
-import { parseDate } from '../utilities/dateHelper'
+import { parseDateForUI } from '../utilities/dateHelper'
 
 interface BasicObject {
   [key: string]: any
@@ -25,7 +25,7 @@ const ObservationEventListElementComponent = (props: Props) => {
   return (
     <TouchableOpacity onPress={props.onPress}>
       <View style={Ts.observationEventListElement}>
-        <Text>{parseDate(dateBegin)} - {parseDate(dateEnd)}</Text>
+        <Text>{parseDateForUI(dateBegin)} - {parseDateForUI(dateEnd)}</Text>
         <Text style={Ts.indentedText}>
           {t('zoneInList') + ": " + observationZone}
         </Text>

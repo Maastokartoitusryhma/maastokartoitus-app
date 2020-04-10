@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Text, TextInput, View } from 'react-native'
 import Os from '../styles/OtherStyles'
 import Cs from '../styles/ContainerStyles'
+import DatePicker from 'react-native-datepicker'
+import { parseDateForUI, parseDateForDocument } from '../utilities/dateHelper'
 
 interface Props {
   title: string
@@ -44,31 +46,49 @@ const FormInputComponent = (props: Props) => {
     }
   }, [])
   
-  return (
-    <View style={props.isArrayItem ? Cs.formArrayInputContainer : Cs.formInputContainer}>
-      {!props.isArrayItem
-        ? <Text>{props.title}</Text>
-        : null
-      }
-      <TextInput
-        style={Os.textInput}
-        keyboardType={props.keyboardType}
-        onChangeText={text => {
-          props.parentObjectTitle !== ''
-            ? addValueToArray(text)
-            : props.setValue(props.objectTitle, text)
-          props.parentCallback !== undefined
-            ? props.parentCallback({ title: props.title, value: text })
-            : null
-          }          
+
+  if (props.objectTitle === 'dateBegin' || props.objectTitle === 'dateEnd') {
+    return (
+      <View style={Cs.formInputContainer}>
+        <Text>{props.title}</Text>
+        <DatePicker
+          style={Os.datePicker}
+          mode="datetime"
+          date={parseDateForUI(props.defaultValue)}
+          format="MM.DD.YYYY HH.mm"
+          onDateChange={(date) => props.setValue(parseDateForDocument(date))}
+        />
+      </View>
+    )
+  } else {
+    return (
+      <View style={props.isArrayItem ? Cs.formArrayInputContainer : Cs.formInputContainer}>
+        {!props.isArrayItem
+          ? <Text>{props.title}</Text>
+          : null
         }
-        defaultValue={props.defaultValue}
-        ref={props.parentObjectTitle === ''
-          ? props.register({ name: props.objectTitle })
-          : null }
-      />
-    </View>
-  )
+        <TextInput
+          style={Os.textInput}
+          keyboardType={props.keyboardType}
+          onChangeText={text => {
+            props.parentObjectTitle !== ''
+              ? addValueToArray(text)
+              : props.setValue(props.objectTitle, text)
+            props.parentCallback !== undefined
+              ? props.parentCallback({ title: props.title, value: text })
+              : null
+            }          
+          }
+          defaultValue={props.defaultValue}
+          ref={props.parentObjectTitle === ''
+            ? props.register({ name: props.objectTitle })
+            : null }
+        />
+      </View>
+    )
+  }
+
+  
 }
 
 export default FormInputComponent
