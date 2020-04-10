@@ -47,19 +47,10 @@ type Props = PropsFromRedux & {
 
 const ObservationEventComponent = (props: Props) => {
 
-  const [event, setEvent] = useState<BasicObject | null>(null)
-  const [observations, setObservations] = useState<BasicObject[]>([])
   const { t } = useTranslation()
 
-  useEffect(() => {
-    props.allObservationEvents()
-    props.observationEvent.forEach(e => {
-      if (e.id === props.id) {
-        setEvent(e)
-        setObservations(e.schema.gatherings[0].units)
-      }
-    })
-  }, [])
+  const event = props.observationEvent.find(e => e.id === props.id)
+  const observations = event.schema.gatherings[0].units
 
   if (event === null || observations === []) {
     return (

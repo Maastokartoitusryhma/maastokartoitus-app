@@ -51,7 +51,7 @@ const connector = connect(
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
-  onPress: () => void,
+  onPress: (id: string) => void,
   onEditLocation: () => void
 }
 
@@ -64,6 +64,7 @@ const EditObservationComponent = (props: Props) => {
   const [ observation, setObservation ] = useState<BasicObject | null>(null)
   const [ events, setEvents ] = useState<any[]>([])
   const [ image, setImage ] = useState<string>('')
+  const [ eventId, setEventId ] = useState<string>('')
 
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
   const { t } = useTranslation()
@@ -95,6 +96,7 @@ const EditObservationComponent = (props: Props) => {
     setObservation(observationClone)
     const imageClone = observationsClone[observationIndex].image
     setImage(imageClone)
+    setEventId(props.observationId.eventId)
   }
 
 
@@ -147,7 +149,6 @@ const EditObservationComponent = (props: Props) => {
         props.setEditing([false, false])
         console.log('LOC MODIFIED')
       }
-
       events[indexOfEditedEvent].schema.gatherings[0].units[indexOfEditedObservation] = editedUnit
   
       // replace events with modified list
@@ -214,7 +215,7 @@ const EditObservationComponent = (props: Props) => {
                   color={Colors.neutralColor}
                   onPress={() => {
                   setShowModal(!showModal)
-                  props.onPress()
+                  props.onPress(eventId)
                 }} />
               </View>
             </View>
