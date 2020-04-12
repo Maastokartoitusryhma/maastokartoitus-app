@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-import MapView, { Marker, Polyline, UrlTile, Region, LatLng } from 'react-native-maps'
+import MapView, { Marker, Polyline, UrlTile, Region, LatLng, Callout } from 'react-native-maps'
 import { connect, ConnectedProps } from 'react-redux'
-import { Button, View, TouchableHighlight } from 'react-native'
+import { Button, View, TouchableHighlight, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { LocationData } from 'expo-location'
 import { GeometryCollection, Point } from 'geojson'
@@ -158,6 +158,12 @@ const MapComponent = (props: Props) => {
     props.onPressEditing()
   }
 
+  const shiftToEditPage = (obsId: string, unitId: string) => {
+    console.log('Observation edit called')
+    console.log("ObsID: ", obsId)
+    console.log("UnitID: ", unitId)
+  }
+
   //will eventually be used to update location for old observation in the 
   //observationEvent as a result of dragging observation marker
   const updateObservationLocation = (coordinates: LatLng, obsId: string, unitId: string) => {
@@ -230,8 +236,6 @@ const MapComponent = (props: Props) => {
     : null
   )
 
-  //console.log(props.zone)
-
   //draws past observations in same gatheringevent to map, markers are draggable 
   const observationLocationsOverlay = () => {
     if (
@@ -277,7 +281,11 @@ const MapComponent = (props: Props) => {
           pinColor = {color}
           onDragEnd = {(event) => updateObservationLocation(event.nativeEvent.coordinate, obsId, unitId)}
           zIndex = {-1}
-        />
+        >
+          <Callout tooltip onPress={() => shiftToEditPage(obsId, unitId)}>
+              <Button title={t('edit observation')} onPress={() => null}/>
+          </Callout>
+        </Marker>
       )
     })
   }
