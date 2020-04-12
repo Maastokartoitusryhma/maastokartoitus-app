@@ -6,6 +6,7 @@ export const TOGGLE_OBSERVING = 'TOGGLE_OBSERVING'
 export const NEW_OBSERVATION_EVENT ='NEW_OBSERVATION_EVENT'
 export const ALL_OBSERVATION_EVENTS = 'ALL_OBSERVATION_EVENTS'
 export const REPLACE_OBSERVATION_EVENTS = 'REPLACE_OBSERVATION_EVENTS'
+export const REPLACE_LOCATION_BY_ID = 'REPLACE_UNIT_BY_ID'
 export const CLEAR_OBSERVATION_EVENTS = 'CLEAR_OBSERVATION_EVENTS'
 export const SET_SCHEMA_FI ='SET_SCHEMA_FI'
 export const SET_SCHEMA_EN ='SET_SCHEMA_EN'
@@ -38,6 +39,11 @@ interface allObservationEvents {
 interface replaceObservationEvents {
   type: typeof REPLACE_OBSERVATION_EVENTS
   payload: any[]
+}
+
+interface replaceLocationById {
+  type: typeof REPLACE_LOCATION_BY_ID
+  payload: object
 }
 
 interface clearObservationEvents {
@@ -74,6 +80,7 @@ export type observationActionTypes = setObservationLocation |
                                      newObservationEvent |
                                      allObservationEvents |
                                      replaceObservationEvents |
+                                     replaceLocationById |
                                      clearObservationEvents |
                                      setSchemaFi |
                                      setSchemaEn |

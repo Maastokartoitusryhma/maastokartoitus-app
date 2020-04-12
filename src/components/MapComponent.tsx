@@ -5,10 +5,11 @@ import { Button, View, TouchableHighlight } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { LocationData } from 'expo-location'
 import { GeometryCollection, Point } from 'geojson'
-import { wrapGeometryInFC, convertGC2FC, convertLatLngToPoint, convertPointToLatLng } from '../converters/geoJSONConverters'
+import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng } from '../converters/geoJSONConverters'
 import Geojson from 'react-native-typescript-geojson'
 import { 
-  setObservationLocation, 
+  setObservationLocation,
+  replaceLocationById, 
   clearObservationLocation,
 } from '../stores/observation/actions' 
 import {
@@ -45,6 +46,7 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = {
   setRegion,
   setObservationLocation,
+  replaceLocationById,
   clearObservationLocation,
   toggleCentered,
   toggleMaptype,
@@ -160,6 +162,7 @@ const MapComponent = (props: Props) => {
   //observationEvent as a result of dragging observation marker
   const updateObservationLocation = (coordinates: LatLng, obsId: string, unitId: string) => {
     console.log(JSON.stringify(coordinates) + ' ' + obsId + ' ' + unitId)
+    props.replaceLocationById(convertLatLngToPoint(coordinates), obsId, unitId)
   }
 
   //draws user position to map

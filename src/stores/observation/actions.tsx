@@ -1,5 +1,5 @@
 import { LatLng, Region } from 'react-native-maps'
-import { GeometryCollection, Point  } from 'geojson'
+import { GeometryCollection, Point, Geometry  } from 'geojson'
 import { observationActionTypes,
         SET_OBSERVATION,
         CLEAR_OBSERVATION,
@@ -10,6 +10,7 @@ import { observationActionTypes,
         SET_SCHEMA_EN,
         SET_SCHEMA_SV,
         REPLACE_OBSERVATION_EVENTS,
+        REPLACE_LOCATION_BY_ID,
         CLEAR_OBSERVATION_EVENTS,
         SET_OBSERVATION_ID,
         CLEAR_OBSERVATION_ID,
@@ -40,6 +41,11 @@ export const allObservationEvents = () : observationActionTypes => ({
 export const replaceObservationEvents = (events: any[]) : observationActionTypes => ({
   type: REPLACE_OBSERVATION_EVENTS,
   payload: events
+})
+
+export const replaceLocationById = (geometry: Geometry, obsId: string, unitId: string) : observationActionTypes => ({
+  type: REPLACE_LOCATION_BY_ID,
+  payload: { geometry, obsId, unitId }
 })
 
 export const clearObservationEvents = () : observationActionTypes => ({

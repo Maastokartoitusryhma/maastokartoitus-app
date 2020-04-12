@@ -10,9 +10,10 @@ import { observationActionTypes,
         REPLACE_OBSERVATION_EVENTS,
         CLEAR_OBSERVATION_EVENTS,
         SET_OBSERVATION_ID,
-        CLEAR_OBSERVATION_ID
+        CLEAR_OBSERVATION_ID,
+        REPLACE_LOCATION_BY_ID
         } from './types'
-import { Point } from 'geojson'
+import _ from 'lodash'
 
 const observationReducer = (state = null, action : observationActionTypes) => {
   switch (action.type) {
@@ -36,14 +37,28 @@ const observingReducer = (state = false, action : observationActionTypes) => {
 }
 
 const observationEventsReducer = (state: any[] = [], action : observationActionTypes) => {
+  var newState
   switch (action.type) {
     case NEW_OBSERVATION_EVENT:
-      const newState = [...state, action.payload]
+      newState = [...state, action.payload]
       return newState
     case ALL_OBSERVATION_EVENTS:
       return state
     case REPLACE_OBSERVATION_EVENTS:
       return action.payload
+    case REPLACE_LOCATION_BY_ID:
+      newState = _.cloneDeep(state)
+      newState.forEach(event => {
+        if (event.id === action.payload.obsId) {
+          event.schema.gatherings[0].units.forEach(unit => {
+            if (unit.id === action.payload.unitId) {
+              unit.unitGathering.geometry = action.payload.geometry
+            }
+          })
+        }  
+      })
+
+      return newState
     case CLEAR_OBSERVATION_EVENTS:
       return []
     default:
