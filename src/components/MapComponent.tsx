@@ -11,6 +11,7 @@ import {
   setObservationLocation,
   replaceLocationById, 
   clearObservationLocation,
+  setObservationId
 } from '../stores/observation/actions' 
 import {
   setRegion,
@@ -51,6 +52,7 @@ const mapDispatchToProps = {
   toggleCentered,
   toggleMaptype,
   setEditing,
+  setObservationId
 }
 
 const connector = connect(
@@ -158,17 +160,19 @@ const MapComponent = (props: Props) => {
     props.onPressEditing()
   }
 
-  const shiftToEditPage = (obsId: string, unitId: string) => {
-    console.log('Observation edit called')
-    console.log("ObsID: ", obsId)
-    console.log("UnitID: ", unitId)
+  const shiftToEditPage = (eventId: string, unitId: string) => {
+    props.setObservationId({
+      eventId,
+      unitId
+    })
+    props.onPressEditing()
   }
 
   //will eventually be used to update location for old observation in the 
   //observationEvent as a result of dragging observation marker
-  const updateObservationLocation = (coordinates: LatLng, obsId: string, unitId: string) => {
-    console.log(JSON.stringify(coordinates) + ' ' + obsId + ' ' + unitId)
-    props.replaceLocationById(convertLatLngToPoint(coordinates), obsId, unitId)
+  const updateObservationLocation = (coordinates: LatLng, eventId: string, unitId: string) => {
+    console.log(JSON.stringify(coordinates) + ' ' + eventId + ' ' + unitId)
+    props.replaceLocationById(convertLatLngToPoint(coordinates), eventId, unitId)
   }
 
   //draws user position to map
@@ -247,7 +251,7 @@ const MapComponent = (props: Props) => {
       return null
     }
 
-    const obsId = props.observationEvent[props.observationEvent.length - 1].id
+    const eventId = props.observationEvent[props.observationEvent.length - 1].id
     const units = props.observationEvent[props.observationEvent.length - 1]
                   .schema.gatherings[0].units
 
@@ -279,10 +283,10 @@ const MapComponent = (props: Props) => {
           draggable = {true} 
           coordinate = {coordinate}
           pinColor = {color}
-          onDragEnd = {(event) => updateObservationLocation(event.nativeEvent.coordinate, obsId, unitId)}
+          onDragEnd = {(event) => updateObservationLocation(event.nativeEvent.coordinate, eventId, unitId)}
           zIndex = {-1}
         >
-          <Callout tooltip onPress={() => shiftToEditPage(obsId, unitId)}>
+          <Callout tooltip onPress={() => shiftToEditPage(eventId, unitId)}>
               <Button title={t('edit observation')} onPress={() => null}/>
           </Callout>
         </Marker>
