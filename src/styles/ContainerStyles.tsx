@@ -166,6 +166,11 @@ const ContainerStyles = StyleSheet.create({
   editObservationButtonContainer: {
     padding: 5,
     width: '75%'
+  },
+  eventDateContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    padding: 10
   }
 })
 

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Text, TextInput, View, Button } from 'react-native'
+import { Text, TextInput, View } from 'react-native'
+import { Icon, Button } from 'react-native-elements'
 import Os from '../styles/OtherStyles'
 import Cs from '../styles/ContainerStyles'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { parseDateForUI, setDateForDocument, parseDateFromISOToDocument } from '../utilities/dateHelper'
+import Colors from '../styles/Colors';
 
 interface Props {
   title: string
@@ -29,37 +31,40 @@ const FormDatePickerComponent = (props: Props) => {
 
   useEffect(() => {
     props.setValue(props.objectTitle, currentValue)
-    console.log('START, objectitle', props.watch(props.objectTitle) + " " + props.objectTitle)
   }, [])
 
+  // Every time date and time change, combine them so both values are updated
   useEffect(() => {
     const combinedDate = currentDate.substring(0, 11) + currentTime.substring(11, 16)
-    console.log('COMBINED', combinedDate)
     props.setValue(props.objectTitle, combinedDate)
+    // Set combined date as current value
     combinedDate !== '' ? setCurrentValue(combinedDate) : null
   }, [currentDate, currentTime])
   
-  const onChangeDate = (event, date: Date) => {
+  const onChangeDate = (event: any, date: Date | undefined) => {
     setShow(false)
     date !== undefined ? setCurrentDate(parseDateFromISOToDocument(date)) : null
   }
 
-  const onChangeTime = (event, date: Date) => {
+  const onChangeTime = (event: any, date: Date | undefined) => {
     date !== undefined ? setCurrentTime(parseDateFromISOToDocument(date)) : null
   }
 
   return (
     <View style={Cs.formInputContainer}>
       <Text>{props.title}</Text>
-      <View style={{ flexDirection: 'row', justifyContent: 'center', padding: 10}}>
+      <View style={Cs.eventDateContainer}>
         <TextInput
           style={Os.datePicker}
           value={parseDateForUI(currentValue)}
           editable={false}
           ref={props.register({ name: props.objectTitle })}
         />
-        
-        <Button title='edit' onPress={() => setShow(true)}></Button>
+        <Button
+          buttonStyle={{ backgroundColor: Colors.neutralButton}}
+          icon={<Icon name={'edit'} color='white' size={22} />}
+          onPress={() => setShow(true)}>
+        </Button>
       </View>
       {show && (
         <View>
@@ -78,8 +83,6 @@ const FormDatePickerComponent = (props: Props) => {
       )}
     </View>
   )
-
-  
 }
 
 export default FormDatePickerComponent

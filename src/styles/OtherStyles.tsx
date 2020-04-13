@@ -21,7 +21,7 @@ const OtherStyles = StyleSheet.create({
     borderRadius: 5
   },
   datePicker: {
-    padding: 5,
+    padding: 10,
     borderColor: Colors.inputBorder,
     borderWidth: 1,
     height: 40,

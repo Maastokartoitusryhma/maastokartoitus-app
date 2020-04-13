@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Text, View, Button } from 'react-native'
+import { Text, View } from 'react-native'
+import { Icon, Button } from 'react-native-elements'
 import FormInputComponent from './FormInputComponent'
 import uuid from 'react-native-uuid'
 import Cs from '../styles/ContainerStyles'
@@ -88,9 +89,17 @@ const FormArrayComponent = (props: Props) => {
       <View style={Cs.formAllInputsContainer}>
         {inputElements}
         <View style={Cs.formArrayButtonContainer}>
-          <Button onPress={() => addInputElement()} title='ADD' color={Colors.neutralButton} />
+          <Button
+            buttonStyle={{ backgroundColor: Colors.positiveButton}}
+            icon={<Icon name={'add'} color='white' size={22} />}
+            onPress={() => addInputElement()} 
+          />
           {inputElements.length > 1
-            ? <Button onPress={() => removeInputElement()} title='REMOVE' color={Colors.negativeButton} />
+            ? <Button
+                icon={<Icon name={'remove'} color='white' size={22} />}
+                buttonStyle={{ backgroundColor: Colors.negativeButton}}
+                onPress={() => removeInputElement()}
+              />
             : null
           }
         </View>

@@ -11,8 +11,6 @@ import Ts from '../styles/TextStyles'
 import Colors from '../styles/Colors'
 import Modal from 'react-native-modal'
 import _ from 'lodash'
-import DatePicker from 'react-native-datepicker'
-import { parseDateForUI } from '../utilities/dateHelper'
 
 interface RootState {
   observationEvent: any[]

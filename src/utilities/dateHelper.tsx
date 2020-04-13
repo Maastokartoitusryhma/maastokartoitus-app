@@ -18,6 +18,8 @@ export const parseDateForUI = (date: string) => {
     const hours = date.substring(11, 13)
     const minutes = date.substring(14, 16)
     return (day + "." + month + "." + year + " " + hours + "." + minutes)
+  } else {
+    return ''
   }
 }
 
@@ -29,8 +31,9 @@ export const parseDateForDocument = (date: string) => {
     const year = date.substring(6, 10)
     const hours = date.substring(11, 13)
     const minutes = date.substring(14, 16)
-
     return (year + "-" + month + "-" + day + "T" + hours + ":" + minutes)
+  } else {
+    return ''
   }
 }
 
@@ -42,5 +45,7 @@ export const parseDateFromISOToDocument = (dateObject: Date) => {
     const dateMonthAndYear = date.substring(0, 11)
     const hoursAndMinutes = time.substring(0, 5)
     return (dateMonthAndYear + hoursAndMinutes)
+  } else {
+    return ''
   }
 }
