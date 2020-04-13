@@ -7,6 +7,7 @@ import { getObservationEventSchema } from '../controllers/documentController'
 import { connect, ConnectedProps } from 'react-redux'
 import { replaceObservationEvents, newObservationEvent, setSchemaFi, setSchemaEn, setSchemaSv } from '../stores/observation/actions'
 import { setUser, setPersonToken } from '../stores/user/actions'
+import { setMessageVisibilityTrue, updateMessageContent } from '../stores/other/actions'
 import Colors from '../styles/Colors'
 import Cs from '../styles/ContainerStyles'
 import Bs from '../styles/ButtonStyles'
@@ -41,7 +42,9 @@ const mapDispatchToProps = {
   setSchemaEn,
   setSchemaSv,
   setUser,
-  setPersonToken
+  setPersonToken,
+  setMessageVisibilityTrue,
+  updateMessageContent
 }
 
 const connector = connect(
@@ -98,17 +101,61 @@ const LoginComponent = (props: Props) => {
     // ------------------------------------------------------------
 
     const observationEvents: Array<Object> = await storageController.fetch('observationEvents')
-    if (observationEvents  !== null) {
+    if (observationEvents !== null) {
       props.replaceObservationEvents(observationEvents)
     }
   }
 
   const fetchSchemasFromServer = async () => {
-    const schemaInFi: object = await getObservationEventSchema('fi')
-    const schemaInEn: object = await getObservationEventSchema('en')
-    const schemaInSv: object = await getObservationEventSchema('sv')
+    // Try to fetch Finnish schema from server
+    let schemaInFi: object = await getObservationEventSchema('fi')    
+    if (schemaInFi === null) {
+      // Couldn't load schema from server. Check for local copy.
+      setMessageVisibilityTrue()
+      schemaInFi = await storageController.fetch('schemaFi')
+      if (schemaInFi === null) {
+        // No local copy available. 
+        updateMessageContent('Suomenkielisen havaintopohjan lataaminen palvelimelta epäonnistui. Vaihda kieltä.')
+      } else {
+        updateMessageContent('Suomenkielisen havaintopohjan lataaminen palvelimelta epäonnistui. Käytetään tallennettua pohjaa.')
+      }
+    } else {
+      await storageController.save('schemaFi', schemaInFi)
+    }
     props.setSchemaFi(schemaInFi)
+
+    // Try to fetch English schema from server
+    let schemaInEn: object = await getObservationEventSchema('en')
+    if (schemaInEn === null) {
+      // Couldn't load schema from server. Check for local copy.
+      setMessageVisibilityTrue()
+      schemaInEn = await storageController.fetch('schemaEn')
+      if (schemaInEn === null) {
+        // No local copy available.
+        updateMessageContent('Englanninkielisen havaintopohjan lataaminen palvelimelta epäonnistui. Vaihda kieltä.')
+      } else {
+        updateMessageContent('Englanninkielisen havaintopohjan lataaminen palvelimelta epäonnistui. Käytetään tallennettua pohjaa.')
+      }
+    } else {
+      await storageController.save('schemaEn', schemaInEn)
+    }
     props.setSchemaEn(schemaInEn)
+
+    // Try to fetch Swedish schema from server
+    let schemaInSv: object = await getObservationEventSchema('sv')
+    if (schemaInSv === null) {
+      // Couldn't load schema from server. Check for local copy.
+      setMessageVisibilityTrue()
+      schemaInSv = await storageController.fetch('schemaSv')
+      if (schemaInSv === null) {
+        // No local copy available.
+        updateMessageContent('Ruotsinkielisen havaintopohjan lataaminen palvelimelta epäonnistui. Vaihda kieltä.')
+      } else {
+        updateMessageContent('Ruotsinkielisen havaintopohjan lataaminen palvelimelta epäonnistui. Käytetään tallennettua pohjaa.')
+      }
+    } else {
+      await storageController.save('schemaSv', schemaInSv)
+    }
     props.setSchemaSv(schemaInSv)
   }
 

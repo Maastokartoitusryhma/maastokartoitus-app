@@ -29,6 +29,7 @@ import { parseSchemaToJSONObject } from '../parsers/SchemaToJSONObject'
 import uuid from 'react-native-uuid'
 import _ from 'lodash'
 import i18n from '../language/i18n'
+import MessageComponent from './MessageComponent'
 import { setDateForDocument } from '../utilities/dateHelper'
 
 interface RootState {
@@ -225,6 +226,7 @@ const HomeComponent = (props: Props) => {
           </View>
           <View style={{ height: 10 }}></View>
         </View>
+        <MessageComponent onPress={null}/>
       </ScrollView>
     </View>
   )

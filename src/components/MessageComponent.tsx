@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, Button } from 'react-native'
 import Modal from 'react-native-modal'
 import { connect, ConnectedProps } from 'react-redux'
-import { setMessageVisibilityFalse } from '../stores/other/actions'
+import { setMessageVisibilityFalse, clearMessageContent } from '../stores/other/actions'
 import Cs from '../styles/ContainerStyles'
 import Colors from '../styles/Colors'
 
@@ -20,7 +20,8 @@ const mapStateToProps = (state: RootState) => {
 }
 
 const mapDispatchToProps = {
-  setMessageVisibilityFalse
+  setMessageVisibilityFalse,
+  clearMessageContent
 }
 
 const connector = connect(
@@ -31,7 +32,7 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & {
-  onPress: () => void
+  onPress: null | (() => void) 
 }
 
 const MessageComponent = (props: Props) => {
@@ -46,7 +47,10 @@ const MessageComponent = (props: Props) => {
             color={Colors.neutralColor}
             onPress={() => {
               props.setMessageVisibilityFalse()
-              props.onPress()
+              props.clearMessageContent()
+              if (props.onPress !== null) {
+                props.onPress()
+              }              
             }} />
         </View>
       </View>

@@ -5,9 +5,11 @@ import Ts from '../styles/TextStyles'
 import { connect, ConnectedProps } from 'react-redux'
 import { allObservationEvents, setObservationId } from '../stores/observation/actions'
 import { getPersonToken } from '../stores/user/actions'
+import { setMessageVisibilityTrue, setMessageContent } from '../stores/other/actions'
 import { useTranslation } from 'react-i18next'
 import ObservationInfoComponent from './ObservationInfoComponent'
-import { postObservationEvent } from '../controllers/documentController' 
+import { postObservationEvent } from '../controllers/documentController'
+import MessageComponent from './MessageComponent' 
 import Colors from '../styles/Colors'
 import { parseDateForUI } from '../utilities/dateHelper'
 
@@ -27,17 +29,20 @@ interface RootState {
   observationId: BasicObject
   user: UserObject
   token: string
+  message: BasicObject
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { observationEvent, observationId, user, token } = state
-  return { observationEvent, observationId, user, token }
+  const { observationEvent, observationId, user, token, message } = state
+  return { observationEvent, observationId, user, token, message }
 }
 
 const mapDispatchToProps = {
   allObservationEvents,
   setObservationId,
-  getPersonToken
+  getPersonToken,
+  setMessageVisibilityTrue,
+  setMessageContent
 }
 
 const connector = connect(
@@ -57,8 +62,8 @@ const ObservationEventComponent = (props: Props) => {
 
   const { t } = useTranslation()
 
-  const event = props.observationEvent.find(e => e.id === props.id)
-  const observations = event.schema.gatherings[0].units
+  const event: BasicObject = props.observationEvent.find(e => e.id === props.id)
+  const observations: BasicObject[] = event.schema.gatherings[0].units
 
   if (event === null || observations === []) {
     return (
@@ -90,7 +95,7 @@ const ObservationEventComponent = (props: Props) => {
             title={'Lähetä palvelimelle'}
             color={Colors.neutralButton}
             onPress={() => {
-              postObservationEvent(event, props.token)
+              postObservationEvent(event, props.token, props.setMessageVisibilityTrue, props.setMessageContent)
             }}
           />
           <View style={{padding: 5}}></View>
@@ -117,6 +122,7 @@ const ObservationEventComponent = (props: Props) => {
               <View style={{padding: 5}}></View>
             </View>
           )}
+          <MessageComponent onPress={null}/>
         </ScrollView>
       </View>
     )

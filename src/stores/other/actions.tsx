@@ -1,5 +1,6 @@
 import { otherActionTypes,
   SET_CONTENT,
+  UPDATE_CONTENT,
   CLEAR_CONTENT,
   SET_VISIBILITY_TRUE,
   SET_VISIBILITY_FALSE,
@@ -8,6 +9,11 @@ import { otherActionTypes,
 
 export const setMessageContent = (content: string) : otherActionTypes => ({
   type: SET_CONTENT,
+  payload: content
+})
+
+export const updateMessageContent = (content: string) : otherActionTypes => ({
+  type: UPDATE_CONTENT,
   payload: content
 })
 

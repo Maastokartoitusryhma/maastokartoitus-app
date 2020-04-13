@@ -2,6 +2,8 @@ import ApolloClient, { gql } from 'apollo-boost'
 import { Alert } from 'react-native'
 import axios from 'axios'
 import temporaryForm from '../../temporaryForm.json'
+import { composeInitialProps } from 'react-i18next'
+import { otherActionTypes } from '../stores/other/types'
 
 interface BasicObject {
   [key: string]: any
@@ -59,7 +61,7 @@ export const getSingleObservationSchema = async (language: string) => {
   }
 }
 
-export const postObservationEvent = async (observationEvent: BasicObject, token: string) => {
+export const postObservationEvent = async (observationEvent: BasicObject, token: string, setMessageVisibilityTrue: () => otherActionTypes, setMessageContent: (content: string) => otherActionTypes) => {
   const event = observationEvent.schema
   const units = observationEvent.schema.gatherings[0].units
 
@@ -78,7 +80,15 @@ export const postObservationEvent = async (observationEvent: BasicObject, token:
     //console.log('URL: ' + url)
     let response = await axios.post(url, event)
     console.log(response)
+    setMessageVisibilityTrue()
+    if (response.status === 200) {    
+      setMessageContent('Lähettäminen onnistui!')
+    } else {
+      setMessageContent(`Lähettäminen epäonnistui koodilla ${response.status}`)
+    }
   } catch (error) {
     console.log('ERROR: ' + error)
+    setMessageContent(`Palvelimelle lähettäminen epäonnistui: ${error}`)
+    setMessageVisibilityTrue()
   }
 }

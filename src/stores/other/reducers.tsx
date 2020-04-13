@@ -1,6 +1,7 @@
 import {
   otherActionTypes,
   SET_CONTENT,
+  UPDATE_CONTENT,
   CLEAR_CONTENT,
   SET_VISIBILITY_TRUE,
   SET_VISIBILITY_FALSE,
@@ -11,6 +12,9 @@ export const messageReducer = (state = {content: '', visibility: false, type: 'm
   switch (action.type) {
     case SET_CONTENT:
       return {...state, content: action.payload}
+    case UPDATE_CONTENT:
+      const newContent = state.content.concat(action.payload, ' ')
+      return {...state, content: newContent}
     case CLEAR_CONTENT:
       return {...state, content: ''}
     case SET_VISIBILITY_TRUE:

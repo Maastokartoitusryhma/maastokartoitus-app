@@ -5,10 +5,14 @@ import { createSchemaObjectComponents } from '../parsers/SchemaObjectParser'
 import i18n from '../language/i18n'
 import Cs from '../styles/ContainerStyles'
 
+interface BasicObject {
+  [key: string]: any
+}
+
 interface RootState {
-  schemaFi: object
-  schemaEn: object
-  schemaSv: object
+  schemaFi: BasicObject
+  schemaEn: BasicObject
+  schemaSv: BasicObject
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -23,13 +27,13 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & {
-  observation: Object
+  observation: BasicObject
   button: any
 }
 
 const ObservationInfoComponent = (props: Props) => {
 
-  let schema: object
+  let schema: BasicObject
   if (i18n.language === 'fi') {
     schema = props.schemaFi
   } else if (i18n.language === 'en') {
