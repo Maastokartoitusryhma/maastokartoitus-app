@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react'
-import MapView, { Marker, Polyline, UrlTile, Region, LatLng } from 'react-native-maps'
+import MapView, { Marker, Polyline, UrlTile, Region, LatLng, Callout } from 'react-native-maps'
 import { connect, ConnectedProps } from 'react-redux'
-import { Button, View, TouchableHighlight } from 'react-native'
+import { Button, View, TouchableHighlight, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { LocationData } from 'expo-location'
 import { GeometryCollection, Point } from 'geojson'
-import { wrapGeometryInFC, convertGC2FC, convertLatLngToPoint, convertPointToLatLng } from '../converters/geoJSONConverters'
+import { convertGC2FC, convertLatLngToPoint, convertPointToLatLng } from '../converters/geoJSONConverters'
 import Geojson from 'react-native-typescript-geojson'
 import { 
-  setObservationLocation, 
+  setObservationLocation,
+  replaceLocationById, 
   clearObservationLocation,
+  setObservationId
 } from '../stores/observation/actions' 
 import {
   setRegion,
@@ -45,10 +47,12 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = {
   setRegion,
   setObservationLocation,
+  replaceLocationById,
   clearObservationLocation,
   toggleCentered,
   toggleMaptype,
   setEditing,
+  setObservationId
 }
 
 const connector = connect(
@@ -156,10 +160,19 @@ const MapComponent = (props: Props) => {
     props.onPressEditing()
   }
 
+  const shiftToEditPage = (eventId: string, unitId: string) => {
+    props.setObservationId({
+      eventId,
+      unitId
+    })
+    props.onPressEditing()
+  }
+
   //will eventually be used to update location for old observation in the 
   //observationEvent as a result of dragging observation marker
-  const updateObservationLocation = (coordinates: LatLng, obsId: string, unitId: string) => {
-    console.log(JSON.stringify(coordinates) + ' ' + obsId + ' ' + unitId)
+  const updateObservationLocation = (coordinates: LatLng, eventId: string, unitId: string) => {
+    console.log(JSON.stringify(coordinates) + ' ' + eventId + ' ' + unitId)
+    props.replaceLocationById(convertLatLngToPoint(coordinates), eventId, unitId)
   }
 
   //draws user position to map
@@ -227,8 +240,6 @@ const MapComponent = (props: Props) => {
     : null
   )
 
-  //console.log(props.zone)
-
   //draws past observations in same gatheringevent to map, markers are draggable 
   const observationLocationsOverlay = () => {
     if (
@@ -240,7 +251,7 @@ const MapComponent = (props: Props) => {
       return null
     }
 
-    const obsId = props.observationEvent[props.observationEvent.length - 1].id
+    const eventId = props.observationEvent[props.observationEvent.length - 1].id
     const units = props.observationEvent[props.observationEvent.length - 1]
                   .schema.gatherings[0].units
 
@@ -272,9 +283,13 @@ const MapComponent = (props: Props) => {
           draggable = {true} 
           coordinate = {coordinate}
           pinColor = {color}
-          onDragEnd = {(event) => updateObservationLocation(event.nativeEvent.coordinate, obsId, unitId)}
+          onDragEnd = {(event) => updateObservationLocation(event.nativeEvent.coordinate, eventId, unitId)}
           zIndex = {-1}
-        />
+        >
+          <Callout tooltip onPress={() => shiftToEditPage(eventId, unitId)}>
+              <Button title={t('edit observation')} onPress={() => null}/>
+          </Callout>
+        </Marker>
       )
     })
   }
