@@ -69,6 +69,7 @@ const LoginComponent = (props: Props) => {
   const loadData = async () => {
     const userData = await storageController.fetch('userData')
     const personToken = await storageController.fetch('personToken')
+    console.log(personToken)
     if (userData !== null && personToken !== null) { // User data found from storage ==> user has logged in previously
       setLoggingIn(true)
       if (props.user === null) { // Set user data to reducer if it's not already there

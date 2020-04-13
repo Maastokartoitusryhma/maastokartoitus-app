@@ -21,10 +21,11 @@ const OtherStyles = StyleSheet.create({
     borderRadius: 5
   },
   datePicker: {
+    padding: 5,
     borderColor: Colors.inputBorder,
     borderWidth: 1,
     height: 40,
-    width: '100%',
+    width: '90%',
   }
 })
 

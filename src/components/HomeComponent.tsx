@@ -29,6 +29,7 @@ import { parseSchemaToJSONObject } from '../parsers/SchemaToJSONObject'
 import uuid from 'react-native-uuid'
 import _ from 'lodash'
 import i18n from '../language/i18n'
+import { setDateForDocument } from '../utilities/dateHelper'
 
 interface RootState {
   position: LocationData
@@ -144,7 +145,7 @@ const HomeComponent = (props: Props) => {
     
     const observationForm = parseObservationEventObject()
     if (observationForm !== null) {
-      observationForm.gatheringEvent.dateBegin = setDate()
+      observationForm.gatheringEvent.dateBegin = setDateForDocument()
       observationForm.formID = 'MHL.45'
       const region: RegionObject | undefined = regions.find(region => region.id === selectedRegion)
       if (region) {
@@ -167,7 +168,7 @@ const HomeComponent = (props: Props) => {
   const finishObservationEvent = () => {
     const events = _.cloneDeep(props.observationEvent)
     const event = events.pop()
-    event.schema.gatheringEvent.dateEnd = setDate()
+    event.schema.gatheringEvent.dateEnd = setDateForDocument()
     events.push(event)
 
     //replace events with modified list
@@ -178,16 +179,6 @@ const HomeComponent = (props: Props) => {
     props.clearObservationLocation()
     stopLocationAsync()
     props.allObservationEvents
-  }
-
-  const setDate = () => {
-    const date = new Date()
-    const year = date.getFullYear()
-    const month = (date.getMonth() + 1) < 10 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)
-    const day = date.getDate() < 10 ? ("0" + date.getDate()) : date.getDate()
-    const hours = date.getHours() <  10 ? ("0" + date.getHours()) : date.getHours()
-    const minutes = date.getMinutes() < 10 ? ("0" + date.getMinutes()) : date.getMinutes()
-    return year + "-" + month + "-" + day + "T" + hours + ":" + minutes
   }
 
   const setSelectedObservationZone = (id: string) => {

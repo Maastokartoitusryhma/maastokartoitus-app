@@ -77,8 +77,8 @@ export const postObservationEvent = async (observationEvent: BasicObject, token:
   try {
     //console.log('URL: ' + url)
     let response = await axios.post(url, event)
-    //console.log(response)
+    console.log(response)
   } catch (error) {
-    //console.log('ERROR: ' + error)
+    console.log('ERROR: ' + error)
   }
 }

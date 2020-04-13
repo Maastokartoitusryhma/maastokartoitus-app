@@ -3,6 +3,7 @@ import FormInputComponent from '../components/FormInputComponent'
 import FormArrayComponent from '../components/FormArrayComponent'
 import FormPickerItemComponent from '../components/FormPickerItemComponent'
 import FormPickerComponent from '../components/FormPickerComponent'
+import FormDatePickerComponent from '../components/FormDatePickerComponent'
 import uuid from 'react-native-uuid'
 
 // Creates a Picker component with PickerItems. Takes JSON schema item label as parameter.
@@ -65,7 +66,15 @@ export const createInputElement = (
   unregister: Function, isArrayItem: boolean, callbackFunction: Function|undefined
   ) => {
 
-  if (type === 'string') {
+  if (objectTitle === 'dateBegin' || objectTitle === 'dateEnd') {
+    return <FormDatePickerComponent
+      key={title} title={title} objectTitle={objectTitle}
+      parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
+      keyboardType='default' register={register} setValue={setValue}
+      watch={watch} errors={errors} unregister={unregister}
+      isArrayItem={isArrayItem} parentCallback={callbackFunction}
+    />
+  } else if (type === 'string') {
     return <FormInputComponent
       key={title} title={title} objectTitle={objectTitle}
       parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
