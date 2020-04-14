@@ -39,7 +39,7 @@ const ObservationEventForm = (register: Function, setValue: Function,
   }
 
   //inserting the hardcoded default options from the schema to the variables in case where there was no default value from the user
-  if(defaultLeg === null || defaultLeg === undefined) { defaultLeg = '' }
+  if(defaultLeg === null || defaultLeg === undefined) { defaultLeg = undefined }
   if(defaultLegPublic === null || defaultLegPublic === undefined) { defaultLegPublic = 'false' }
   if(defaultSecureLevel === null || defaultSecureLevel === undefined) { defaultSecureLevel = '' }
   if(defaultDateBegin === null || defaultDateBegin === undefined) { defaultDateBegin = '' }
