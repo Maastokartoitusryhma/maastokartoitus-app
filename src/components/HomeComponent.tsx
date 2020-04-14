@@ -32,6 +32,13 @@ import i18n from '../language/i18n'
 import MessageComponent from './MessageComponent'
 import { setDateForDocument } from '../utilities/dateHelper'
 
+type UserObject = {
+  id: string
+  fullName: string
+  emailAddress: string
+  defaultLanguage: string
+}
+
 interface RootState {
   position: LocationData
   path: LocationData[]
@@ -42,6 +49,7 @@ interface RootState {
   schemaFi: object
   schemaEn: object
   schemaSv: object
+  user: UserObject
 }
 
 interface MyObject {
@@ -49,8 +57,8 @@ interface MyObject {
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, observing, observation, zone, observationEvent, schemaFi, schemaEn, schemaSv } = state
-  return { position, path, observing, observation, zone, observationEvent, schemaFi, schemaEn, schemaSv }
+  const { position, path, observing, observation, zone, observationEvent, schemaFi, schemaEn, schemaSv, user } = state
+  return { position, path, observing, observation, zone, observationEvent, schemaFi, schemaEn, schemaSv, user }
 }
 
 const mapDispatchToProps = {
@@ -125,9 +133,9 @@ const HomeComponent = (props: Props) => {
     }
     const fetchedSchema: MyObject = _.cloneDeep(schema)
     if (fetchedSchema !== null) {
-      //parse schema object
+      // parse schema object
       const schemaObject: MyObject = {} = (parseSchemaToJSONObject(fetchedSchema.properties))
-      //parse gatherings object
+      // parse gatherings object
       const gatheringsObject: MyObject = {} = (parseSchemaToJSONObject(fetchedSchema.properties.gatherings.items.properties))
       schemaObject.gatherings.push(gatheringsObject)
       return schemaObject
@@ -148,6 +156,7 @@ const HomeComponent = (props: Props) => {
     if (observationForm !== null) {
       observationForm.gatheringEvent.dateBegin = setDateForDocument()
       observationForm.formID = 'MHL.45'
+      observationForm.editors.push(props.user.id)
       const region: RegionObject | undefined = regions.find(region => region.id === selectedRegion)
       if (region) {
         observationForm.gatherings[0].geometry = region.geometry.geometries[0]
@@ -172,7 +181,7 @@ const HomeComponent = (props: Props) => {
     event.schema.gatheringEvent.dateEnd = setDateForDocument()
     events.push(event)
 
-    //replace events with modified list
+    // replace events with modified list
     props.replaceObservationEvents(events)
 
     storageController.save('observationEvents', events)

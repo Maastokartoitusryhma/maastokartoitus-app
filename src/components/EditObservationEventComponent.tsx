@@ -78,7 +78,7 @@ const EditObservationEventComponent = (props: Props) => {
 
     //build the new schema based on the data from the form while leaving the gatherings unedited
     const editedSchema = {
-      editors: data.editors,
+      editors: event.schema.editors,
       secureLevel: data.secureLevel,
       gatheringEvent: {
         leg: data.leg,
@@ -93,7 +93,6 @@ const EditObservationEventComponent = (props: Props) => {
     //build the event by replacing its schema with the modified one
     const editedEvent = {
       id: event.id,
-      sentToServer: event.sentToServer,
       schema: editedSchema
     }
 
