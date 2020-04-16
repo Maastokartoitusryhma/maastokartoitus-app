@@ -47,6 +47,9 @@ const TextStyles = StyleSheet.create({
   },
   indentedText: {
     paddingLeft: 10
+  },
+  noImageText: {
+    color: Colors.noImageBorder
   }
 })
 

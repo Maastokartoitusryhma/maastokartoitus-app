@@ -14,4 +14,5 @@ export default {
   trackColor:           '#FFD700',
   fecesColor:           '#7CFC00',
   nestColor:            '#800080',
+  noImageBorder:        '#a9a9a9',
 }

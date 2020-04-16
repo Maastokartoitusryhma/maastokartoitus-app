@@ -25,6 +25,14 @@ const ButtonStyles = StyleSheet.create({
   removeObservationButton: {
     width: '75%',
     backgroundColor: Colors.negativeButton
+  },
+  addImageButton: {
+    width: 130,
+    backgroundColor: Colors.neutralButton,
+  },
+  removeImageButton: {
+    width: 130,
+    backgroundColor: Colors.negativeButton,
   }
 })
 

@@ -19,9 +19,6 @@
   "home page": "Home page",
   "add observation": "Add observation",
   "save observation": "Save observation",
-  "attach image": "Choose an image",
-  "use camera": "Use camera",
-  "remove image": "Remove image",
   "species": "Species",
   "location": "Location",
   "date": "Date",
@@ -46,7 +43,7 @@
   "observation saved": "Observation was saved successfully!",
   "login text": "You need to log in to use the application.",
   "edit observation": "Edit observation",
-  "edit location": "Change location",
+  "edit location": "CHANGE LOCATION ",
   "cancel": "Cancel",
   "MY.indirectObservationTypeSnowTracks" : "Snow tracks",
   "MY.indirectObservationTypeUrine" : "Urine",
@@ -89,5 +86,9 @@
   "zoneInList": "Zone",
   "observationsInList": "Observations",
   "piece": "pc",
-  "pieces": "pcs"
+  "pieces": "pcs",
+  "choose image": "CHOOSE ",
+  "use camera": "TAKE PHOTO ",
+  "remove image": "REMOVE ",
+  "no image": "No image"
 }

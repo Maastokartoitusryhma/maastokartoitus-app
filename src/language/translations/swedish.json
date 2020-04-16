@@ -43,7 +43,7 @@
   "observation saved": "Observationen sparades!",
   "login text": "Logga in för att använda applikationen.",
   "edit observation": "Redigera observationen",
-  "edit location": "Förändra platsen",
+  "edit location": "FÖRÄNDRA PLATSEN ",
   "cancel": "Avbryt",
   "MY.indirectObservationTypeSnowTracks" : "Snö fotspår",
   "MY.indirectObservationTypeUrine" : "Spår av urin",
@@ -86,5 +86,10 @@
   "zoneInList": "Platsen",
   "observationsInList": "Observationer",
   "piece": "st",
-  "pieces": "st"
+  "pieces": "st",
+  "choose image": "VÄLJA ",
+  "use camera": "TA BILD ",
+  "remove image": "TA BORT ",
+  "no image": "Ingen bild"
+
 }

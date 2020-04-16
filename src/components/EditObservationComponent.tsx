@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, ScrollView, Button } from 'react-native'
+import { Button as ButtonElement, Icon } from 'react-native-elements'
 import { useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -195,14 +196,20 @@ const EditObservationComponent = (props: Props) => {
     return (
       <View style={Cs.observationContainer}>
         <ScrollView>
-          <ImagePickerComponent image={image} setImage={setImage} />
           <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
           <View style={Cs.buttonContainer}>
-            <Button title={t('edit location')} onPress={() => handleChangeToMap()}></Button>
+            <ButtonElement
+              buttonStyle={{}}
+              title={t('edit location')}
+              iconRight={true}
+              icon={<Icon name='edit-location' type='material-icons' color='white' size={22} />}
+              onPress={() => handleChangeToMap()}
+            />
           </View>
           <View style={Cs.formContainer}>
             {form}
           </View>
+          <ImagePickerComponent image={image} setImage={setImage} />
           <View style={Cs.formSaveButtonContainer}>
             <Button title={t('save')} onPress={handleSubmit(onSubmit)} color={Colors.positiveButton}/>
           </View>

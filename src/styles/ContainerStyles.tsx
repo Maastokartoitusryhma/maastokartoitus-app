@@ -187,8 +187,30 @@ const ContainerStyles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
-  observationButtonsContainer: {
-    
+  imageContainer: {
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  noImageContainer: {
+    width: 150,
+    height: 150,
+    borderStyle: 'dashed',
+    borderColor: Colors.noImageBorder,
+    borderWidth: 2,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  imageButtonsContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 150,
+    height: 150
+  },
+  padding5Container: {
+    padding: 5
   }
 })
 
