@@ -11,11 +11,11 @@ const ButtonStyles = StyleSheet.create({
     padding: 10,
   },
   editEventButton: {
-    width: '50%',
+    width: 60,
     backgroundColor: Colors.neutralButton
   },
   sendEventButton: {
-    width: '50%',
+    width: 60,
     backgroundColor: Colors.positiveButton
   },
   editObservationButton: {

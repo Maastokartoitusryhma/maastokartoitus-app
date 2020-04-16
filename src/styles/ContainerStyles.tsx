@@ -175,17 +175,19 @@ const ContainerStyles = StyleSheet.create({
     padding: 10
   },
   eventTopContainer: {
+    alignSelf: 'stretch',
     flexDirection: 'row',
-    height: '7%',
+    alignItems: 'center',
   },
   eventTextContainer: {
     flexDirection: 'column',
     width: '80%',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   eventButtonsContainer: {
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   imageContainer: {
     padding: 10,

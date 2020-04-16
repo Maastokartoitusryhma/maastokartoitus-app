@@ -86,6 +86,7 @@ const ObservationEventComponent = (props: Props) => {
             <View style={Cs.eventButtonsContainer}>
               <ButtonElement
                 buttonStyle={Bs.editEventButton}
+                containerStyle={Cs.padding5Container}
                 icon={<Icon name='edit' color='white' size={22} />}
                 onPress={() => {
                   const id = {
