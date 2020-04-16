@@ -161,16 +161,34 @@ const ContainerStyles = StyleSheet.create({
     padding: 5,
     backgroundColor: Colors.blueBackground,
     alignItems: 'center',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
   },
   editObservationButtonContainer: {
-    padding: 5,
-    width: '75%'
+    alignSelf: 'flex-end',
+    paddingVertical: 5,
+    width: '50%',
+    flexDirection: 'row',
   },
   eventDateContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     padding: 10
+  },
+  eventTopContainer: {
+    flexDirection: 'row',
+    height: '7%',
+  },
+  eventTextContainer: {
+    flexDirection: 'column',
+    width: '80%',
+    justifyContent: 'center'
+  },
+  eventButtonsContainer: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  observationButtonsContainer: {
+    
   }
 })
 

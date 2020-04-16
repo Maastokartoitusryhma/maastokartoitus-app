@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, ScrollView, Button } from 'react-native'
+import { Icon, Button as ButtonElement } from 'react-native-elements'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
+import Bs from '../styles/ButtonStyles'
 import { connect, ConnectedProps } from 'react-redux'
 import { allObservationEvents, setObservationId } from '../stores/observation/actions'
 import { getPersonToken } from '../stores/user/actions'
@@ -75,39 +77,43 @@ const ObservationEventComponent = (props: Props) => {
     return (
       <View style={Cs.singleObservationEventContainer}>
         <ScrollView>
-          <Text>{t('dateBegin')}: {parseDateForUI(event.schema.gatheringEvent.dateBegin)}</Text>
-          <Text>{t('dateEnd')}: {parseDateForUI(event.schema.gatheringEvent.dateEnd)}</Text>
-          <Text>{t('Zone')}: {event.schema.gatherings[0].locality}</Text>
-          <Button
-            title={'Muokkaa havaintotapahtumaa'}
-            color={Colors.neutralButton}
-            onPress={() => {
-              const id = {
-                eventId: event.id,
-                unitId: ''
-              }
-            props.setObservationId(id)
-            props.onPressObservationEvent()
-            }}
-          />
-          <View style={{padding: 5}}></View>
-          <Button
-            title={'Lähetä palvelimelle'}
-            color={Colors.neutralButton}
-            onPress={() => {
-              postObservationEvent(event, props.token, props.setMessageVisibilityTrue, props.setMessageContent)
-            }}
-          />
-          <View style={{padding: 5}}></View>
+          <View style={Cs.eventTopContainer}>
+            <View style={Cs.eventTextContainer}>
+              <Text>{t('dateBegin')}: {parseDateForUI(event.schema.gatheringEvent.dateBegin)}</Text>
+              <Text>{t('dateEnd')}: {parseDateForUI(event.schema.gatheringEvent.dateEnd)}</Text>
+              <Text>{t('Zone')}: {event.schema.gatherings[0].locality}</Text>
+            </View>
+            <View style={Cs.eventButtonsContainer}>
+              <ButtonElement
+                buttonStyle={Bs.editEventButton}
+                icon={<Icon name='edit' color='white' size={22} />}
+                onPress={() => {
+                  const id = {
+                    eventId: event.id,
+                    unitId: ''
+                  }
+                  props.setObservationId(id)
+                  props.onPressObservationEvent()
+                }}
+              />
+              <ButtonElement
+                buttonStyle={Bs.sendEventButton}
+                icon={<Icon name='send' color='white' size={22} />}
+                onPress={() => {
+                  postObservationEvent(event, props.token, props.setMessageVisibilityTrue, props.setMessageContent)
+                }}
+              />
+            </View>
+          </View>
           <Text style={Ts.observationText}>{t('Observations')}:</Text>
           {observations.map(observation =>
             <View key={observation.id}>
               <ObservationInfoComponent
                 observation={observation}
-                button={
-                  <Button
-                    title={t('edit observation')}
-                    color={Colors.neutralButton}
+                editButton={
+                  <ButtonElement
+                    buttonStyle={Bs.editObservationButton}
+                    icon={<Icon name='edit' color='white' size={22} />}
                     onPress={() => {
                       const id = {
                         eventId: event.id,
@@ -115,6 +121,15 @@ const ObservationEventComponent = (props: Props) => {
                       }
                       props.setObservationId(id)
                       props.onPressObservation()
+                    }}
+                  />
+                }
+                removeButton={
+                  <ButtonElement
+                    buttonStyle={Bs.removeObservationButton}
+                    icon={<Icon name='delete' color='white' size={22} />}
+                    onPress={() => {
+                      console.log('POISTO')
                     }}
                   />
                 }
