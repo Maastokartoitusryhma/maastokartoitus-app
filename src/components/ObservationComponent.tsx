@@ -155,13 +155,13 @@ const ObservationComponent = (props: Props) => {
       <View style={Cs.observationContainer}>
         <ScrollView>
 
-          <ImagePickerComponent image={image} setImage={setImage} />
-
           <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
 
           <View style={Cs.formContainer}>
             {form}
           </View>
+
+          <ImagePickerComponent image={image} setImage={setImage} />
 
           <View style={Cs.formSaveButtonContainer}>
             <Button title={t('save observation')} onPress={handleSubmit(onSubmit)} color={Colors.positiveButton}/>
