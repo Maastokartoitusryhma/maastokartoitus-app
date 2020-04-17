@@ -52,7 +52,8 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
   onPress: (id: string) => void,
-  onEditLocation: () => void
+  toMap: () => void
+  fromMap: boolean
 }
 
 
@@ -76,7 +77,6 @@ const EditObservationComponent = (props: Props) => {
     return () => {
       props.clearObservationLocation()
       props.setEditing([false, false])
-      console.log("CLEANUP FIRED")
     }
   }, [])
 
@@ -147,8 +147,8 @@ const EditObservationComponent = (props: Props) => {
         props.observation ? editedUnit.unitGathering.geometry = props.observation : null
         props.clearObservationLocation()
         props.setEditing([false, false])
-        console.log('LOC MODIFIED')
       }
+
       events[indexOfEditedEvent].schema.gatherings[0].units[indexOfEditedObservation] = editedUnit
   
       // replace events with modified list
@@ -160,7 +160,6 @@ const EditObservationComponent = (props: Props) => {
       props.clearObservationId()
       setShowModal(true)
     }
-    
   }
 
   
@@ -184,7 +183,7 @@ const EditObservationComponent = (props: Props) => {
     if (observation !== null) {
       props.setObservationLocation(observation.unitGathering.geometry)
       props.setEditing([true, false])
-      props.onEditLocation()
+      props.toMap()
     }
   }
 
@@ -197,9 +196,12 @@ const EditObservationComponent = (props: Props) => {
         <ScrollView>
           <ImagePickerComponent image={image} setImage={setImage} />
           <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
-          <View style={Cs.buttonContainer}>
-            <Button title={t('edit location')} onPress={() => handleChangeToMap()}></Button>
-          </View>
+          {props.fromMap ?
+            null :
+            <View style={Cs.buttonContainer}>
+              <Button title={t('edit location')} onPress={() => handleChangeToMap()}></Button>
+            </View>
+          }
           <View style={Cs.formContainer}>
             {form}
           </View>
@@ -215,7 +217,9 @@ const EditObservationComponent = (props: Props) => {
                   color={Colors.neutralColor}
                   onPress={() => {
                   setShowModal(!showModal)
-                  props.onPress(eventId)
+                  props.fromMap ?
+                    props.toMap() :
+                    props.onPress(eventId)
                 }} />
               </View>
             </View>

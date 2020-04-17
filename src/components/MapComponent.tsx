@@ -66,7 +66,7 @@ type Props = PropsFromRedux & {
   onPressTrackObservation: () => void, 
   onPressFecesObservation: () => void, 
   onPressNestObservation: () => void,
-  onPressEditing: () => void,
+  onPressEditing: (fromMap?: boolean) => void,
 } 
 
 const MapComponent = (props: Props) => {
@@ -127,11 +127,13 @@ const MapComponent = (props: Props) => {
     followUser()
   }
 
-  //releases mapcenter from userlocation on moving the map
-  const onPanDrag = () => {
+  //releases mapcenter from userlocation on moving the map or tapping one of the 
+  //markers
+  const stopCentering = () => {
     props.centered ? props.toggleCentered() : null
   }
 
+  //updates region reducer one map has stopped moving
   const onRegionChangeComplete = (region: Region) => {
     props.setRegion(region)
   }
@@ -148,7 +150,8 @@ const MapComponent = (props: Props) => {
     props.clearObservationLocation()
   }
 
-  //redirects navigator back to edit page of single observation
+  //redirects navigator back to edit page of single observation with flags telling
+  //it that coordinate has been changed
   const submitEdit = () => {
     props.setEditing([true, true])
     props.onPressEditing()
@@ -160,12 +163,15 @@ const MapComponent = (props: Props) => {
     props.onPressEditing()
   }
 
+  //sets observation ids and shifts screen to observation edit page, parameter
+  //in onPressEditing will tell edit page that observation is being modified 
+  //from map, enabling return to correct screen when editing is finished
   const shiftToEditPage = (eventId: string, unitId: string) => {
     props.setObservationId({
       eventId,
       unitId
     })
-    props.onPressEditing()
+    props.onPressEditing(true)
   }
 
   //will eventually be used to update location for old observation in the 
@@ -285,6 +291,7 @@ const MapComponent = (props: Props) => {
           pinColor = {color}
           onDragEnd = {(event) => updateObservationLocation(event.nativeEvent.coordinate, eventId, unitId)}
           zIndex = {-1}
+          onPress = {() => stopCentering()}
         >
           <Callout tooltip onPress={() => shiftToEditPage(eventId, unitId)}>
               <Button title={t('edit observation')} onPress={() => null}/>
@@ -335,7 +342,7 @@ const MapComponent = (props: Props) => {
         ref = {map => {mapView = map}}
         provider = {'google'}
         initialRegion = { props.region }
-        onPanDrag = {() => onPanDrag()}
+        onPanDrag = {() => stopCentering()}
         onLongPress = {(event) => markObservation(event.nativeEvent.coordinate)}
         onRegionChangeComplete = {(region) => onRegionChangeComplete(region)}
         maxZoomLevel = {18.9}

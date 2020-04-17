@@ -19,10 +19,17 @@ export default class EditObservationScreen extends Component<NavigationStackScre
 
   render() {
     const { navigate } = this.props.navigation
+    //handles situation where fromMap can purposefully be undefined
+    let fromMap = false
+    if(this.props.navigation.state.params && this.props.navigation.state.params.fromMap) {
+      fromMap = true
+    }
+
     return (
       <EditObservationComponent 
         onPress={(id: string) => navigate('ObservationEvent', {id})}
-        onEditLocation={() => navigate('Map')}
+        toMap={() => navigate('Map')}
+        fromMap={fromMap}
       />
     )
   }
