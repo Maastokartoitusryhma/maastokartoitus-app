@@ -28,7 +28,8 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & {
   observation: BasicObject
-  button: any
+  editButton: any
+  removeButton: any
 }
 
 const ObservationInfoComponent = (props: Props) => {
@@ -53,7 +54,8 @@ const ObservationInfoComponent = (props: Props) => {
         : null
       }
       <View style={Cs.editObservationButtonContainer}>
-        {props.button}
+        {props.editButton}
+        {props.removeButton}
       </View>
     </View>
   )

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, ScrollView, Button } from 'react-native'
+import { Button as ButtonElement, Icon } from 'react-native-elements'
 import { useForm } from 'react-hook-form'
 import { connect, ConnectedProps } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -64,7 +65,7 @@ const EditObservationComponent = (props: Props) => {
   const [ form, setForm ] = useState<any | null>(null)
   const [ observation, setObservation ] = useState<BasicObject | null>(null)
   const [ events, setEvents ] = useState<any[]>([])
-  const [ image, setImage ] = useState<string>('')
+  const [ images, setImages ] = useState<string[]>([])
   const [ eventId, setEventId ] = useState<string>('')
 
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
@@ -94,8 +95,8 @@ const EditObservationComponent = (props: Props) => {
     setIndexOfEditedObservation(observationIndex)
     const observationClone = observationsClone[observationIndex]
     setObservation(observationClone)
-    const imageClone = observationsClone[observationIndex].image
-    setImage(imageClone)
+    const imagesClone = observationsClone[observationIndex].localImages
+    setImages(imagesClone)
     setEventId(props.observationId.eventId)
   }
 
@@ -133,13 +134,13 @@ const EditObservationComponent = (props: Props) => {
           lolifeDroppingsType: data.lolifeDroppingsType,
           lolifeDroppingsCount: data.lolifeDroppingsCount,
         },
-        image: image
+        localImages: images
       } : {
         id: observation.id,
         type: observation.type,
         ...data,
         unitGathering: observation.unitGathering,
-        image: image
+        localImages: images
       }
 
       // if editing-flag 1st and 2nd elements are true replace location with new location, and clear editing-flag
@@ -194,17 +195,24 @@ const EditObservationComponent = (props: Props) => {
     return (
       <View style={Cs.observationContainer}>
         <ScrollView>
-          <ImagePickerComponent image={image} setImage={setImage} />
           <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
           {props.fromMap ?
-            null :
+            null
+          :
             <View style={Cs.buttonContainer}>
-              <Button title={t('edit location')} onPress={() => handleChangeToMap()}></Button>
+              <ButtonElement
+                buttonStyle={{}}
+                title={t('edit location')}
+                iconRight={true}
+                icon={<Icon name='edit-location' type='material-icons' color='white' size={22} />}
+                onPress={() => handleChangeToMap()}
+              />
             </View>
           }
           <View style={Cs.formContainer}>
             {form}
           </View>
+          <ImagePickerComponent images={images} setImages={setImages} />
           <View style={Cs.formSaveButtonContainer}>
             <Button title={t('save')} onPress={handleSubmit(onSubmit)} color={Colors.positiveButton}/>
           </View>

@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, ScrollView, Button, Alert, Image } from 'react-native'
+import React from 'react'
+import { View, Text, Image } from 'react-native'
+import { Button as ButtonElement, Icon } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
-import { connect, ConnectedProps } from 'react-redux'
+import { connect } from 'react-redux'
 import Cs from '../styles/ContainerStyles'
-import Colors from '../styles/Colors'
+import Bs from '../styles/ButtonStyles'
+import Ts from '../styles/TextStyles'
 import * as ImagePicker from 'expo-image-picker'
 
 
 interface Props {
-  image: string
-  setImage: Function
+  images: Array<string>
+  setImages: Function
 }
 
 const connector = connect()
@@ -39,7 +41,7 @@ const ImagePickerComponent = (props: Props) => {
 
     let succeeded : boolean = !pickerResult.cancelled
     if (succeeded) {
-      props.setImage(pickerResult.uri)
+      props.setImages(props.images.concat(pickerResult.uri))
     }
     return succeeded
   }
@@ -52,37 +54,56 @@ const ImagePickerComponent = (props: Props) => {
     return attachImage(true)
   }
 
-  const removeImage = () => {
-    props.setImage('')
+  const removeImage = (image: string) => {
+    const updatedImages = props.images.filter(i => i !== image)
+    props.setImages(updatedImages)
   }
 
   return (
-    <View style={ Cs.formSaveButtonContainer }>
-      <Button
-        title={ t('attach image') }
-        onPress={ imageFromLibrary }
-        color={ Colors.positiveButton }
-      />
-      <Button
-        title={ t('use camera') }
-        onPress={ imageFromCamera }
-        color={ Colors.positiveButton }
-      />
-      { props.image !== ''
+    <View style={ Cs.imageContainer }>
+      { props.images === []
         ?
+          <View style={Cs.noImageContainer}>
+            <Text style={Ts.noImageText}>{t('no image')}</Text>
+          </View>
+        :
+          null
+      }
+      { props.images.map((image: string) =>
+        <View key={image}>
           <Image
-            source={{ uri: props.image }}
-            style={{ width: 100, height: 100 }}
+            source={{ uri: image }}
+            style={{ width: 150, height: 150 }}
           />
-        :
-          null
-      }
-      { props.image !== ''
-        ?
-          <Button title={ t('remove image') } onPress={ removeImage } color={ Colors.positiveButton } />
-        :
-          null
-      }
+          <ButtonElement
+            buttonStyle={Bs.removeImageButton}
+            containerStyle={Cs.padding5Container}
+            title={t('remove image')}
+            iconRight={true}
+            icon={<Icon name='delete' type='material-icons' color='white'  size={22} />}
+            onPress={() => {removeImage(image)}}
+          />
+        </View>
+      )}
+        
+      <View style={Cs.imageButtonsContainer}>
+        <ButtonElement
+          buttonStyle={Bs.addImageButton}
+          containerStyle={Cs.padding5Container}
+          title={t('choose image')}
+          iconRight={true}
+          icon={<Icon name='photo-library' type='material-icons' color='white'  size={22} />}
+          onPress={imageFromLibrary}
+        />
+        <ButtonElement
+          buttonStyle={Bs.addImageButton}
+          containerStyle={Cs.padding5Container}
+          title={t('use camera')}
+          iconRight={true}
+          icon={<Icon name='add-a-photo' type='material-icons' color='white'  size={22} />}
+          onPress={imageFromCamera}
+        />
+      </View>
     </View>
   )
 }

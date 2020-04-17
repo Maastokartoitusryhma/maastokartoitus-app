@@ -1,8 +1,6 @@
 import ApolloClient, { gql } from 'apollo-boost'
 import { Alert } from 'react-native'
 import axios from 'axios'
-import temporaryForm from '../../temporaryForm.json'
-import { composeInitialProps } from 'react-i18next'
 import { otherActionTypes } from '../stores/other/types'
 
 interface BasicObject {
@@ -69,6 +67,7 @@ export const postObservationEvent = async (observationEvent: BasicObject, token:
   units.forEach((observation: BasicObject) => {
     delete observation.id
     delete observation.type
+    delete observation.localImages
   })
 
   event.gatherings[0].units = units

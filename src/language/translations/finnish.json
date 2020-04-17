@@ -19,9 +19,6 @@
   "home page": "Etusivu",
   "add observation": "Lisää havainto",
   "save observation": "Tallenna havainto",
-  "attach image": "Liitä kuva",
-  "use camera": "Ota uusi kuva",
-  "remove image": "Poista kuva",
   "species": "Laji",
   "location": "Sijainti",
   "date": "Päivä",
@@ -46,7 +43,7 @@
   "observation saved": "Havainnon tallentaminen onnistui!",
   "login text": "Käyttääksesi sovellusta, sinun tulee kirjautua sisään.",
   "edit observation": "Muokkaa havaintoa",
-  "edit location": "Muuta sijaintia",
+  "edit location": "MUUTA SIJAINITA ",
   "cancel": "Peruuta",
   "MY.indirectObservationTypeSnowTracks" : "Lumijälkiä",
   "MY.indirectObservationTypeUrine" : "Virtsajälkiä",
@@ -89,5 +86,9 @@
   "zoneInList": "Alue",
   "observationsInList": "Havaintoja",
   "piece": "kpl",
-  "pieces": "kpl"
+  "pieces": "kpl",
+  "choose image": "VALITSE ",
+  "use camera": "OTA KUVA ",
+  "remove image": "POISTA ",
+  "no image": "Ei kuvaa"
 }
