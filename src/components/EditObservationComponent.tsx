@@ -64,7 +64,7 @@ const EditObservationComponent = (props: Props) => {
   const [ form, setForm ] = useState<any | null>(null)
   const [ observation, setObservation ] = useState<BasicObject | null>(null)
   const [ events, setEvents ] = useState<any[]>([])
-  const [ image, setImage ] = useState<string>('')
+  const [ images, setImages ] = useState<string[]>([])
   const [ eventId, setEventId ] = useState<string>('')
 
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
@@ -95,8 +95,8 @@ const EditObservationComponent = (props: Props) => {
     setIndexOfEditedObservation(observationIndex)
     const observationClone = observationsClone[observationIndex]
     setObservation(observationClone)
-    const imageClone = observationsClone[observationIndex].image
-    setImage(imageClone)
+    const imagesClone = observationsClone[observationIndex].localImages
+    setImages(imagesClone)
     setEventId(props.observationId.eventId)
   }
 
@@ -134,13 +134,13 @@ const EditObservationComponent = (props: Props) => {
           lolifeDroppingsType: data.lolifeDroppingsType,
           lolifeDroppingsCount: data.lolifeDroppingsCount,
         },
-        image: image
+        localImages: images
       } : {
         id: observation.id,
         type: observation.type,
         ...data,
         unitGathering: observation.unitGathering,
-        image: image
+        localImages: images
       }
 
       // if editing-flag 1st and 2nd elements are true replace location with new location, and clear editing-flag
@@ -209,7 +209,7 @@ const EditObservationComponent = (props: Props) => {
           <View style={Cs.formContainer}>
             {form}
           </View>
-          <ImagePickerComponent image={image} setImage={setImage} />
+          <ImagePickerComponent images={images} setImages={setImages} />
           <View style={Cs.formSaveButtonContainer}>
             <Button title={t('save')} onPress={handleSubmit(onSubmit)} color={Colors.positiveButton}/>
           </View>

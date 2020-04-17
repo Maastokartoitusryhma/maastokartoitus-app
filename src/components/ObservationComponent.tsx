@@ -59,7 +59,7 @@ const ObservationComponent = (props: Props) => {
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
   const { t } = useTranslation()
   const [form, setForm] = useState()
-  const [image, setImage] = useState('')
+  const [images, setImages] = useState<string[]>([])
 
   const onSubmit = (data: { [key: string]: any }) => {
     //all observations must have taxon confidence field so it is added here if it's missing
@@ -110,7 +110,7 @@ const ObservationComponent = (props: Props) => {
         lolifeDroppingsType: data.lolifeDroppingsType,
         lolifeDroppingsCount: data.lolifeDroppingsCount,
       },
-      image: image
+      localImages: images
     } : {
       id: 'observation_' + uuid.v4(),
       type: props.type,
@@ -118,7 +118,7 @@ const ObservationComponent = (props: Props) => {
       unitGathering: {
         geometry: props.observation
       },
-      image: image
+      localImages: images
     }
 
     //console.log('NEW UNIT:', newUnit)
@@ -161,7 +161,7 @@ const ObservationComponent = (props: Props) => {
             {form}
           </View>
 
-          <ImagePickerComponent image={image} setImage={setImage} />
+          <ImagePickerComponent images={images} setImages={setImages} />
 
           <View style={Cs.formSaveButtonContainer}>
             <Button title={t('save observation')} onPress={handleSubmit(onSubmit)} color={Colors.positiveButton}/>

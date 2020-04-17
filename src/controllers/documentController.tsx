@@ -67,6 +67,7 @@ export const postObservationEvent = async (observationEvent: BasicObject, token:
   units.forEach((observation: BasicObject) => {
     delete observation.id
     delete observation.type
+    delete observation.localImages
   })
 
   event.gatherings[0].units = units
