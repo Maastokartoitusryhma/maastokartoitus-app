@@ -27,21 +27,31 @@ import uuid from 'react-native-uuid'
 
 const urlTemplate: string = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
 
+interface BasicObject {
+  [key: string]: any
+}
+
+interface ZoneObject {
+  name: string
+  id: string
+  geometry: GeometryCollection
+}
+
 interface RootState {
   position: LocationData
   path: LocationData[]
   region: Region
   observation: Point
-  observationEvent: Object[]
-  zone: GeometryCollection
+  observationEvent: BasicObject[]
   centered: boolean
   maptype: 'topographic' | 'satellite'
   editing: boolean[]
+  observationZone: {currentZoneId: string, zones: ZoneObject[]}
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, region, observation, observationEvent, zone, centered, maptype, editing } = state
-  return { position, path, region, observation, observationEvent, zone, centered, maptype, editing }
+  const { position, path, region, observation, observationEvent, centered, maptype, editing, observationZone } = state
+  return { position, path, region, observation, observationEvent, centered, maptype, editing, observationZone }
 }
 
 const mapDispatchToProps = {
@@ -226,16 +236,18 @@ const MapComponent = (props: Props) => {
   )
 
   //draws observation zone to map
-  const zoneOverlay = () => (props.zone ?
+  const zoneOverlay = () => {
+    let zone = props.observationZone.zones.find(z => z.id === props.observationZone.currentZoneId)
+    return (zone ?
     <Geojson 
-      geojson = {convertGC2FC(props.zone)}
+      geojson = {convertGC2FC(zone.geometry)}
       fillColor = "#f002"
       pinColor = "#f00"
       strokeColor = "#f00"
       strokeWidth = {4}
     />
     : null
-  )
+  )}
 
   //if topomap is selected draws its tiles on map
   const tileOverlay = () => (props.maptype === 'topographic' ?
@@ -257,11 +269,11 @@ const MapComponent = (props: Props) => {
       return null
     }
 
-    const eventId = props.observationEvent[props.observationEvent.length - 1].id
-    const units = props.observationEvent[props.observationEvent.length - 1]
+    const eventId: string = props.observationEvent[props.observationEvent.length - 1].id
+    const units: BasicObject[] = props.observationEvent[props.observationEvent.length - 1]
                   .schema.gatherings[0].units
 
-    return units.map((unit: Object) => {
+    return units.map((unit) => {
       const coordinate = convertPointToLatLng(unit.unitGathering.geometry)
       const unitId = unit.id
       let color

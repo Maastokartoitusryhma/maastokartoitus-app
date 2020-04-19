@@ -11,7 +11,7 @@ import {
 } from './observation/reducers'
 import {
   regionReducer,
-  zoneReducer,
+  observationZoneReducer,
   centeringReducer,
   maptypeReducer,
   editingReducer
@@ -25,7 +25,6 @@ export default combineReducers({
   path: pathReducer,
   observing: observingReducer,
   observation: observationReducer,
-  zone: zoneReducer,
   centered: centeringReducer,
   maptype: maptypeReducer,
   observationEvent: observationEventsReducer,
@@ -36,5 +35,6 @@ export default combineReducers({
   editing: editingReducer,
   user: userReducer,
   token: tokenReducer,
-  message: messageReducer
+  message: messageReducer,
+  observationZone: observationZoneReducer
 })
