@@ -1,16 +1,24 @@
 import { createPicker, createArray, createInputElement } from '../builders/FormComponentBuilders'
 
+interface DefaultsObject {
+  taxonConfidence: string
+  recordBasis: string
+  count: string
+  lifeStage: string
+  notes: string
+}
+
 const ObservationForm = (register: Function, setValue: Function,
-  watch: Function, errors: Object, unregister: Function, defaults: Object | undefined, t: Function
+  watch: Function, errors: Object, unregister: Function, defaults: DefaultsObject | undefined, t: Function
 ) => {
   
   // variables for the possible default values of the fields
   let toReturn = []
-  let defaultTaxonConfidence = null
-  let defaultRecordBasis = null
-  let defaultCount = null
-  let defaultLifeStage = null
-  let defaultNotes = null
+  let defaultTaxonConfidence: string | null = null
+  let defaultRecordBasis: string | null = null
+  let defaultCount: string | null = null
+  let defaultLifeStage: string | null = null
+  let defaultNotes: string | null = null
   
   // hardcoded options for each picker (enum) component
   const taxonConfidenceDictionary: { [key: string]: any } = {

@@ -1,13 +1,18 @@
-import { createPicker, createArray, createInputElement } from '../builders/FormComponentBuilders'
+import { createPicker, createInputElement } from '../builders/FormComponentBuilders'
+
+interface DefaultsObject {
+  indirectObservationType: string
+  notes: string
+}
 
 const TrackObservationForm = (register: Function, setValue: Function,
-  watch: Function, errors: Object, unregister: Function, defaults: Object | undefined, t: Function
+  watch: Function, errors: Object, unregister: Function, defaults: DefaultsObject | undefined, t: Function
 ) => {
 
   // variables for the possible default values of the fields
   let toReturn = []
-  let defaultIndirectObservationType = null
-  let defaultNotes = null
+  let defaultIndirectObservationType: string | null = null
+  let defaultNotes: string | null = null
 
   // hardcoded options for each picker (enum) component
   const indirectObservationTypeDictionary: { [key: string]: any } = {

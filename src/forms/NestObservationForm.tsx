@@ -1,7 +1,15 @@
-import { createPicker, createArray, createInputElement } from '../builders/FormComponentBuilders'
+import { createPicker, createInputElement } from '../builders/FormComponentBuilders'
+
+interface DefaultsObject {
+  nestType: string
+  nestNotes: string
+  nestCount: number
+  taxonConfidence: string
+  notes: string
+}
 
 const NestObservationForm = (register: Function, setValue: Function,
-  watch: Function, errors: Object, unregister: Function, defaults: Object | undefined, t: Function
+  watch: Function, errors: Object, unregister: Function, defaults: DefaultsObject | undefined, t: Function
 ) => {
 
   // variables for the possible default values of the fields
