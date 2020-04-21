@@ -101,7 +101,7 @@ const EditObservationComponent = (props: Props) => {
   }
 
 
-  const onSubmit = (data: { [key: string]: any }) => {
+  const onSubmit = async (data: { [key: string]: any }) => {
     if (observation !== null) {
       if (!('taxonConfidence' in data)) {
         data['taxonConfidence'] = 'MY.taxonConfidenceSure'
@@ -157,7 +157,7 @@ const EditObservationComponent = (props: Props) => {
       
       // console.log('EVENT AFTER:', props.observationEvent)
   
-      storageController.save('observationEvents', events)
+      await storageController.save('observationEvents', events)
       props.clearObservationId()
       setShowModal(true)
     }
