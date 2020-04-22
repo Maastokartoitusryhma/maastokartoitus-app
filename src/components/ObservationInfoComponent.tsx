@@ -2,14 +2,13 @@ import React from 'react'
 import { View, Image, Text, ScrollView } from 'react-native'
 import { connect, ConnectedProps } from 'react-redux'
 import { createSchemaObjectComponents } from '../parsers/SchemaObjectParser'
+import { convertGC2FC, convertPointToLatLng } from '../converters/geoJSONConverters'
+import { useTranslation } from 'react-i18next'
+import MapView, { Marker, Region, UrlTile } from 'react-native-maps'
+import Geojson from 'react-native-typescript-geojson'
 import i18n from '../language/i18n'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
-import MapView, { Marker, Region, UrlTile } from 'react-native-maps'
-import Geojson from 'react-native-typescript-geojson'
-import { GeometryCollection, FeatureCollection, Feature, Geometry } from 'geojson'
-import { convertPointToLatLng } from '../converters/geoJSONConverters'
-import { useTranslation } from 'react-i18next'
 
 interface BasicObject {
   [key: string]: any
@@ -53,31 +52,6 @@ const ObservationInfoComponent = (props: Props) => {
     schema = props.schemaSv
   }
 
-  const featureCollectionConstructor = (features: Feature[]) => {
-    const featureCollection: FeatureCollection = {
-      type: 'FeatureCollection',
-      features: features
-    }
-  
-    return featureCollection
-  }
-
-  const convertGC2FC = (geometryCollection: GeometryCollection) => {
-    const features = geometryCollection.geometries.map((geometry) => featureConstructor(geometry))
-    const featureCollection = featureCollectionConstructor(features)
-    return featureCollection
-  }
-
-  const featureConstructor = (geometry: Geometry) => {
-    const feature: Feature = {
-      type: 'Feature',
-      properties: {},
-      geometry: geometry,
-    }
-  
-    return feature
-  }
-
   const tileOverlay = () => (
     <UrlTile
       urlTemplate = {urlTemplate}
@@ -86,9 +60,7 @@ const ObservationInfoComponent = (props: Props) => {
   )
 
   const observationLocationOverlay = () => {
-  
     const coordinate = convertPointToLatLng(props.observation.unitGathering.geometry)
-    
     return(
       <Marker
         coordinate = {coordinate}
@@ -98,7 +70,6 @@ const ObservationInfoComponent = (props: Props) => {
       </Marker>
     )
   }
-
 
   const zoneOverlay = () => {
     let zone = {
