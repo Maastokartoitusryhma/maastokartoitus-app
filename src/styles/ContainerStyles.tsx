@@ -190,9 +190,13 @@ const ContainerStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  imageContainer: {
-    padding: 10,
+  imageElementRowContainer: {
     flexDirection: 'row',
+    padding: 10,
+    justifyContent: 'space-between'
+  },
+  imageElementColumnContainer: {
+    padding: 5,
     justifyContent: 'space-between'
   },
   noImageContainer: {
@@ -205,12 +209,15 @@ const ContainerStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  imageButtonsContainer: {
+  imageButtonsRowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageButtonsColumnContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    width: 150,
-    height: 150
   },
   padding5Container: {
     padding: 5
@@ -227,6 +234,17 @@ const ContainerStyles = StyleSheet.create({
   singleButton: {
     width: '40%',
     padding: 5
+  },
+  imagesContainer: {
+    justifyContent: 'space-between'
+  },
+  singleImageContainer: {
+    padding: 5
+  },
+  removeIconContainer: {
+    position: 'absolute',
+    top: '1%',
+    right: '1%' 
   }
 })
 

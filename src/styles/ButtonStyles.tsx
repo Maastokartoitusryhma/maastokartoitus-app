@@ -31,8 +31,8 @@ const ButtonStyles = StyleSheet.create({
     backgroundColor: Colors.neutralButton,
   },
   removeImageButton: {
-    width: 130,
-    backgroundColor: Colors.negativeButton,
+    width: 30,
+    height: 30,
   }
 })
 

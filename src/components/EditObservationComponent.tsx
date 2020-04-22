@@ -211,6 +211,10 @@ const EditObservationComponent = (props: Props) => {
           }
           <View style={Cs.formContainer}>
             {form}
+            <View style={{ paddingLeft: 10 }}>
+              <Text>{t('images')}</Text>
+            </View>
+            
           </View>
           <ImagePickerComponent images={images} setImages={setImages} />
           <View style={Cs.formSaveButtonContainer}>
