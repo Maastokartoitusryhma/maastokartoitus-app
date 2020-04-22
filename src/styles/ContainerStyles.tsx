@@ -152,22 +152,22 @@ const ContainerStyles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   observationPropertyTitle: {
-    width: '40%'
+    width: '40%',
   },
   observationPropertyValue: {
-    width: '60%'
+    width: '60%',
+    paddingLeft: 10
   },
   observationInfoContainer: {
     padding: 5,
     backgroundColor: Colors.blueBackground,
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
   },
   editObservationButtonContainer: {
-    alignSelf: 'flex-end',
-    paddingVertical: 5,
-    width: '50%',
+    alignSelf: 'center',
+    width: '100%',
     flexDirection: 'row',
+    justifyContent: 'center',
   },
   eventDateContainer: {
     flexDirection: 'row',
@@ -178,6 +178,7 @@ const ContainerStyles = StyleSheet.create({
     alignSelf: 'stretch',
     flexDirection: 'row',
     alignItems: 'center',
+    paddingBottom: 15
   },
   eventTextContainer: {
     flexDirection: 'column',
@@ -212,6 +213,19 @@ const ContainerStyles = StyleSheet.create({
     height: 150
   },
   padding5Container: {
+    padding: 5
+  },
+  observationInfoMapContainer: {
+    width: '100%',
+    height: 150
+  },
+  observationInfoImageContainer: {
+    flexDirection: 'row',
+    padding: 5,
+    justifyContent: 'space-between'
+  },
+  singleButton: {
+    width: '40%',
     padding: 5
   }
 })

@@ -92,5 +92,8 @@
   "remove image": "REMOVE ",
   "no image": "No image",
   "edit observation event": "Edit observation event",
-  "changes saved": "Changes saved!"
+  "changes saved": "Changes saved!",
+  "images": "Images",
+  "edit button": "EDIT ",
+  "remove button": "REMOVE "
 }

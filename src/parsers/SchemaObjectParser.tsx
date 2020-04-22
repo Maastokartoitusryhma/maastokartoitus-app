@@ -6,6 +6,7 @@ interface BasicObject {
 }
 
 export const createSchemaObjectComponents = (JSONObject: BasicObject, schema: BasicObject) => {
+  console.log('SCHEMA', schema)
   const returnArray: Array<any> = []
   Object.keys(JSONObject).forEach((key) => {
     const objectKey = key
@@ -42,12 +43,12 @@ const findSchemaObject = (objectKey: string, objectValue: any, schemaObject: Bas
         }
         break
       case 'object':
-        if (!schemaObject['title'] && typeof(objectValue) === 'object') {
+        if (!schemaObject['title'] && typeof(objectValue) === 'object' && objectKey !== 'unitGathering') {
           Object.keys(objectValue).forEach(key => {
             const subSchemaObject = schemaObject['properties'][key]
             findSchemaObject(key, objectValue[key], subSchemaObject, componentArray)
           })          
-        } else {
+        } else if ( objectKey !== 'unitGathering') { // No need to show coordinates as text since observation location is shown on map
           componentArray.push(
             <SchemaObjectComponent
               key={objectKey} name={objectKey}
@@ -58,7 +59,7 @@ const findSchemaObject = (objectKey: string, objectValue: any, schemaObject: Bas
         break
       default:
     }
-  } else if (objectKey !== 'id' && objectKey !== 'type') { // user doesn't need to see id or type
+  } else if (objectKey !== 'id' && objectKey !== 'type' && objectKey !== 'localImages') { // user doesn't need to see id or type
     //this js object does not have a match in the schema
     componentArray.push(
       <SchemaObjectComponent

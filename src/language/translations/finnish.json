@@ -92,5 +92,8 @@
   "remove image": "POISTA ",
   "no image": "Ei kuvaa",
   "edit observation event": "Muokkaa havaintotapahtumaa",
-  "changes saved": "Muutokset tallennettu!"
+  "changes saved": "Muutokset tallennettu!",
+  "images": "Kuvat",
+  "edit button": "MUOKKAA ",
+  "remove button": "POISTA "
 }

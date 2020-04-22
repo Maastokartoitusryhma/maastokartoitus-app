@@ -348,6 +348,8 @@ const MapComponent = (props: Props) => {
     </View>
   )
 
+  console.log('REGION', props.region)
+
   return (
     <>
       <MapView
