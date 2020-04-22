@@ -10,8 +10,8 @@ import * as ImagePicker from 'expo-image-picker'
 
 
 interface Props {
-  image: string
-  setImage: Function
+  images: Array<string>
+  setImages: Function
 }
 
 const connector = connect()
@@ -41,7 +41,7 @@ const ImagePickerComponent = (props: Props) => {
 
     let succeeded : boolean = !pickerResult.cancelled
     if (succeeded) {
-      props.setImage(pickerResult.uri)
+      props.setImages(props.images.concat(pickerResult.uri))
     }
     return succeeded
   }
@@ -54,23 +54,38 @@ const ImagePickerComponent = (props: Props) => {
     return attachImage(true)
   }
 
-  const removeImage = () => {
-    props.setImage('')
+  const removeImage = (image: string) => {
+    const updatedImages = props.images.filter(i => i !== image)
+    props.setImages(updatedImages)
   }
 
   return (
     <View style={ Cs.imageContainer }>
-      { props.image !== ''
+      { props.images === []
         ?
-          <Image
-            source={{ uri: props.image }}
-            style={{ width: 150, height: 150 }}
-          />
-        :
           <View style={Cs.noImageContainer}>
             <Text style={Ts.noImageText}>{t('no image')}</Text>
           </View>
+        :
+          null
       }
+      { props.images.map((image: string) =>
+        <View key={image}>
+          <Image
+            source={{ uri: image }}
+            style={{ width: 150, height: 150 }}
+          />
+          <ButtonElement
+            buttonStyle={Bs.removeImageButton}
+            containerStyle={Cs.padding5Container}
+            title={t('remove image')}
+            iconRight={true}
+            icon={<Icon name='delete' type='material-icons' color='white'  size={22} />}
+            onPress={() => {removeImage(image)}}
+          />
+        </View>
+      )}
+        
       <View style={Cs.imageButtonsContainer}>
         <ButtonElement
           buttonStyle={Bs.addImageButton}
@@ -88,19 +103,6 @@ const ImagePickerComponent = (props: Props) => {
           icon={<Icon name='add-a-photo' type='material-icons' color='white'  size={22} />}
           onPress={imageFromCamera}
         />
-        { props.image !== ''
-          ?
-            <ButtonElement
-              buttonStyle={Bs.removeImageButton}
-              containerStyle={Cs.padding5Container}
-              title={t('remove image')}
-              iconRight={true}
-              icon={<Icon name='delete' type='material-icons' color='white'  size={22} />}
-              onPress={removeImage}
-            />
-          :
-            null
-        }
       </View>
     </View>
   )

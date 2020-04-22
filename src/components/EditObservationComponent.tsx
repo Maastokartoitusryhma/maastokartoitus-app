@@ -53,7 +53,8 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & {
   onPress: (id: string) => void,
-  onEditLocation: () => void
+  toMap: () => void
+  fromMap: boolean
 }
 
 
@@ -64,7 +65,7 @@ const EditObservationComponent = (props: Props) => {
   const [ form, setForm ] = useState<any | null>(null)
   const [ observation, setObservation ] = useState<BasicObject | null>(null)
   const [ events, setEvents ] = useState<any[]>([])
-  const [ image, setImage ] = useState<string>('')
+  const [ images, setImages ] = useState<string[]>([])
   const [ eventId, setEventId ] = useState<string>('')
 
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
@@ -77,7 +78,6 @@ const EditObservationComponent = (props: Props) => {
     return () => {
       props.clearObservationLocation()
       props.setEditing([false, false])
-      console.log("CLEANUP FIRED")
     }
   }, [])
 
@@ -95,13 +95,13 @@ const EditObservationComponent = (props: Props) => {
     setIndexOfEditedObservation(observationIndex)
     const observationClone = observationsClone[observationIndex]
     setObservation(observationClone)
-    const imageClone = observationsClone[observationIndex].image
-    setImage(imageClone)
+    const imagesClone = observationsClone[observationIndex].localImages
+    setImages(imagesClone)
     setEventId(props.observationId.eventId)
   }
 
 
-  const onSubmit = (data: { [key: string]: any }) => {
+  const onSubmit = async (data: { [key: string]: any }) => {
     if (observation !== null) {
       if (!('taxonConfidence' in data)) {
         data['taxonConfidence'] = 'MY.taxonConfidenceSure'
@@ -134,13 +134,13 @@ const EditObservationComponent = (props: Props) => {
           lolifeDroppingsType: data.lolifeDroppingsType,
           lolifeDroppingsCount: data.lolifeDroppingsCount,
         },
-        image: image
+        localImages: images
       } : {
         id: observation.id,
         type: observation.type,
         ...data,
         unitGathering: observation.unitGathering,
-        image: image
+        localImages: images
       }
 
       // if editing-flag 1st and 2nd elements are true replace location with new location, and clear editing-flag
@@ -148,8 +148,8 @@ const EditObservationComponent = (props: Props) => {
         props.observation ? editedUnit.unitGathering.geometry = props.observation : null
         props.clearObservationLocation()
         props.setEditing([false, false])
-        console.log('LOC MODIFIED')
       }
+
       events[indexOfEditedEvent].schema.gatherings[0].units[indexOfEditedObservation] = editedUnit
   
       // replace events with modified list
@@ -157,11 +157,10 @@ const EditObservationComponent = (props: Props) => {
       
       // console.log('EVENT AFTER:', props.observationEvent)
   
-      storageController.save('observationEvents', events)
+      await storageController.save('observationEvents', events)
       props.clearObservationId()
       setShowModal(true)
     }
-    
   }
 
   
@@ -185,7 +184,7 @@ const EditObservationComponent = (props: Props) => {
     if (observation !== null) {
       props.setObservationLocation(observation.unitGathering.geometry)
       props.setEditing([true, false])
-      props.onEditLocation()
+      props.toMap()
     }
   }
 
@@ -197,19 +196,23 @@ const EditObservationComponent = (props: Props) => {
       <View style={Cs.observationContainer}>
         <ScrollView>
           <Text style={Ts.speciesText}>{t('species')}: {t('flying squirrel')}</Text>
-          <View style={Cs.buttonContainer}>
-            <ButtonElement
-              buttonStyle={{}}
-              title={t('edit location')}
-              iconRight={true}
-              icon={<Icon name='edit-location' type='material-icons' color='white' size={22} />}
-              onPress={() => handleChangeToMap()}
-            />
-          </View>
+          {props.fromMap ?
+            null
+          :
+            <View style={Cs.buttonContainer}>
+              <ButtonElement
+                buttonStyle={{}}
+                title={t('edit location')}
+                iconRight={true}
+                icon={<Icon name='edit-location' type='material-icons' color='white' size={22} />}
+                onPress={() => handleChangeToMap()}
+              />
+            </View>
+          }
           <View style={Cs.formContainer}>
             {form}
           </View>
-          <ImagePickerComponent image={image} setImage={setImage} />
+          <ImagePickerComponent images={images} setImages={setImages} />
           <View style={Cs.formSaveButtonContainer}>
             <Button title={t('save')} onPress={handleSubmit(onSubmit)} color={Colors.positiveButton}/>
           </View>
@@ -222,7 +225,9 @@ const EditObservationComponent = (props: Props) => {
                   color={Colors.neutralColor}
                   onPress={() => {
                   setShowModal(!showModal)
-                  props.onPress(eventId)
+                  props.fromMap ?
+                    props.toMap() :
+                    props.onPress(eventId)
                 }} />
               </View>
             </View>

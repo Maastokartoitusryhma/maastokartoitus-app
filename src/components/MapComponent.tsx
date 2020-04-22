@@ -27,21 +27,31 @@ import uuid from 'react-native-uuid'
 
 const urlTemplate: string = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
 
+interface BasicObject {
+  [key: string]: any
+}
+
+interface ZoneObject {
+  name: string
+  id: string
+  geometry: GeometryCollection
+}
+
 interface RootState {
   position: LocationData
   path: LocationData[]
   region: Region
   observation: Point
-  observationEvent: Object[]
-  zone: GeometryCollection
+  observationEvent: BasicObject[]
   centered: boolean
   maptype: 'topographic' | 'satellite'
   editing: boolean[]
+  observationZone: {currentZoneId: string, zones: ZoneObject[]}
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, region, observation, observationEvent, zone, centered, maptype, editing } = state
-  return { position, path, region, observation, observationEvent, zone, centered, maptype, editing }
+  const { position, path, region, observation, observationEvent, centered, maptype, editing, observationZone } = state
+  return { position, path, region, observation, observationEvent, centered, maptype, editing, observationZone }
 }
 
 const mapDispatchToProps = {
@@ -66,7 +76,7 @@ type Props = PropsFromRedux & {
   onPressTrackObservation: () => void, 
   onPressFecesObservation: () => void, 
   onPressNestObservation: () => void,
-  onPressEditing: () => void,
+  onPressEditing: (fromMap?: boolean) => void,
 } 
 
 const MapComponent = (props: Props) => {
@@ -127,11 +137,13 @@ const MapComponent = (props: Props) => {
     followUser()
   }
 
-  //releases mapcenter from userlocation on moving the map
-  const onPanDrag = () => {
+  //releases mapcenter from userlocation on moving the map or tapping one of the 
+  //markers
+  const stopCentering = () => {
     props.centered ? props.toggleCentered() : null
   }
 
+  //updates region reducer one map has stopped moving
   const onRegionChangeComplete = (region: Region) => {
     props.setRegion(region)
   }
@@ -148,7 +160,8 @@ const MapComponent = (props: Props) => {
     props.clearObservationLocation()
   }
 
-  //redirects navigator back to edit page of single observation
+  //redirects navigator back to edit page of single observation with flags telling
+  //it that coordinate has been changed
   const submitEdit = () => {
     props.setEditing([true, true])
     props.onPressEditing()
@@ -160,12 +173,15 @@ const MapComponent = (props: Props) => {
     props.onPressEditing()
   }
 
+  //sets observation ids and shifts screen to observation edit page, parameter
+  //in onPressEditing will tell edit page that observation is being modified 
+  //from map, enabling return to correct screen when editing is finished
   const shiftToEditPage = (eventId: string, unitId: string) => {
     props.setObservationId({
       eventId,
       unitId
     })
-    props.onPressEditing()
+    props.onPressEditing(true)
   }
 
   //will eventually be used to update location for old observation in the 
@@ -220,16 +236,18 @@ const MapComponent = (props: Props) => {
   )
 
   //draws observation zone to map
-  const zoneOverlay = () => (props.zone ?
+  const zoneOverlay = () => {
+    let zone = props.observationZone.zones.find(z => z.id === props.observationZone.currentZoneId)
+    return (zone ?
     <Geojson 
-      geojson = {convertGC2FC(props.zone)}
+      geojson = {convertGC2FC(zone.geometry)}
       fillColor = "#f002"
       pinColor = "#f00"
       strokeColor = "#f00"
       strokeWidth = {4}
     />
     : null
-  )
+  )}
 
   //if topomap is selected draws its tiles on map
   const tileOverlay = () => (props.maptype === 'topographic' ?
@@ -251,11 +269,11 @@ const MapComponent = (props: Props) => {
       return null
     }
 
-    const eventId = props.observationEvent[props.observationEvent.length - 1].id
-    const units = props.observationEvent[props.observationEvent.length - 1]
+    const eventId: string = props.observationEvent[props.observationEvent.length - 1].id
+    const units: BasicObject[] = props.observationEvent[props.observationEvent.length - 1]
                   .schema.gatherings[0].units
 
-    return units.map((unit: Object) => {
+    return units.map((unit) => {
       const coordinate = convertPointToLatLng(unit.unitGathering.geometry)
       const unitId = unit.id
       let color
@@ -285,6 +303,7 @@ const MapComponent = (props: Props) => {
           pinColor = {color}
           onDragEnd = {(event) => updateObservationLocation(event.nativeEvent.coordinate, eventId, unitId)}
           zIndex = {-1}
+          onPress = {() => stopCentering()}
         >
           <Callout tooltip onPress={() => shiftToEditPage(eventId, unitId)}>
               <Button title={t('edit observation')} onPress={() => null}/>
@@ -335,7 +354,7 @@ const MapComponent = (props: Props) => {
         ref = {map => {mapView = map}}
         provider = {'google'}
         initialRegion = { props.region }
-        onPanDrag = {() => onPanDrag()}
+        onPanDrag = {() => stopCentering()}
         onLongPress = {(event) => markObservation(event.nativeEvent.coordinate)}
         onRegionChangeComplete = {(region) => onRegionChangeComplete(region)}
         maxZoomLevel = {18.9}

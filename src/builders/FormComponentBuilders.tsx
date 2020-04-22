@@ -61,7 +61,7 @@ export const createArray = (
 
 export const createInputElement = (
   title: string, objectTitle: string, parentObjectTitle: string,
-  type: string, defaultValue: string, register: Function,
+  type: string, defaultValue: string | number, register: Function,
   setValue: Function, watch: Function, errors: Object,
   unregister: Function, isArrayItem: boolean, callbackFunction: Function|undefined
   ) => {

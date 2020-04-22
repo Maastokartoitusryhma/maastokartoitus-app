@@ -19,7 +19,7 @@ const SchemaObjectComponent = (props: Props) => {
 
   useEffect(() => {
     findObjectDataFromSchemaObject()
-  }, [])
+  }, [props.value])
 
   const findObjectDataFromSchemaObject = () => {
     if (props.schemaObject) {

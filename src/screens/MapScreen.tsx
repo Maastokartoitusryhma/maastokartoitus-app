@@ -29,7 +29,7 @@ export default class MapScreen extends Component<NavigationStackScreenProps<Prop
           onPressTrackObservation = {() => navigate('Observation', {type: 'trackObservation'})} 
           onPressFecesObservation = {() => navigate('Observation', {type: 'fecesObservation'})} 
           onPressNestObservation = {() => navigate('Observation', {type: 'nestObservation'})}
-          onPressEditing = {() => navigate('EditObservation')} 
+          onPressEditing = {(fromMap?: boolean) => navigate('EditObservation', {fromMap})} 
         />
       </View>
     )

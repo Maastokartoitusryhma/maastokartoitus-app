@@ -1,8 +1,8 @@
-import { LatLng, Region } from 'react-native-maps'
-import { GeometryCollection, Point  } from 'geojson'
+import { Region } from 'react-native-maps'
 import { mapActionTypes,
-        SET_OBS_ZONE,
-        CLEAR_OBS_ZONE,
+        SET_CURRENT_OBS_ZONE,
+        CLEAR_CURRENT_OBS_ZONE,
+        SET_OBS_ZONES,
         TOGGLE_CENTERED,
         TOGGLE_MAPTYPE,
         SET_REGION,
@@ -20,13 +20,18 @@ export const clearRegion = () :mapActionTypes => ({
   type: CLEAR_REGION
 })
 
-export const setObservationZone = ( zone : GeometryCollection ) : mapActionTypes => ({
-  type: SET_OBS_ZONE,
-  payload: zone
+export const setCurrentObservationZone = ( id: string ) : mapActionTypes => ({
+  type: SET_CURRENT_OBS_ZONE,
+  payload: id
 })
 
-export const clearObservationZone = () : mapActionTypes => ({
-  type: CLEAR_OBS_ZONE
+export const clearCurrentObservationZone = () : mapActionTypes => ({
+  type: CLEAR_CURRENT_OBS_ZONE
+})
+
+export const setObservationZones = ( zones : object[] ) : mapActionTypes => ({
+  type: SET_OBS_ZONES,
+  payload: zones
 })
 
 export const toggleCentered = () : mapActionTypes => ({

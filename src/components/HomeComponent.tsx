@@ -3,7 +3,6 @@ import { View, Text, Button, Picker, ScrollView } from 'react-native'
 import UserInfoComponent from './UserInfoComponent'
 import ObservationEventListComponent from './ObservationEventListElementComponent'
 import { useTranslation } from 'react-i18next'
-import regionController from '../controllers/regionController'
 import storageController from '../controllers/storageController'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
@@ -18,8 +17,8 @@ import {
   clearObservationLocation,
   } from '../stores/observation/actions'
 import {
-  setObservationZone,
-  clearObservationZone
+  setCurrentObservationZone,
+  clearCurrentObservationZone
 } from '../stores/map/actions'
 import { updateLocation, appendPath } from '../stores/position/actions'
 import { connect, ConnectedProps } from 'react-redux'
@@ -32,6 +31,10 @@ import i18n from '../language/i18n'
 import MessageComponent from './MessageComponent'
 import { setDateForDocument } from '../utilities/dateHelper'
 
+interface BasicObject {
+  [key: string]: any
+}
+
 type UserObject = {
   id: string
   fullName: string
@@ -39,33 +42,35 @@ type UserObject = {
   defaultLanguage: string
 }
 
+interface ZoneObject {
+  name: string
+  id: string
+  geometry: GeometryCollection
+}
+
 interface RootState {
   position: LocationData
   path: LocationData[]
   observing: boolean
   observation: LatLng
-  zone: GeometryCollection
-  observationEvent: any[]
+  observationEvent: BasicObject[]
   schemaFi: object
   schemaEn: object
   schemaSv: object
   user: UserObject
-}
-
-interface MyObject {
-  [key: string]: any
+  observationZone: {currentZoneId: string, zones: ZoneObject[]}
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { position, path, observing, observation, zone, observationEvent, schemaFi, schemaEn, schemaSv, user } = state
-  return { position, path, observing, observation, zone, observationEvent, schemaFi, schemaEn, schemaSv, user }
+  const { position, path, observing, observation, observationEvent, schemaFi, schemaEn, schemaSv, user, observationZone } = state
+  return { position, path, observing, observation, observationEvent, schemaFi, schemaEn, schemaSv, user, observationZone }
 }
 
 const mapDispatchToProps = {
   updateLocation,
   appendPath,
-  setObservationZone,
-  clearObservationZone,
+  setCurrentObservationZone,
+  clearCurrentObservationZone,
   toggleObserving,
   newObservationEvent,
   allObservationEvents,
@@ -85,31 +90,13 @@ type Props = PropsFromRedux & {
   onPressObservationEvent: (id: string) => void
 }
 
-interface RegionObject {
-  name: string
-  id: string
-  geometry: GeometryCollection
-}
-
 const HomeComponent = (props: Props) => {
 
-  const [selectedRegion, setSelectedRegion] = useState('')
-  const [regions, setRegions] = useState<RegionObject[]>([])
   const [observationEvents, setObservationEvents] = useState<Element[]>([])
 
   useEffect(() => {
-    loadRegions()
     loadObservationEvents()
   }, [props.observationEvent])
-
-  const loadRegions = async () => {
-    const response = await regionController.getRegions()
-    if (response !== null) {
-      setRegions(response.results)
-      setSelectedRegion(response.results[0].id)
-      setSelectedObservationZone(response.results[0].id)
-    }
-  }
 
   const loadObservationEvents = () => {
     props.allObservationEvents()
@@ -131,20 +118,21 @@ const HomeComponent = (props: Props) => {
     } else {
       schema = props.schemaSv
     }
-    const fetchedSchema: MyObject = _.cloneDeep(schema)
+    const fetchedSchema: BasicObject = _.cloneDeep(schema)
     if (fetchedSchema !== null) {
       // parse schema object
-      const schemaObject: MyObject = {} = (parseSchemaToJSONObject(fetchedSchema.properties))
+      const schemaObject: BasicObject = parseSchemaToJSONObject(fetchedSchema.properties)
       // parse gatherings object
-      const gatheringsObject: MyObject = {} = (parseSchemaToJSONObject(fetchedSchema.properties.gatherings.items.properties))
+      const gatheringsObject: BasicObject = parseSchemaToJSONObject(fetchedSchema.properties.gatherings.items.properties)
       schemaObject.gatherings.push(gatheringsObject)
       return schemaObject
     }
     return null
   }
 
-  const createRegionsList = () => {
-    return regions.map(region => 
+  const createZonesList = () => {
+    //console.log(props.observationZone.zones)
+    return props.observationZone.zones.map(region => 
       <Picker.Item key={region.id} label={region.name} value={region.id}/>)
   }
 
@@ -158,7 +146,7 @@ const HomeComponent = (props: Props) => {
       observationForm.formID = 'MHL.45'
       observationForm.editors.push(props.user.id)
       observationForm.gatheringEvent.leg.push(props.user.fullName)
-      const region: RegionObject | undefined = regions.find(region => region.id === selectedRegion)
+      const region: ZoneObject | undefined = props.observationZone.zones.find(region => region.id === props.observationZone.currentZoneId)
       if (region) {
         observationForm.gatherings[0].geometry = region.geometry.geometries[0]
         observationForm.gatherings[0].locality = region.name
@@ -179,8 +167,10 @@ const HomeComponent = (props: Props) => {
   const finishObservationEvent = () => {
     const events = _.cloneDeep(props.observationEvent)
     const event = events.pop()
-    event.schema.gatheringEvent.dateEnd = setDateForDocument()
-    events.push(event)
+    if (event) {
+      event.schema.gatheringEvent.dateEnd = setDateForDocument()
+      events.push(event)
+    }    
 
     // replace events with modified list
     props.replaceObservationEvents(events)
@@ -190,14 +180,6 @@ const HomeComponent = (props: Props) => {
     props.clearObservationLocation()
     stopLocationAsync()
     props.allObservationEvents
-  }
-
-  const setSelectedObservationZone = (id: string) => {
-    const region: RegionObject | undefined = regions.find(region => region.id === id)              
-    
-    if (region) {
-      props.setObservationZone(region.geometry)
-    }
   }
 
   return (
@@ -210,12 +192,11 @@ const HomeComponent = (props: Props) => {
             <View style={Cs.pickerContainer}>
               <Text>{t('observation zone')}</Text>
               <Picker 
-                selectedValue={selectedRegion}
+                selectedValue={props.observationZone.currentZoneId}
                 onValueChange={itemValue => {
-                  setSelectedRegion(itemValue)
-                  setSelectedObservationZone(itemValue) 
+                  props.setCurrentObservationZone(itemValue) 
                 }}>
-                {createRegionsList()}
+                {createZonesList()}
               </Picker>
             </View>
             <View style={Cs.buttonContainer}>

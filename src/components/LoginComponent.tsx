@@ -4,7 +4,9 @@ import { useTranslation } from 'react-i18next'
 import userController from '../controllers/userController'
 import storageController from '../controllers/storageController'
 import { getObservationEventSchema } from '../controllers/documentController'
+import zoneController from '../controllers/zoneController'
 import { connect, ConnectedProps } from 'react-redux'
+import { setObservationZones } from '../stores/map/actions'
 import { replaceObservationEvents, newObservationEvent, setSchemaFi, setSchemaEn, setSchemaSv } from '../stores/observation/actions'
 import { setUser, setPersonToken } from '../stores/user/actions'
 import { setMessageVisibilityTrue, updateMessageContent } from '../stores/other/actions'
@@ -44,7 +46,8 @@ const mapDispatchToProps = {
   setUser,
   setPersonToken,
   setMessageVisibilityTrue,
-  updateMessageContent
+  updateMessageContent,
+  setObservationZones
 }
 
 const connector = connect(
@@ -72,7 +75,7 @@ const LoginComponent = (props: Props) => {
   const loadData = async () => {
     const userData = await storageController.fetch('userData')
     const personToken = await storageController.fetch('personToken')
-    console.log(personToken)
+    //console.log(personToken)
     if (userData !== null && personToken !== null) { // User data found from storage ==> user has logged in previously
       setLoggingIn(true)
       if (props.user === null) { // Set user data to reducer if it's not already there
@@ -84,6 +87,7 @@ const LoginComponent = (props: Props) => {
       i18n.changeLanguage(userData.defaultLanguage)
       await fetchObservationEvents()
       await fetchSchemasFromServer()
+      await fecthObservationZones()
       props.onSuccessfulLogin()
       setLoggingIn(false)
     }
@@ -157,6 +161,24 @@ const LoginComponent = (props: Props) => {
       await storageController.save('schemaSv', schemaInSv)
     }
     props.setSchemaSv(schemaInSv)
+  }
+
+  const fecthObservationZones = async () => {
+    // Try to fetch observation zones from server
+    let zones = await zoneController.getZones()
+    if (zones === null) {
+      // Couldn't load zones from server. Check for local copy.
+      setMessageVisibilityTrue()
+      zones = await storageController.fetch('zones')
+      if (zones === null) {
+        // No local copy available.
+        updateMessageContent('Havaintoalueiden lataaminen epäonnistui.')
+      } else {
+        updateMessageContent('Havaintoalueiden lataaminen palvelimelta epäonnistui. Käytetään tallennettuja havaintoalueita.')
+      }
+    }
+    console.log(JSON.stringify(zones))
+    props.setObservationZones(zones)
   }
 
 

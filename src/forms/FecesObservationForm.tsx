@@ -1,18 +1,29 @@
 import { createPicker, createInputElement } from '../builders/FormComponentBuilders'
 
+interface UnitFactObject {
+  lolifeDroppingsType: string
+  lolifeDroppingsCount: string
+  lolifeDroppingsQuality: string
+}
+
+interface DefaultsObject {
+  unitFact: UnitFactObject
+  notes: string
+}
+
 const FecesObservationForm = (
   register: Function, setValue: Function,
   watch: Function, errors: Object, 
-  unregister: Function, defaults: Object | undefined, t: Function) => {
+  unregister: Function, defaults: DefaultsObject | undefined, t: Function) => {
 
-  //variables for the possible default values of the fields
+  // variables for the possible default values of the fields
   let toReturn = []
-  let defaultLolifeDroppingsType = null
-  let defaultLolifeDroppingsCount = null
-  let defaultLolifeDroppingsQuality = null
-  let defaultNotes = null
+  let defaultLolifeDroppingsType: string | null = null
+  let defaultLolifeDroppingsCount: string | null = null
+  let defaultLolifeDroppingsQuality: string | null = null
+  let defaultNotes: string | null = null
 
-  //hardcoded options for each picker (enum) component
+  // hardcoded options for each picker (enum) component
   const lolifeDroppingsTypeDictionary: { [key: string]: any } = {
     '' : '',
     'MY.lolifeDroppingsTypeRock' : t('MY.lolifeDroppingsTypeRock'),
@@ -33,7 +44,7 @@ const FecesObservationForm = (
     'MY.lolifeDroppingsQuality3' : t('MY.lolifeDroppingsQuality3')
   }
 
-  //inserting the default values into the variables in fields where a default value exists
+  // inserting the default values into the variables in fields where a default value exists
   if (defaults !== undefined) {
     if (defaults.unitFact.lolifeDroppingsType !== undefined) { defaultLolifeDroppingsType = defaults.unitFact.lolifeDroppingsType }
     if (defaults.unitFact.lolifeDroppingsCount !== undefined) { defaultLolifeDroppingsCount = defaults.unitFact.lolifeDroppingsCount }
@@ -41,13 +52,13 @@ const FecesObservationForm = (
     if (defaults.notes !== undefined) { defaultNotes = defaults.notes }
   }
 
-  //inserting the hardcoded default options from the schema to the variables in case where there was no default value from the user
+  // inserting the hardcoded default options from the schema to the variables in case where there was no default value from the user
   if (defaultLolifeDroppingsType === null || defaultLolifeDroppingsType === undefined) { defaultLolifeDroppingsType =  '' }
   if (defaultLolifeDroppingsCount === null || defaultLolifeDroppingsCount === undefined) { defaultLolifeDroppingsCount = '' }
   if (defaultLolifeDroppingsQuality === null || defaultLolifeDroppingsQuality === undefined) { defaultLolifeDroppingsQuality = '' }
-  if(defaultNotes === null || defaultNotes === undefined) {defaultNotes = ''}
+  if (defaultNotes === null || defaultNotes === undefined) {defaultNotes = ''}
 
-  //creating the actual form elements, they're hardcoded and use the above variables to define the default values
+  // creating the actual form elements, they're hardcoded and use the above variables to define the default values
   toReturn.push(createPicker(t('lolifeDroppingsType'), 'lolifeDroppingsType', defaultLolifeDroppingsType, 
     register, setValue, watch, errors, unregister, lolifeDroppingsTypeDictionary))
 
