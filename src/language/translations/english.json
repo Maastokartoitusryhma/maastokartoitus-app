@@ -91,5 +91,6 @@
   "use camera": "TAKE PHOTO ",
   "remove image": "REMOVE ",
   "no image": "No image",
-  "edit observation event": "Edit observation event"
+  "edit observation event": "Edit observation event",
+  "changes saved": "Changes saved!"
 }

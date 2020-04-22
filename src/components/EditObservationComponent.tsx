@@ -190,7 +190,7 @@ const EditObservationComponent = (props: Props) => {
 
   if (form === null) {
     loadSchemaAndSetForm()
-    return <View><Text>Ladataan...</Text></View>
+    return <View><Text> {t('loading')}</Text></View>
   } else {
     return (
       <View style={Cs.observationContainer}>
@@ -218,7 +218,7 @@ const EditObservationComponent = (props: Props) => {
           </View>
           <Modal isVisible={showModal}>
             <View style={Cs.observationAddModal}>
-              <Text style={Cs.containerWithJustPadding}>{t('observation saved')}</Text>
+              <Text style={Cs.containerWithJustPadding}>{t('changes saved')}</Text>
               <View style={{ width: '20%'}}>
                 <Button
                   title='OK'

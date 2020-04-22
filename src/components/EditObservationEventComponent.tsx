@@ -126,7 +126,7 @@ const EditObservationEventComponent = (props: Props) => {
           </View>
           <Modal isVisible={showModal}>
             <View style={Cs.observationAddModal}>
-              <Text style={Cs.containerWithJustPadding}>{t('observation event saved')}</Text>
+              <Text style={Cs.containerWithJustPadding}>{t('changes saved')}</Text>
               <View style={{ width: '20%'}}>
                 <Button
                   title='OK'
