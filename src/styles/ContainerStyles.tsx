@@ -229,7 +229,7 @@ const ContainerStyles = StyleSheet.create({
   observationInfoImageContainer: {
     flexDirection: 'row',
     padding: 5,
-    justifyContent: 'space-between'
+    //justifyContent: 'space-between'
   },
   singleButton: {
     width: '40%',

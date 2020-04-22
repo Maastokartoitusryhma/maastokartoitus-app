@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Image, Text } from 'react-native'
+import { View, Image, Text, ScrollView } from 'react-native'
 import { connect, ConnectedProps } from 'react-redux'
 import { createSchemaObjectComponents } from '../parsers/SchemaObjectParser'
 import i18n from '../language/i18n'
@@ -152,14 +152,17 @@ const ObservationInfoComponent = (props: Props) => {
                 <Text style={Ts.boldText}>{t('images')}</Text>
               </View>
             </View>
-            <View style={Cs.observationInfoImageContainer}>
+            <ScrollView horizontal={true} style={Cs.observationInfoImageContainer}>
               {props.observation.localImages.map((uri: string) => (
-                <Image
-                  source={{ uri: uri }}
-                  style={{ width: 100, height: 100}}
-                />
+                <View style={{ paddingRight: 5}}>
+                  <Image
+                    source={{ uri: uri }}
+                    style={{ width: 100, height: 100}}
+                  />
+                </View>
+                
               ))}
-            </View>
+            </ScrollView>
           </View>
         )
         : null
