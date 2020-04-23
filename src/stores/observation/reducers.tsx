@@ -11,7 +11,8 @@ import { observationActionTypes,
         CLEAR_OBSERVATION_EVENTS,
         SET_OBSERVATION_ID,
         CLEAR_OBSERVATION_ID,
-        REPLACE_LOCATION_BY_ID
+        REPLACE_LOCATION_BY_ID,
+        DELETE_OBSERVATION_BY_ID
         } from './types'
 import _ from 'lodash'
 
@@ -59,6 +60,18 @@ const observationEventsReducer = (state: any[] = [], action : observationActionT
       })
 
       return newState
+    /**
+    case DELETE_OBSERVATION_BY_ID:
+      newState = _.cloneDeep(state)
+      newState.forEach(event => {
+        if(event.id === action.payload.obsId) {
+          const units = _.cloneDeep(event.schema.gatherings[0].units)
+          event.schema.gatherings[0].units = units.filter(unit => unit.id !== action.payload.unitId)
+        }
+      })
+
+      return newState
+    */
     case CLEAR_OBSERVATION_EVENTS:
       return []
     default:

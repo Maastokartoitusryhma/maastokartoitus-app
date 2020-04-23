@@ -7,6 +7,7 @@ export const NEW_OBSERVATION_EVENT ='NEW_OBSERVATION_EVENT'
 export const ALL_OBSERVATION_EVENTS = 'ALL_OBSERVATION_EVENTS'
 export const REPLACE_OBSERVATION_EVENTS = 'REPLACE_OBSERVATION_EVENTS'
 export const REPLACE_LOCATION_BY_ID = 'REPLACE_UNIT_BY_ID'
+//export const DELETE_OBSERVATION_BY_ID = 'DELETE_OBSERVATION_BY_ID'
 export const CLEAR_OBSERVATION_EVENTS = 'CLEAR_OBSERVATION_EVENTS'
 export const SET_SCHEMA_FI ='SET_SCHEMA_FI'
 export const SET_SCHEMA_EN ='SET_SCHEMA_EN'
@@ -46,6 +47,13 @@ interface replaceLocationById {
   payload: object
 }
 
+/**
+interface deleteObservationById {
+  type: typeof DELETE_OBSERVATION_BY_ID
+  payload: object
+}
+*/
+
 interface clearObservationEvents {
   type: typeof CLEAR_OBSERVATION_EVENTS
 }
@@ -81,6 +89,7 @@ export type observationActionTypes = setObservationLocation |
                                      allObservationEvents |
                                      replaceObservationEvents |
                                      replaceLocationById |
+                                     //deleteObservationById |
                                      clearObservationEvents |
                                      setSchemaFi |
                                      setSchemaEn |

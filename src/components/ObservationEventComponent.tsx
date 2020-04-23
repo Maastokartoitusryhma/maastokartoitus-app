@@ -5,15 +5,20 @@ import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import Bs from '../styles/ButtonStyles'
 import { connect, ConnectedProps } from 'react-redux'
-import { allObservationEvents, setObservationId } from '../stores/observation/actions'
+import { 
+  allObservationEvents,
+  replaceObservationEvents, 
+  setObservationId
+} from '../stores/observation/actions'
 import { getPersonToken } from '../stores/user/actions'
 import { setMessageVisibilityTrue, setMessageContent } from '../stores/other/actions'
 import { useTranslation } from 'react-i18next'
 import ObservationInfoComponent from './ObservationInfoComponent'
 import { postObservationEvent } from '../controllers/documentController'
+import storageController from '../controllers/storageController'
 import MessageComponent from './MessageComponent' 
-import Colors from '../styles/Colors'
 import { parseDateForUI } from '../utilities/dateHelper'
+import _ from 'lodash'
 
 type UserObject = {
   id: string
@@ -44,7 +49,8 @@ const mapDispatchToProps = {
   setObservationId,
   getPersonToken,
   setMessageVisibilityTrue,
-  setMessageContent
+  setMessageContent,
+  replaceObservationEvents 
 }
 
 const connector = connect(
@@ -66,6 +72,22 @@ const ObservationEventComponent = (props: Props) => {
 
   const event: BasicObject = props.observationEvent.find(e => e.id === props.id)
   const observations: BasicObject[] = event.schema.gatherings[0].units
+
+  //delete observation from correct event, replace reducer and asyncStorage
+  //events with new modified list
+  const deleteObservation = (obsId: string, unitId: string) => {
+    let events = _.cloneDeep(props.observationEvent)
+    events.forEach(event => {
+      if(event.id === obsId) {
+        const units = _.cloneDeep(event.schema.gatherings[0].units)
+        event.schema.gatherings[0].units = units.filter((unit: any) => 
+          unit.id !== unitId
+        )
+      }
+    })
+    props.replaceObservationEvents(events)
+    storageController.save('observationEvents', events)
+  }
 
   if (event === null || observations === []) {
     return (
@@ -130,7 +152,7 @@ const ObservationEventComponent = (props: Props) => {
                     buttonStyle={Bs.removeObservationButton}
                     icon={<Icon name='delete' color='white' size={22} />}
                     onPress={() => {
-                      console.log('POISTO')
+                      deleteObservation(event.id, observation.id)
                     }}
                   />
                 }

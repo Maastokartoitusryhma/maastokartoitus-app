@@ -14,6 +14,7 @@ import { observationActionTypes,
         CLEAR_OBSERVATION_EVENTS,
         SET_OBSERVATION_ID,
         CLEAR_OBSERVATION_ID,
+        //DELETE_OBSERVATION_BY_ID,
         } from './types'
 
 export const setObservationLocation = (point : Point | null) : observationActionTypes => ({
@@ -47,6 +48,13 @@ export const replaceLocationById = (geometry: Geometry, obsId: string, unitId: s
   type: REPLACE_LOCATION_BY_ID,
   payload: { geometry, obsId, unitId }
 })
+
+/**
+export const deleteObservationById = (obsId: string, unitId: string) : observationActionTypes => ({
+  type: DELETE_OBSERVATION_BY_ID,
+  payload: { obsId, unitId }
+})
+*/
 
 export const clearObservationEvents = () : observationActionTypes => ({
   type: CLEAR_OBSERVATION_EVENTS
