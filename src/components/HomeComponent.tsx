@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, Button, Picker, ScrollView } from 'react-native'
+import { Button as ButtonElement, Icon } from 'react-native-elements'
 import UserInfoComponent from './UserInfoComponent'
 import ObservationEventListComponent from './ObservationEventListElementComponent'
 import { useTranslation } from 'react-i18next'
 import storageController from '../controllers/storageController'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
+import Bs from '../styles/ButtonStyles'
 import Color from '../styles/Colors'
 import { LocationData } from 'expo-location'
 import { LatLng } from 'react-native-maps'
@@ -30,6 +32,7 @@ import _ from 'lodash'
 import i18n from '../language/i18n'
 import MessageComponent from './MessageComponent'
 import { setDateForDocument } from '../utilities/dateHelper'
+import Colors from '../styles/Colors'
 
 interface BasicObject {
   [key: string]: any
@@ -66,7 +69,7 @@ const mapStateToProps = (state: RootState) => {
   return { position, path, observing, observation, observationEvent, schemaFi, schemaEn, schemaSv, user, observationZone }
 }
 
-const mapDispatchToProps = {
+const mapDispatchToProps = { 
   updateLocation,
   appendPath,
   setCurrentObservationZone,
@@ -96,13 +99,13 @@ const HomeComponent = (props: Props) => {
 
   useEffect(() => {
     loadObservationEvents()
-  }, [props.observationEvent])
+  }, [props.observationEvent]) 
 
   const loadObservationEvents = () => {
     props.allObservationEvents()
     if (props.observationEvent !== null) {
       const events: Array<Element> = []
-      props.observationEvent.forEach(event => {
+      props.observationEvent.forEach((event: BasicObject) => {
         events.push(<ObservationEventListComponent key={event.id} observationEvent={event} onPress={() => props.onPressObservationEvent(event.id)} />)
       })
       setObservationEvents(events)
@@ -131,8 +134,7 @@ const HomeComponent = (props: Props) => {
   }
 
   const createZonesList = () => {
-    //console.log(props.observationZone.zones)
-    return props.observationZone.zones.map(region => 
+    return props.observationZone.zones.map((region: BasicObject) => 
       <Picker.Item key={region.id} label={region.name} value={region.id}/>)
   }
 
@@ -189,26 +191,63 @@ const HomeComponent = (props: Props) => {
         <View style={Cs.homeContainer}>
           <View style={Cs.observationEventContainer}>
             <Text style={Ts.observationEventTitle}>{t('observation event')}</Text>
-            <View style={Cs.pickerContainer}>
-              <Text>{t('observation zone')}</Text>
-              <Picker 
-                selectedValue={props.observationZone.currentZoneId}
-                onValueChange={itemValue => {
-                  props.setCurrentObservationZone(itemValue) 
-                }}>
-                {createZonesList()}
-              </Picker>
-            </View>
-            <View style={Cs.buttonContainer}>
-              { props.observing ?
-                <>
-                  <Button onPress = {() => props.onPressMap() } title = {t('map')}></Button>
-                  <Button onPress = {() => finishObservationEvent()} title = {t('cancelObservation')} color = {Color.negativeButton}></Button>
-                </>
+            {props.observing
+              ? 
+              <Text style={Ts.zoneText}>
+                {t('observation zone')}: {props.observationZone.zones.map((z: BasicObject) => {
+                  if (z.id === props.observationZone.currentZoneId) {
+                    return z.name
+                  }
+                })}
+              </Text>
+              : 
+              <View>
+                <Text style={Ts.zoneText}>{t('observation zone')}</Text>
+              <View style={Cs.pickerContainer}>
+                <Picker
+                  selectedValue={props.observationZone.currentZoneId}
+                  onValueChange={(itemValue: string) => {
+                    props.setCurrentObservationZone(itemValue) 
+                  }}>
+                  {createZonesList()}
+                </Picker>
+              </View>
+              </View>
+              
+            }
+            
+            {props.observing
+              ?
+              <View style={Cs.buttonContainer}>
+                <ButtonElement 
+                  containerStyle={Cs.continueButtonContainer}
+                  buttonStyle={Bs.continueButton}
+                  title={t('continue')}
+                  iconRight={true}
+                  icon={<Icon name='map-outline' type='material-community' color='white' size={22} />}
+                  onPress={() => props.onPressMap()}
+                />
+                <ButtonElement
+                  containerStyle={Cs.endButtonContainer}
+                  buttonStyle={Bs.endButton}
+                  title={t('cancelObservation')}
+                  iconRight={true}
+                  icon={<Icon name='stop' type='material-icons' color='white' size={22} />}
+                  onPress={() => finishObservationEvent()}
+                />
+              </View>
               :
-                <Button onPress = {() => beginObservationEvent()}  title = {t('beginObservation')}></Button>
-              }
-            </View>
+              <View style={Cs.buttonContainer}>
+                <ButtonElement
+                  containerStyle={Cs.beginButtonContainer}
+                  buttonStyle={{ backgroundColor: Colors.positiveColor}}
+                  title={t('beginObservation')}
+                  iconRight={true}
+                  icon={<Icon name='play-arrow' type='material-icons' color='white' size={22} />}
+                  onPress={() => beginObservationEvent()}
+                />
+              </View>
+            }
           </View>
           <View style={{ height: 10 }}></View>
           <View style={Cs.observationEventListContainer}>

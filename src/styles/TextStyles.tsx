@@ -23,18 +23,15 @@ const TextStyles = StyleSheet.create({
   observationText: {
     fontWeight: 'bold'
   },
-  loggedIn: {
-    padding: 10,
-  },
-  userInfoTitle: {
-    paddingTop: 10
-  },
   previousObservationsTitle: {
     fontWeight: 'bold',
   },
   observationEventTitle: {
     padding: 10,
     fontWeight: 'bold'
+  },
+  zoneText: {
+    paddingLeft: 20
   },
   observationEventListElement: {
     padding: 6

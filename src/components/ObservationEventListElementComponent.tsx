@@ -16,7 +16,6 @@ interface Props {
 const ObservationEventListElementComponent = (props: Props) => {
 
   const { t } = useTranslation()
-  console.log(props.observationEvent)
   const dateBegin = props.observationEvent.schema.gatheringEvent.dateBegin
   const dateEnd = props.observationEvent.schema.gatheringEvent.dateEnd
   const observationCount = props.observationEvent.schema.gatherings[0].units.length

@@ -19,11 +19,9 @@ const ButtonStyles = StyleSheet.create({
     backgroundColor: Colors.positiveButton
   },
   editObservationButton: {
-    //width: '75%',
     backgroundColor: Colors.neutralButton
   },
   removeObservationButton: {
-    //width: '75%',
     backgroundColor: Colors.negativeButton
   },
   addImageButton: {
@@ -33,6 +31,16 @@ const ButtonStyles = StyleSheet.create({
   removeImageButton: {
     width: 30,
     height: 30,
+  },
+  logoutButton: {
+    backgroundColor: Colors.negativeButton,
+    width: '45%',
+  },
+  continueButton: {
+    backgroundColor: Colors.neutralColor
+  },
+  endButton: {
+    backgroundColor: Colors.negativeColor
   }
 })
 

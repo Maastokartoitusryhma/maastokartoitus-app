@@ -13,14 +13,20 @@ const ContainerStyles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   buttonContainer: {
-    padding: 10,
+    padding: 5,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   observationEventContainer: {
     width: '90%',
     backgroundColor: Colors.blueBackground
   },
   pickerContainer: {
-    paddingLeft: 20
+    alignSelf: 'center',
+    width: '90%',
+    borderColor: Colors.darkBlueInputBorder,
+    borderWidth: 1,
   },
   loginContainer: {
     flexDirection: 'column',
@@ -45,14 +51,17 @@ const ContainerStyles = StyleSheet.create({
     padding: 10
   },
   userInfoContainer: {
+    paddingTop: 10,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingLeft: 10,
-    paddingRight: 10
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  loggedInContainer: {
+    padding: 10,
   },
   logoutButtonContainer: {
-    paddingTop: 10,
-    paddingRight: 10
+    paddingRight: 5,
+    alignItems: 'flex-end',
   },
   mapContainer: {
     flex: 1,
@@ -229,7 +238,6 @@ const ContainerStyles = StyleSheet.create({
   observationInfoImageContainer: {
     flexDirection: 'row',
     padding: 5,
-    //justifyContent: 'space-between'
   },
   singleButton: {
     width: '40%',
@@ -245,6 +253,18 @@ const ContainerStyles = StyleSheet.create({
     position: 'absolute',
     top: '1%',
     right: '1%' 
+  },
+  beginButtonContainer: {
+    padding: 5,
+    width: '100%',
+  },
+  continueButtonContainer: {
+    padding: 5,
+    width: '50%'
+  },
+  endButtonContainer: {
+    padding: 5,
+    width: '50%'
   }
 })
 

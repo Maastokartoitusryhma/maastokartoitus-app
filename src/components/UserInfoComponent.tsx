@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Text, Button, View } from 'react-native'
+import { Button as ButtonElement, Icon } from 'react-native-elements'
 import { connect, ConnectedProps } from 'react-redux'
 import { clearObservationEvents } from '../stores/observation/actions'
 import Colors from '../styles/Colors'
 import { useTranslation } from 'react-i18next'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
+import Bs from '../styles/ButtonStyles'
 import { removeUser } from '../stores/user/actions'
 import storageController from '../controllers/storageController'
 
@@ -64,16 +66,16 @@ const UserInfoComponent = (props: Props) => {
   return (
     <View>
       <View style={Cs.userInfoContainer}>
-        <View style={Ts.userInfoTitle}>
-          <Text style={Ts.loggedIn}>
+        <View style={Cs.loggedInContainer}>
+          <Text>
             {props.user != null ? t('loggedin') + props.user.fullName : null}
           </Text>
         </View>
         <View style={Cs.logoutButtonContainer}>
-          <Button
-            color={Colors.negativeColor}
-            title={t('logout')}
-            onPress={logout}
+          <ButtonElement
+            buttonStyle={Bs.logoutButton}
+            icon={<Icon name='logout' type='material-community' color='white' size={22} />}
+            onPress={() => logout()}
           />
         </View>
       </View>
