@@ -29,8 +29,13 @@
         "supportsTablet": true
     },
     "android": {
-        "package": "org.luomus.maastokartoitus",
-        "versionCode": 1
+      "package": "org.luomus.maastokartoitus",
+      "versionCode": 1,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBpg98sycRN_RqpGGDantX_91iLRj3CTII"
+        }
+      }
     }
-   }
+  }
 }
