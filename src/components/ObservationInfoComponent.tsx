@@ -72,28 +72,33 @@ const ObservationInfoComponent = (props: Props) => {
   }
 
   const zoneOverlay = () => {
-    let zone = {
-      "geometry": {
-        "geometries": [
-          {
-            "coordinates": props.event.schema.gatherings[0].geometry.coordinates,
-            "type": "Polygon"
-          }
-        ],
-        "type": "GeometryCollection",
+    if (props.event.schema.gatherings[0].geometry.coordinates !== undefined) {
+      let zone = {
+        "geometry": {
+          "geometries": [
+            {
+              "coordinates": props.event.schema.gatherings[0].geometry.coordinates,
+              "type": "Polygon"
+            }
+          ],
+          "type": "GeometryCollection",
+        }
       }
-    }
+      
+      return (
+        <Geojson 
+          geojson = {convertGC2FC(zone.geometry)}
+          fillColor = "#f002"
+          pinColor = "#f00"
+          strokeColor = "#f00"
+          strokeWidth = {4}
+        />
+      )
+    } else {
+      return null
+    } 
     
-    return (zone ?
-    <Geojson 
-      geojson = {convertGC2FC(zone.geometry)}
-      fillColor = "#f002"
-      pinColor = "#f00"
-      strokeColor = "#f00"
-      strokeWidth = {4}
-    />
-    : null
-  )}
+  }
 
   const region: Region = {
     "latitude": props.observation.unitGathering.geometry.coordinates[1],
@@ -125,7 +130,7 @@ const ObservationInfoComponent = (props: Props) => {
             </View>
             <ScrollView horizontal={true} style={Cs.observationInfoImageContainer}>
               {props.observation.localImages.map((uri: string) => (
-                <View style={{ paddingRight: 5}}>
+                <View style={{ paddingRight: 5 }} key={uri}>
                   <Image
                     source={{ uri: uri }}
                     style={{ width: 100, height: 100}}
