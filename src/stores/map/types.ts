@@ -1,10 +1,10 @@
-import { LatLng, Region } from 'react-native-maps'
-import { GeometryCollection, Point } from 'geojson'
+import { Region } from 'react-native-maps'
 
 export const SET_REGION = 'SET_REGION'
 export const CLEAR_REGION = 'CLEAR_REGION'
-export const SET_OBS_ZONE = 'SET_OBS_ZONE'
-export const CLEAR_OBS_ZONE = 'CLEAR_OBS_ZONE'
+export const SET_CURRENT_OBS_ZONE = 'SET_CURRENT_OBS_ZONE'
+export const CLEAR_CURRENT_OBS_ZONE = 'CLEAR_CURRENT_OBS_ZONE'
+export const SET_OBS_ZONES = 'SET_OBS_ZONES'
 export const TOGGLE_CENTERED = 'TOGGLE_CENTERED'
 export const TOGGLE_MAPTYPE = 'TOGGLE_MAPTYPE'
 export const TOGGLE_ZONE  = 'TOGGLE_ZONE'
@@ -19,13 +19,18 @@ interface clearRegion {
   type: typeof CLEAR_REGION
 }
 
-interface setObservationZone {
-  type : typeof SET_OBS_ZONE
-  payload: GeometryCollection
+interface setCurrentObservationZone {
+  type : typeof SET_CURRENT_OBS_ZONE
+  payload: string
 }
 
-interface clearObservationZone {
-  type: typeof CLEAR_OBS_ZONE
+interface clearCurrentObservationZone {
+  type: typeof CLEAR_CURRENT_OBS_ZONE
+}
+
+interface setObservationZones {
+  type: typeof SET_OBS_ZONES
+  payload: object[]
 }
 
 interface toggleCentered {
@@ -47,8 +52,9 @@ interface setEditing {
 
 export type mapActionTypes = setRegion |
                                      clearRegion |
-                                     setObservationZone | 
-                                     clearObservationZone | 
+                                     setCurrentObservationZone | 
+                                     clearCurrentObservationZone | 
+                                     setObservationZones | 
                                      toggleCentered |
                                      toggleMaptype |
                                      toggleZoomToZone |

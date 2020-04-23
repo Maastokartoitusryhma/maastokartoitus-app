@@ -132,10 +132,13 @@ const ObservationEventComponent = (props: Props) => {
           {observations.map(observation =>
             <View key={observation.id}>
               <ObservationInfoComponent
+                event={event}
                 observation={observation}
                 editButton={
                   <ButtonElement
                     buttonStyle={Bs.editObservationButton}
+                    title={t('edit button')}
+                    iconRight={true}
                     icon={<Icon name='edit' color='white' size={22} />}
                     onPress={() => {
                       const id = {
@@ -150,6 +153,8 @@ const ObservationEventComponent = (props: Props) => {
                 removeButton={
                   <ButtonElement
                     buttonStyle={Bs.removeObservationButton}
+                    title={t('remove button')}
+                    iconRight={true}
                     icon={<Icon name='delete' color='white' size={22} />}
                     onPress={() => {
                       deleteObservation(event.id, observation.id)

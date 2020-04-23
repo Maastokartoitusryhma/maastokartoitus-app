@@ -40,7 +40,7 @@
   "trace": "spår",
   "feces": "avföring",
   "nest": "bo",
-  "observation saved": "Observationen sparades!",
+  "observation saved": "Observationen sparat!",
   "login text": "Logga in för att använda applikationen.",
   "edit observation": "Redigera observationen",
   "edit location": "FÖRÄNDRA PLATSEN ",
@@ -90,6 +90,10 @@
   "choose image": "VÄLJA ",
   "use camera": "TA BILD ",
   "remove image": "TA BORT ",
-  "no image": "Ingen bild"
-
+  "no image": "Inga bilder",
+  "edit observation event": "Redigera händelsen",
+  "changes saved": "Förändringar sparat!",
+  "images": "Bilder",
+  "edit button": "REDIGERA ",
+  "remove button": "RADERA "
 }

@@ -12,9 +12,13 @@ import Colors from '../styles/Colors'
 import Modal from 'react-native-modal'
 import _ from 'lodash'
 
+interface BasicObject {
+  [key: string]: any
+}
+
 interface RootState {
-  observationEvent: any[]
-  observationId: object
+  observationEvent: BasicObject[]
+  observationId: BasicObject
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -39,9 +43,9 @@ type Props = PropsFromRedux & {
 
 const EditObservationEventComponent = (props: Props) => {
   //states that store the list of all event, the event that's being edited
-  const [ events, setEvents ] = useState(null)
-  const [ indexOfEditedEvent, setIndexOfEditedEvent ] = useState(null)
-  const [ event, setEvent ] = useState(null)
+  const [ events, setEvents ] = useState<BasicObject[]>([])
+  const [ indexOfEditedEvent, setIndexOfEditedEvent ] = useState<number>(-1)
+  const [ event, setEvent ] = useState<BasicObject>({})
   //For react-hook-form
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
   const { t } = useTranslation()
@@ -118,11 +122,11 @@ const EditObservationEventComponent = (props: Props) => {
             {form}
           </View>
           <View style={Cs.formSaveButtonContainer}>
-            <Button title={t('edit observation event')} onPress={handleSubmit(onSubmit)} color={Colors.positiveButton}/>
+            <Button title={t('save')} onPress={handleSubmit(onSubmit)} color={Colors.positiveButton}/>
           </View>
           <Modal isVisible={showModal}>
             <View style={Cs.observationAddModal}>
-              <Text style={Cs.containerWithJustPadding}>{t('observation event saved')}</Text>
+              <Text style={Cs.containerWithJustPadding}>{t('changes saved')}</Text>
               <View style={{ width: '20%'}}>
                 <Button
                   title='OK'

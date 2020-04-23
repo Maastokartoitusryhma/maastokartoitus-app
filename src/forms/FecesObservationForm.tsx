@@ -1,16 +1,27 @@
 import { createPicker, createInputElement } from '../builders/FormComponentBuilders'
 
+interface UnitFactObject {
+  lolifeDroppingsType: string
+  lolifeDroppingsCount: string
+  lolifeDroppingsQuality: string
+}
+
+interface DefaultsObject {
+  unitFact: UnitFactObject
+  notes: string
+}
+
 const FecesObservationForm = (
   register: Function, setValue: Function,
   watch: Function, errors: Object, 
-  unregister: Function, defaults: Object | undefined, t: Function) => {
+  unregister: Function, defaults: DefaultsObject | undefined, t: Function) => {
 
   // variables for the possible default values of the fields
   let toReturn = []
-  let defaultLolifeDroppingsType = null
-  let defaultLolifeDroppingsCount = null
-  let defaultLolifeDroppingsQuality = null
-  let defaultNotes = null
+  let defaultLolifeDroppingsType: string | null = null
+  let defaultLolifeDroppingsCount: string | null = null
+  let defaultLolifeDroppingsQuality: string | null = null
+  let defaultNotes: string | null = null
 
   // hardcoded options for each picker (enum) component
   const lolifeDroppingsTypeDictionary: { [key: string]: any } = {

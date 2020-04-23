@@ -32,7 +32,7 @@
   "remove": "remove",
   "observations": "observations",
   "singleObservation": "observation",
-  "event": "Observation Event",
+  "event": "Observation event",
   "dateBegin": "Starting date",
   "dateEnd": "Ending date",
   "Observations": "Observations",
@@ -90,5 +90,10 @@
   "choose image": "CHOOSE ",
   "use camera": "TAKE PHOTO ",
   "remove image": "REMOVE ",
-  "no image": "No image"
+  "no image": "No images",
+  "edit observation event": "Edit observation event",
+  "changes saved": "Changes saved!",
+  "images": "Images",
+  "edit button": "EDIT ",
+  "remove button": "REMOVE "
 }

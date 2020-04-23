@@ -5,7 +5,7 @@ interface BasicObject {
 }
 
 const ObservationEventForm = (register: Function, setValue: Function,
-  watch: Function, errors: BasicObject, unregister: Function, defaults: BasicObject | undefined
+  watch: Function, errors: BasicObject, unregister: Function, defaults: BasicObject
 ) => {
   
   // variables for the possible default values of the fields

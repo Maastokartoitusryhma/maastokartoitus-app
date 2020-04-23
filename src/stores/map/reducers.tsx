@@ -1,6 +1,7 @@
 import { mapActionTypes, 
-        SET_OBS_ZONE,
-        CLEAR_OBS_ZONE,
+        SET_CURRENT_OBS_ZONE,
+        CLEAR_CURRENT_OBS_ZONE,
+        SET_OBS_ZONES,
         TOGGLE_CENTERED,
         TOGGLE_MAPTYPE,
         SET_REGION,
@@ -24,12 +25,14 @@ const regionReducer = (state = initialRegion, action: mapActionTypes) => {
   }
 }
 
-const zoneReducer = (state = null, action : mapActionTypes) => {
+const observationZoneReducer = (state = {currentZoneId: '', zones: []}, action : mapActionTypes) => {
   switch (action.type) {
-    case SET_OBS_ZONE:
-      return action.payload
-    case CLEAR_OBS_ZONE:
-      return null
+    case SET_CURRENT_OBS_ZONE:
+      return {...state, currentZoneId: action.payload}
+    case CLEAR_CURRENT_OBS_ZONE:
+      return {...state, currentZoneId: ''}
+    case SET_OBS_ZONES:
+      return {...state, zones: action.payload}
     default:
       return state
   }
@@ -77,7 +80,7 @@ const maptypeReducer = (state: 'topographic' | 'satellite' = 'topographic', acti
 
 export { 
   regionReducer, 
-  zoneReducer, 
+  observationZoneReducer, 
   centeringReducer, 
   maptypeReducer,
   editingReducer,

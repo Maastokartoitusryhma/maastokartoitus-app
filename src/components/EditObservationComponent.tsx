@@ -101,7 +101,7 @@ const EditObservationComponent = (props: Props) => {
   }
 
 
-  const onSubmit = (data: { [key: string]: any }) => {
+  const onSubmit = async (data: { [key: string]: any }) => {
     if (observation !== null) {
       if (!('taxonConfidence' in data)) {
         data['taxonConfidence'] = 'MY.taxonConfidenceSure'
@@ -157,7 +157,7 @@ const EditObservationComponent = (props: Props) => {
       
       // console.log('EVENT AFTER:', props.observationEvent)
   
-      storageController.save('observationEvents', events)
+      await storageController.save('observationEvents', events)
       props.clearObservationId()
       setShowModal(true)
     }
@@ -190,7 +190,7 @@ const EditObservationComponent = (props: Props) => {
 
   if (form === null) {
     loadSchemaAndSetForm()
-    return <View><Text>Ladataan...</Text></View>
+    return <View><Text> {t('loading')}</Text></View>
   } else {
     return (
       <View style={Cs.observationContainer}>
@@ -211,6 +211,10 @@ const EditObservationComponent = (props: Props) => {
           }
           <View style={Cs.formContainer}>
             {form}
+            <View style={{ paddingLeft: 10 }}>
+              <Text>{t('images')}</Text>
+            </View>
+            
           </View>
           <ImagePickerComponent images={images} setImages={setImages} />
           <View style={Cs.formSaveButtonContainer}>
@@ -218,7 +222,7 @@ const EditObservationComponent = (props: Props) => {
           </View>
           <Modal isVisible={showModal}>
             <View style={Cs.observationAddModal}>
-              <Text style={Cs.containerWithJustPadding}>{t('observation saved')}</Text>
+              <Text style={Cs.containerWithJustPadding}>{t('changes saved')}</Text>
               <View style={{ width: '20%'}}>
                 <Button
                   title='OK'

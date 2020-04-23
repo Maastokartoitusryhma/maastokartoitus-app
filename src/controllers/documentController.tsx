@@ -2,6 +2,7 @@ import ApolloClient, { gql } from 'apollo-boost'
 import { Alert } from 'react-native'
 import axios from 'axios'
 import { otherActionTypes } from '../stores/other/types'
+import i18n from '../language/i18n'
 
 interface BasicObject {
   [key: string]: any
@@ -60,6 +61,7 @@ export const getSingleObservationSchema = async (language: string) => {
 }
 
 export const postObservationEvent = async (observationEvent: BasicObject, token: string, setMessageVisibilityTrue: () => otherActionTypes, setMessageContent: (content: string) => otherActionTypes) => {
+  
   const event = observationEvent.schema
   const units = observationEvent.schema.gatherings[0].units
 
@@ -76,18 +78,37 @@ export const postObservationEvent = async (observationEvent: BasicObject, token:
   let url = `https://apitest.laji.fi/v0/documents?personToken=${token}&access_token=${accessToken}&validationErrorFormat=remote`
   
   try {
-    //console.log('URL: ' + url)
     let response = await axios.post(url, event)
     console.log(response)
     setMessageVisibilityTrue()
-    if (response.status === 200) {    
-      setMessageContent('Lähettäminen onnistui!')
+    if (i18n.language === 'fi') {
+      if (response.status === 200) {
+        setMessageContent('Lähettäminen onnistui!')
+      } else {
+        setMessageContent(`Lähettäminen epäonnistui koodilla ${response.status}`)
+      }
+    } else if (i18n.language === 'en') {
+      if (response.status === 200) {
+        setMessageContent('Sending succeeded!')
+      } else {
+        setMessageContent(`Sending to server failed with status code ${response.status}`)
+      }
     } else {
-      setMessageContent(`Lähettäminen epäonnistui koodilla ${response.status}`)
+      if (response.status === 200) {
+        setMessageContent('Skickande lyckades!')
+      } else {
+        setMessageContent(`Skickande misslyckades med statuskod ${response.status}`)
+      }
     }
   } catch (error) {
     console.log('ERROR: ' + error)
-    setMessageContent(`Palvelimelle lähettäminen epäonnistui: ${error}`)
     setMessageVisibilityTrue()
+    if (i18n.language === 'fi') {
+      setMessageContent(`Palvelimelle lähettäminen epäonnistui: ${error}`)
+    } else if (i18n.language === 'en') {
+      setMessageContent(`Sending to server failed: ${error}`)
+    } else {
+      setMessageContent(`Skickande till server misslyckades: ${error}`)
+    }
   }
 }
