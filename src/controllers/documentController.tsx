@@ -3,6 +3,7 @@ import { Alert } from 'react-native'
 import axios from 'axios'
 import { otherActionTypes } from '../stores/other/types'
 import i18n from '../language/i18n'
+import * as FileSystem from 'expo-file-system'
 
 interface BasicObject {
   [key: string]: any
@@ -112,4 +113,41 @@ export const postObservationEvent = async (observationEvent: BasicObject, token:
       setMessageContent(`Skickande till server misslyckades: ${error}`)
     }
   }
+}
+
+const postImageFile = async (image: string, token: string) => {
+
+  const accessToken = 'R7uWGymPsmJ2ItzJphThYBcqLc6dBVDBfdUEGSRYq8aChwRvi34zvfJyrXTTUHFB'
+  let url = `https://apitest.laji.fi/v0/images?personToken=${token}&access_token=${accessToken}&formID=MHL.51`
+
+  // readAsStringAsync reads the file contents and converts it to base64-encoded string
+  const base64 = await FileSystem.readAsStringAsync(image, { encoding: 'base64' })
+
+  // Instead of using FormData, the payload is manually constructed below
+  // const data = new FormData()
+  // data.append('photo', 'data:image/jpeg;name=IMAGE.JPG;base64,' + base64)
+
+  let boundary = '---erotin---'
+  let payloadheader = boundary + '\n' +
+        'Content-Disposition: form-data; name="data"; filename="IMAGE.JPG"\n' +
+        'Content-Type: image/jpeg\n\n\n' + 
+        boundary + '\n'
+
+  let payload = payloadheader + 'data:image/jpeg;name=IMAGE.JPG;base64,' + base64
+
+  try {
+    let response = await axios.post(url, payload, {
+      headers: {
+        'Content-Type': 'multipart/form-data; boundary=' + boundary
+      }
+    })
+    console.log('POST /images/ response: ' + response)
+  } catch (error) {
+    console.log('POST /images/ error: ' + error)
+  }
+  
+}
+
+const postImageMetadata = async () => {
+  
 }
