@@ -132,6 +132,10 @@ const HomeComponent = (props: Props) => {
 
   const createZonesList = () => {
     //console.log(props.observationZone.zones)
+    if (props.observationZone.currentZoneId === '' && props.observationZone.zones.length !== 0) {
+      props.setCurrentObservationZone(props.observationZone.zones[0].id)
+    }
+
     return props.observationZone.zones.map(region => 
       <Picker.Item key={region.id} label={region.name} value={region.id}/>)
   }

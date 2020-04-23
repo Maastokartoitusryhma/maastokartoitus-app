@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, ScrollView, Button } from 'react-native'
+import Modal from 'react-native-modal'
 import { Icon, Button as ButtonElement } from 'react-native-elements'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
@@ -19,6 +20,7 @@ import storageController from '../controllers/storageController'
 import MessageComponent from './MessageComponent' 
 import { parseDateForUI } from '../utilities/dateHelper'
 import _ from 'lodash'
+import Colors from '../styles/Colors'
 
 type UserObject = {
   id: string
@@ -69,19 +71,23 @@ type Props = PropsFromRedux & {
 const ObservationEventComponent = (props: Props) => {
 
   const { t } = useTranslation()
-
+  const [showModal, setShowModal] = useState(false)
+  const [id, setId] = useState({
+    eventId: null,
+    unitId: null
+  })
   const event: BasicObject = props.observationEvent.find(e => e.id === props.id)
   const observations: BasicObject[] = event.schema.gatherings[0].units
 
   //delete observation from correct event, replace reducer and asyncStorage
   //events with new modified list
-  const deleteObservation = (obsId: string, unitId: string) => {
+  const deleteObservation = () => {
     let events = _.cloneDeep(props.observationEvent)
     events.forEach(event => {
-      if(event.id === obsId) {
+      if(event.id === id.eventId) {
         const units = _.cloneDeep(event.schema.gatherings[0].units)
         event.schema.gatherings[0].units = units.filter((unit: any) => 
-          unit.id !== unitId
+          unit.id !== id.unitId
         )
       }
     })
@@ -157,7 +163,11 @@ const ObservationEventComponent = (props: Props) => {
                     iconRight={true}
                     icon={<Icon name='delete' color='white' size={22} />}
                     onPress={() => {
-                      deleteObservation(event.id, observation.id)
+                      setShowModal(!showModal)
+                      setId({
+                        eventId: event.id, 
+                        unitId: observation.id
+                      })
                     }}
                   />
                 }
@@ -165,6 +175,40 @@ const ObservationEventComponent = (props: Props) => {
               <View style={{padding: 5}}></View>
             </View>
           )}
+          <Modal isVisible={showModal}>
+            <View style={Cs.observationAddModal}>
+              <Text style={Cs.containerWithJustPadding}>{t('remove observation')}</Text>
+              <View style={Cs.editObservationButtonContainer}>
+                <View style={Cs.singleButton}>
+                  <ButtonElement
+                    title='OK'
+                    buttonStyle={Bs.removeObservationButton}
+                    onPress={() => {
+                      deleteObservation()
+                      setShowModal(!showModal)
+                      setId({
+                        eventId: null,
+                        unitId: null
+                      })
+                    }}
+                  />
+                </View>
+                <View style={Cs.singleButton}>
+                  <ButtonElement 
+                    title='Cancel'
+                    buttonStyle={Bs.editObservationButton}
+                    onPress={() => {
+                      setShowModal(!showModal)
+                      setId({
+                        eventId: null,
+                        unitId: null
+                      })
+                    }}
+                  />
+                </View>
+              </View>
+            </View>
+          </Modal>
           <MessageComponent onPress={null}/>
         </ScrollView>
       </View>
