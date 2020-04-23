@@ -177,7 +177,6 @@ const LoginComponent = (props: Props) => {
         updateMessageContent('Havaintoalueiden lataaminen palvelimelta epäonnistui. Käytetään tallennettuja havaintoalueita.')
       }
     }
-    console.log(JSON.stringify(zones))
     props.setObservationZones(zones)
   }
 

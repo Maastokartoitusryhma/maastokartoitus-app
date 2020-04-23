@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, Button, Picker, ScrollView } from 'react-native'
-import { Button as ButtonElement, Icon } from 'react-native-elements'
+import { View, Text, Picker, ScrollView } from 'react-native'
+import { Button, Icon } from 'react-native-elements'
 import UserInfoComponent from './UserInfoComponent'
 import ObservationEventListComponent from './ObservationEventListElementComponent'
 import { useTranslation } from 'react-i18next'
@@ -8,7 +8,6 @@ import storageController from '../controllers/storageController'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import Bs from '../styles/ButtonStyles'
-import Color from '../styles/Colors'
 import { LocationData } from 'expo-location'
 import { LatLng } from 'react-native-maps'
 import { 
@@ -96,6 +95,12 @@ type Props = PropsFromRedux & {
 const HomeComponent = (props: Props) => {
 
   const [observationEvents, setObservationEvents] = useState<Element[]>([])
+  const { t } = useTranslation()
+
+  useEffect(() => {
+    // Set first zone in array as selected zone to avoid undefined values
+    props.setCurrentObservationZone(props.observationZone.zones[0].id) 
+  }, [])
 
   useEffect(() => {
     loadObservationEvents()
@@ -138,8 +143,6 @@ const HomeComponent = (props: Props) => {
       <Picker.Item key={region.id} label={region.name} value={region.id}/>)
   }
 
-  const { t } = useTranslation()
-
   const beginObservationEvent = () => {
     
     const observationForm = parseObservationEventObject()
@@ -148,7 +151,7 @@ const HomeComponent = (props: Props) => {
       observationForm.formID = 'MHL.45'
       observationForm.editors.push(props.user.id)
       observationForm.gatheringEvent.leg.push(props.user.fullName)
-      const region: ZoneObject | undefined = props.observationZone.zones.find(region => region.id === props.observationZone.currentZoneId)
+      const region: ZoneObject | undefined = props.observationZone.zones.find((region: BasicObject) => region.id === props.observationZone.currentZoneId)
       if (region) {
         observationForm.gatherings[0].geometry = region.geometry.geometries[0]
         observationForm.gatherings[0].locality = region.name
@@ -184,6 +187,8 @@ const HomeComponent = (props: Props) => {
     props.allObservationEvents
   }
 
+  
+
   return (
     <View>
       <ScrollView>
@@ -194,32 +199,30 @@ const HomeComponent = (props: Props) => {
             {props.observing
               ? 
               <Text style={Ts.zoneText}>
-                {t('observation zone')}: {props.observationZone.zones.map((z: BasicObject) => {
-                  if (z.id === props.observationZone.currentZoneId) {
-                    return z.name
+                {t('observation zone')}: {props.observationZone.zones.map((zone: BasicObject) => {
+                  if (zone.id === props.observationZone.currentZoneId) {
+                    return zone.name
                   }
                 })}
               </Text>
               : 
               <View>
                 <Text style={Ts.zoneText}>{t('observation zone')}</Text>
-              <View style={Cs.pickerContainer}>
-                <Picker
-                  selectedValue={props.observationZone.currentZoneId}
-                  onValueChange={(itemValue: string) => {
-                    props.setCurrentObservationZone(itemValue) 
-                  }}>
-                  {createZonesList()}
-                </Picker>
+                <View style={Cs.pickerContainer}>
+                  <Picker
+                    selectedValue={props.observationZone.currentZoneId}
+                    onValueChange={(itemValue: string) => {
+                      props.setCurrentObservationZone(itemValue) 
+                    }}>
+                    {createZonesList()}
+                  </Picker>
+                </View>
               </View>
-              </View>
-              
             }
-            
             {props.observing
               ?
               <View style={Cs.buttonContainer}>
-                <ButtonElement 
+                <Button
                   containerStyle={Cs.continueButtonContainer}
                   buttonStyle={Bs.continueButton}
                   title={t('continue')}
@@ -227,7 +230,7 @@ const HomeComponent = (props: Props) => {
                   icon={<Icon name='map-outline' type='material-community' color='white' size={22} />}
                   onPress={() => props.onPressMap()}
                 />
-                <ButtonElement
+                <Button
                   containerStyle={Cs.endButtonContainer}
                   buttonStyle={Bs.endButton}
                   title={t('cancelObservation')}
@@ -238,7 +241,7 @@ const HomeComponent = (props: Props) => {
               </View>
               :
               <View style={Cs.buttonContainer}>
-                <ButtonElement
+                <Button
                   containerStyle={Cs.beginButtonContainer}
                   buttonStyle={{ backgroundColor: Colors.positiveColor}}
                   title={t('beginObservation')}
@@ -258,6 +261,7 @@ const HomeComponent = (props: Props) => {
         </View>
         <MessageComponent onPress={null}/>
       </ScrollView>
+      {console.log(props.observationZone.zones[0].id)}
     </View>
   )
 }
