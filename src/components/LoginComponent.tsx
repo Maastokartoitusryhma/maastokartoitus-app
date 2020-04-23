@@ -10,6 +10,7 @@ import { setObservationZones } from '../stores/map/actions'
 import { replaceObservationEvents, newObservationEvent, setSchemaFi, setSchemaEn, setSchemaSv } from '../stores/observation/actions'
 import { setUser, setPersonToken } from '../stores/user/actions'
 import { setMessageVisibilityTrue, updateMessageContent } from '../stores/other/actions'
+import MessageComponent from './MessageComponent'
 import Colors from '../styles/Colors'
 import Cs from '../styles/ContainerStyles'
 import Bs from '../styles/ButtonStyles'
@@ -95,7 +96,12 @@ const LoginComponent = (props: Props) => {
 
   const login = async () => {
     const result = await userController.getTempTokenAndLoginUrl()
-    props.onPressLogin(result)
+    if (result === null) {
+      setMessageVisibilityTrue()
+      updateMessageContent('Sisäänkirjautuminen epäonnistui.')
+    } else {
+      props.onPressLogin(result)
+    }  
   }
 
   const fetchObservationEvents = async () => {
@@ -208,6 +214,7 @@ const LoginComponent = (props: Props) => {
           <Text style={Ts.loginLanguage} onPress={() => i18n.changeLanguage('sv')}>SV</Text>
           <Text style={Ts.loginLanguage} onPress={() => i18n.changeLanguage('en')}>EN</Text>
         </View>
+        <MessageComponent onPress={null}/>
       </View>
     )
   }

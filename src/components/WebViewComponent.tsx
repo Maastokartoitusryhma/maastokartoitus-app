@@ -4,6 +4,7 @@ import userController from '../controllers/userController'
 import storageController from '../controllers/storageController'
 import { connect, ConnectedProps } from 'react-redux'
 import { setUser, setPersonToken } from '../stores/user/actions'
+import { setMessageVisibilityTrue, updateMessageContent } from '../stores/other/actions'
 
 type UserObject = {
   id: string
@@ -24,7 +25,9 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = {
   setUser,
-  setPersonToken
+  setPersonToken,
+  setMessageVisibilityTrue,
+  updateMessageContent
 }
 
 const connector = connect(
@@ -72,10 +75,12 @@ const WebViewComponent = (props: Props) => {
   // Fetch user info from API
   const getUserInfo = async (token: string) => {
     const userObject = await userController.getUserByPersonToken(token)
-    if (userObject.error === undefined) {
+    if (userObject !== null || userObject.error === undefined) {
       return userObject
     } else {
-      console.log('SOME ERROR')
+      //console.log('SOME ERROR')
+      setMessageVisibilityTrue()
+      updateMessageContent('Sisääkirjautuminen epäonnistui.')
     }
   }
 

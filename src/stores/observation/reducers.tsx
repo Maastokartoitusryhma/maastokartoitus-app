@@ -12,7 +12,7 @@ import { observationActionTypes,
         SET_OBSERVATION_ID,
         CLEAR_OBSERVATION_ID,
         REPLACE_LOCATION_BY_ID,
-        DELETE_OBSERVATION_BY_ID
+        //DELETE_OBSERVATION_BY_ID
         } from './types'
 import _ from 'lodash'
 
