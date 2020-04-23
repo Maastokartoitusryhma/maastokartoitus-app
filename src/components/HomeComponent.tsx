@@ -261,7 +261,6 @@ const HomeComponent = (props: Props) => {
         </View>
         <MessageComponent onPress={null}/>
       </ScrollView>
-      {console.log(props.observationZone.zones[0].id)}
     </View>
   )
 }

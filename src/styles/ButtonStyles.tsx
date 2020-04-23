@@ -41,6 +41,12 @@ const ButtonStyles = StyleSheet.create({
   },
   endButton: {
     backgroundColor: Colors.negativeColor
+  },
+  observationButton: {
+    backgroundColor: Colors.neutralColor
+  },
+  basicNegativeButton: {
+    backgroundColor: Colors.negativeColor
   }
 })
 

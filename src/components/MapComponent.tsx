@@ -24,6 +24,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import Cs from '../styles/ContainerStyles'
 import Os from '../styles/OtherStyles'
 import uuid from 'react-native-uuid'
+import ObservationButtonsComponent from './ObservationButtonsComponent'
 
 const urlTemplate: string = 'https://proxy.laji.fi/mml_wmts/maasto/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png'
 
@@ -310,43 +311,6 @@ const MapComponent = (props: Props) => {
     })
   }
 
-  const observationButtonsOverlay = () => (        
-    <View style = {Cs.observationTypeButtonsContainer}>
-      <View
-        style={Cs.observationTypeButtonsColumn}>
-          {props.editing[0] ?
-            <>
-              <View style={Cs.observationTypeButton}>
-                <Button title = {t('save')} onPress = {() => submitEdit()}/>
-              </View>
-              <View style={Cs.observationTypeButton}>
-                <Button title = {t('cancel')} onPress = {() => cancelEdit()}/>
-              </View>
-            </> :
-            <>
-              <View style={Cs.observationTypeButton}>
-                <Button title = {t('observation')} onPress = {() => props.onPressObservation('observation')}/>
-              </View>
-              <View style={Cs.observationTypeButton}>
-                <Button title = {t('trace')} onPress = {() => props.onPressObservation('trackObservation')}/>
-              </View>
-              <View style={Cs.observationTypeButton}>
-              <Button title = {t('feces')} onPress = {() => props.onPressObservation('fecesObservation')}/>
-              </View>
-              <View style={Cs.observationTypeButton}>
-                <Button title = {t('nest')} onPress = {() => props.onPressObservation('nestObservation')}/>
-              </View>
-              <View style={Cs.observationTypeButton}>
-                <Button title = {t('remove')} onPress = {() => cancelObservation()} color = {Colors.negativeButton}/>
-              </View>
-            </>
-          }
-      </View>
-    </View>
-  )
-
-  console.log('REGION', props.region)
-
   return (
     <>
       <MapView
@@ -390,7 +354,12 @@ const MapComponent = (props: Props) => {
         </TouchableHighlight>
       </View>
       { props.observation ?
-        observationButtonsOverlay()
+        <ObservationButtonsComponent
+          onPressObservation={props.onPressObservation}
+          cancelObservation={cancelObservation}
+          cancelEdit={cancelEdit}
+          submitEdit={submitEdit}
+        />
         : null
       }
       

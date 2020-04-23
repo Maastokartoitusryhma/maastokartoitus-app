@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, ScrollView, Button } from 'react-native'
-import { Icon, Button as ButtonElement } from 'react-native-elements'
+import React from 'react'
+import { View, Text, ScrollView } from 'react-native'
+import { Icon, Button } from 'react-native-elements'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import Bs from '../styles/ButtonStyles'
@@ -92,7 +92,7 @@ const ObservationEventComponent = (props: Props) => {
   if (event === null || observations === []) {
     return (
       <View>
-        <Text>ladataan</Text>
+        <Text>{t('loading')}</Text>
       </View>
     )
   } else {
@@ -106,10 +106,10 @@ const ObservationEventComponent = (props: Props) => {
               <Text>{t('Zone')}: {event.schema.gatherings[0].locality}</Text>
             </View>
             <View style={Cs.eventButtonsContainer}>
-              <ButtonElement
+              <Button
                 buttonStyle={Bs.editEventButton}
                 containerStyle={Cs.padding5Container}
-                icon={<Icon name='edit' color='white' size={22} />}
+                icon={<Icon name='edit' type='material-icons' color='white' size={22} />}
                 onPress={() => {
                   const id = {
                     eventId: event.id,
@@ -119,9 +119,9 @@ const ObservationEventComponent = (props: Props) => {
                   props.onPressObservationEvent()
                 }}
               />
-              <ButtonElement
+              <Button
                 buttonStyle={Bs.sendEventButton}
-                icon={<Icon name='send' color='white' size={22} />}
+                icon={<Icon name='send' type='material-icons' color='white' size={22} />}
                 onPress={() => {
                   postObservationEvent(event, props.token, props.setMessageVisibilityTrue, props.setMessageContent)
                 }}
@@ -135,11 +135,11 @@ const ObservationEventComponent = (props: Props) => {
                 event={event}
                 observation={observation}
                 editButton={
-                  <ButtonElement
+                  <Button
                     buttonStyle={Bs.editObservationButton}
                     title={t('edit button')}
                     iconRight={true}
-                    icon={<Icon name='edit' color='white' size={22} />}
+                    icon={<Icon name='edit' type='material-icons' color='white' size={22} />}
                     onPress={() => {
                       const id = {
                         eventId: event.id,
@@ -151,11 +151,11 @@ const ObservationEventComponent = (props: Props) => {
                   />
                 }
                 removeButton={
-                  <ButtonElement
+                  <Button
                     buttonStyle={Bs.removeObservationButton}
                     title={t('remove button')}
                     iconRight={true}
-                    icon={<Icon name='delete' color='white' size={22} />}
+                    icon={<Icon name='delete' type='material-icons' color='white' size={22} />}
                     onPress={() => {
                       deleteObservation(event.id, observation.id)
                     }}

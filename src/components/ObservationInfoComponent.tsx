@@ -121,7 +121,7 @@ const ObservationInfoComponent = (props: Props) => {
         {observationLocationOverlay()}
       </MapView>
       {createSchemaObjectComponents(props.observation, schema.properties.gatherings.items.properties.units.items.properties)}
-      {props.observation.localImages.length > 0
+      {props.observation.localImages !== undefined && props.observation.localImages.length > 0
         ? (<View>
             <View style={Cs.observationListLine}>
               <View style={Cs.observationPropertyTitle}>

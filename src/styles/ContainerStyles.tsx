@@ -131,10 +131,10 @@ const ContainerStyles = StyleSheet.create({
     width: '98%',
     bottom: '1%',
     flexDirection: 'column',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   observationTypeButton: {
-    padding: 5
+    padding: 5,
   },
   observationTypeButtonsColumn: {
     alignSelf: 'flex-end',
@@ -240,7 +240,7 @@ const ContainerStyles = StyleSheet.create({
     padding: 5,
   },
   singleButton: {
-    width: '40%',
+    width: '50%',
     padding: 5
   },
   imagesContainer: {

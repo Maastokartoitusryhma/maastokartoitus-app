@@ -78,6 +78,7 @@ export const postObservationEvent = async (observationEvent: BasicObject, token:
   let url = `https://apitest.laji.fi/v0/documents?personToken=${token}&access_token=${accessToken}&validationErrorFormat=remote`
   
   try {
+    console.log('EVENT:', event)
     let response = await axios.post(url, event)
     console.log(response)
     setMessageVisibilityTrue()
