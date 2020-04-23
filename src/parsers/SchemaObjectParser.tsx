@@ -6,7 +6,6 @@ interface BasicObject {
 }
 
 export const createSchemaObjectComponents = (JSONObject: BasicObject, schema: BasicObject) => {
-  console.log('SCHEMA', schema)
   const returnArray: Array<any> = []
   Object.keys(JSONObject).forEach((key) => {
     const objectKey = key

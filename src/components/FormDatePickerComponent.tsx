@@ -5,7 +5,7 @@ import Os from '../styles/OtherStyles'
 import Cs from '../styles/ContainerStyles'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { parseDateForUI, setDateForDocument, parseDateFromISOToDocument } from '../utilities/dateHelper'
-import Colors from '../styles/Colors';
+import Colors from '../styles/Colors'
 
 interface Props {
   title: string
@@ -35,9 +35,18 @@ const FormDatePickerComponent = (props: Props) => {
 
   // Every time date and time change, combine them so both values are updated
   useEffect(() => {
-    const combinedDate = currentDate.substring(0, 11) + currentTime.substring(11, 16)
+    let combinedDate = currentDate.substring(0, 11) + currentTime.substring(11, 16)
+    // Check if dateEnd time is set to be before dateBegin. If so, set dateEnd to be equal with dateBegin
+    if (props.objectTitle === 'dateEnd' && Date.parse(props.watch('dateBegin')) > Date.parse(combinedDate)) {
+      combinedDate = props.watch('dateBegin')
+    }
+    // Check if dateBegin time is set to be after dateEnd. If so, set dateBegin to be equal with dateEnd
+    if (props.objectTitle === 'dateBegin' && Date.parse(combinedDate) > Date.parse(props.watch('dateEnd'))) {
+      combinedDate = props.watch('dateEnd')
+    }
+    // Set new value to register
     props.setValue(props.objectTitle, combinedDate)
-    // Set combined date as current value
+    // Set combined date as current value (which is shown to user)
     combinedDate !== '' ? setCurrentValue(combinedDate) : null
   }, [currentDate, currentTime])
   
@@ -77,7 +86,12 @@ const FormDatePickerComponent = (props: Props) => {
             value={new Date(Date.parse(currentValue))}
             mode='date'
             onChange={onChangeDate}
-            maximumDate={new Date(Date.parse(setDateForDocument()))}
+            minimumDate={props.objectTitle === 'dateEnd'
+              ? new Date(Date.parse(props.watch('dateBegin')))
+              : null}
+            maximumDate={props.objectTitle === 'dateBegin'
+              ? new Date(Date.parse(props.watch('dateEnd')))
+              : new Date(Date.parse(setDateForDocument()))}
           />
         </View>
       )}
