@@ -10,12 +10,12 @@ const ObservationEventForm = (register: Function, setValue: Function,
   
   // variables for the possible default values of the fields
   let toReturn = []
-  let defaultLeg = null
-  let defaultLegPublic = null
-  let defaultSecureLevel = null
-  let defaultDateBegin = null
-  let defaultDateEnd = null
-  let defaultKeywords = null
+  let defaultLeg: Array<string> = []
+  let defaultLegPublic: string = 'false'
+  let defaultSecureLevel: string = ''
+  let defaultDateBegin: string = ''
+  let defaultDateEnd: string = ''
+  let defaultKeywords: string = ''
 
   // hardcoded options for each picker (enum) component
   const legPublicDictionary: { [key: string]: any } = {
@@ -37,14 +37,6 @@ const ObservationEventForm = (register: Function, setValue: Function,
     if (defaults.gatheringEvent.dateEnd != undefined) { defaultDateEnd = defaults.gatheringEvent.dateEnd }
     if (defaults.keywords !== undefined) { defaultKeywords = defaults.keywords }
   }
-
-  // inserting the hardcoded default options from the schema to the variables in case where there was no default value from the user
-  if (defaultLeg === null || defaultLeg === undefined) { defaultLeg = undefined }
-  if (defaultLegPublic === null || defaultLegPublic === undefined) { defaultLegPublic = 'false' }
-  if (defaultSecureLevel === null || defaultSecureLevel === undefined) { defaultSecureLevel = '' }
-  if (defaultDateBegin === null || defaultDateBegin === undefined) { defaultDateBegin = '' }
-  if (defaultDateEnd === null || defaultDateEnd === undefined) { defaultDateEnd = '' }
-  if (defaultKeywords === null || defaultKeywords === undefined) { defaultKeywords = '' }
 
   // creating the actual form elements, they're hardcoded and use the above variables to define the default values
   toReturn.push(createArray('Havainnoijat', '', 'leg', 'string', defaultLeg, register, setValue, watch, errors, unregister))

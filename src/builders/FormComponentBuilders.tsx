@@ -29,7 +29,7 @@ export const createPicker = (
 
 export const createArray = (
   title: string, objectTitle: string, parentObjectTitle: string, type: string,
-  defaultValue: Array<Object>|undefined, register: Function, setValue: Function,
+  defaultValue: (Array<string>) | undefined, register: Function, setValue: Function,
   watch: Function, errors: Object, unregister: Function
   ) => {
   const key = title + ' ' + uuid.v4()
@@ -45,7 +45,7 @@ export const createArray = (
   }
 
   //if there are default values for the array, we iterate them, create the according input elements and pass the elements to FormArrayComponent 
-  let inputElements: Array<Object> = []
+  let inputElements: Array<Element | undefined> = []
   if(defaultValue) {
     defaultValue.forEach((value) => inputElements.push(createInputElement(
       key, objectTitle, parentObjectTitle, type, value,
@@ -61,7 +61,7 @@ export const createArray = (
 
 export const createInputElement = (
   title: string, objectTitle: string, parentObjectTitle: string,
-  type: string, defaultValue: string | number, register: Function,
+  type: string, defaultValue: string, register: Function,
   setValue: Function, watch: Function, errors: Object,
   unregister: Function, isArrayItem: boolean, callbackFunction: Function|undefined
   ) => {

@@ -49,7 +49,7 @@ const EditObservationEventComponent = (props: Props) => {
   //For react-hook-form
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
   const { t } = useTranslation()
-  const [form, setForm] = useState()
+  const [form, setForm] = useState<Array<Element | undefined>>()
   const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {

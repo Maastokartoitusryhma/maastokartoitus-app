@@ -58,7 +58,7 @@ const ObservationComponent = (props: Props) => {
   //For react-hook-form
   const { handleSubmit, setValue, unregister, errors, watch, register } = useForm()
   const { t } = useTranslation()
-  const [form, setForm] = useState()
+  const [form, setForm] = useState<Array<Element | undefined>>()
   const [images, setImages] = useState<string[]>([])
 
   const onSubmit = (data: { [key: string]: any }) => {
@@ -82,12 +82,6 @@ const ObservationComponent = (props: Props) => {
     if(props.type === 'nestObservation') {
       data['nestCount'] = parseInt(data['nestCount'])
     }
-    
-    //console.log('POINT:', props.observation)
-    //console.log('REGISTER DATA:', data)
-    //console.log('EVENT BEFORE:', props.observationEvent)
-    //console.log('LOCATIONS', props.observationLocations)
-    //console.log('IMAGE:', image)
 
     //clone events from reducer for modification
     const events = _.cloneDeep(props.observationEvent)
@@ -121,14 +115,11 @@ const ObservationComponent = (props: Props) => {
       localImages: images
     }
 
-    //console.log('NEW UNIT:', newUnit)
     event.schema.gatherings[0].units.push(newUnit)
     events.push(event)
 
     //replace events with the modified copy
     props.replaceObservationEvents(events)
-
-    //console.log('EVENT AFTER:', props.observationEvent)
 
     storageController.save('observationEvents', events)
     props.clearObservationLocation()

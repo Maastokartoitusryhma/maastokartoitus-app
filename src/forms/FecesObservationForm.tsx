@@ -18,10 +18,10 @@ const FecesObservationForm = (
 
   // variables for the possible default values of the fields
   let toReturn = []
-  let defaultLolifeDroppingsType: string | null = null
-  let defaultLolifeDroppingsCount: string | null = null
-  let defaultLolifeDroppingsQuality: string | null = null
-  let defaultNotes: string | null = null
+  let defaultLolifeDroppingsType: string | null = ''
+  let defaultLolifeDroppingsCount: string | null = ''
+  let defaultLolifeDroppingsQuality: string | null = ''
+  let defaultNotes: string | null = ''
 
   // hardcoded options for each picker (enum) component
   const lolifeDroppingsTypeDictionary: { [key: string]: any } = {
@@ -51,12 +51,6 @@ const FecesObservationForm = (
     if (defaults.unitFact.lolifeDroppingsQuality !== undefined) { defaultLolifeDroppingsQuality = defaults.unitFact.lolifeDroppingsQuality }
     if (defaults.notes !== undefined) { defaultNotes = defaults.notes }
   }
-
-  // inserting the hardcoded default options from the schema to the variables in case where there was no default value from the user
-  if (defaultLolifeDroppingsType === null || defaultLolifeDroppingsType === undefined) { defaultLolifeDroppingsType =  '' }
-  if (defaultLolifeDroppingsCount === null || defaultLolifeDroppingsCount === undefined) { defaultLolifeDroppingsCount = '' }
-  if (defaultLolifeDroppingsQuality === null || defaultLolifeDroppingsQuality === undefined) { defaultLolifeDroppingsQuality = '' }
-  if (defaultNotes === null || defaultNotes === undefined) {defaultNotes = ''}
 
   // creating the actual form elements, they're hardcoded and use the above variables to define the default values
   toReturn.push(createPicker(t('lolifeDroppingsType'), 'lolifeDroppingsType', defaultLolifeDroppingsType, 

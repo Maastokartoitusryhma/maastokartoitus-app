@@ -27,7 +27,7 @@ interface BasicObject {
 
 interface RootState {
   observation: Point
-  observationEvent: any[]
+  observationEvent: BasicObject[]
   observationId: BasicObject
   editing: boolean[]
 }
@@ -62,8 +62,8 @@ const EditObservationComponent = (props: Props) => {
   const [ indexOfEditedEvent, setIndexOfEditedEvent ] = useState<number>(-1)
   const [ indexOfEditedObservation, setIndexOfEditedObservation ] = useState<number>(-1)
   const [ showModal, setShowModal ] = useState<boolean>(false)
-  const [ form, setForm ] = useState<any | null>(null)
-  const [ observation, setObservation ] = useState<BasicObject | null>(null)
+  const [ form, setForm ] = useState<Array<Element | undefined> | null>(null)
+  const [ observation, setObservation ] = useState<any | null>(null)
   const [ events, setEvents ] = useState<any[]>([])
   const [ images, setImages ] = useState<string[]>([])
   const [ eventId, setEventId ] = useState<string>('')
@@ -115,9 +115,10 @@ const EditObservationComponent = (props: Props) => {
       if (observation.type === 'fecesObservation') {
         data['indirectObservationType'] = 'MY.indirectObservationTypeFeces'
       }
-
-      // console.log('REGISTER DATA:', JSON.stringify(data))
-      // console.log('EVENT BEFORE:', props.observationEvent)
+      //if observation type is nest, change nestCount to integer
+      if(data['nestCount']) {
+        data['nestCount'] = parseInt(data['nestCount'])    
+      }
   
       // replace the data of the unit that's being edited while keeping its id, unitGathering and type values
       const editedUnit = observation.type === 'fecesObservation' ? {
@@ -154,8 +155,6 @@ const EditObservationComponent = (props: Props) => {
   
       // replace events with modified list
       props.replaceObservationEvents(events)
-      
-      // console.log('EVENT AFTER:', props.observationEvent)
   
       await storageController.save('observationEvents', events)
       props.clearObservationId()

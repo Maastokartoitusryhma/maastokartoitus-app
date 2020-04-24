@@ -16,7 +16,7 @@ interface Props {
   watch: Function
   errors: Object
   unregister: Function
-  inputElements: Array<Object | undefined>
+  inputElements: Array<Element | undefined>
   elementDictionary: any
   callbackFunction: Function | undefined
 }

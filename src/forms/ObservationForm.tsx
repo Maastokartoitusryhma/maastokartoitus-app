@@ -14,18 +14,17 @@ const ObservationForm = (register: Function, setValue: Function,
   
   // variables for the possible default values of the fields
   let toReturn = []
-  let defaultTaxonConfidence: string | null = null
-  let defaultRecordBasis: string | null = null
-  let defaultCount: string | null = null
-  let defaultLifeStage: string | null = null
-  let defaultNotes: string | null = null
+  let defaultTaxonConfidence: string = 'MY.taxonConfidenceSure'
+  let defaultRecordBasis: string = ''
+  let defaultCount: string = ''
+  let defaultLifeStage: string = 'MY.lifeStageAlive'
+  let defaultNotes: string = ''
   
   // hardcoded options for each picker (enum) component
   const taxonConfidenceDictionary: { [key: string]: any } = {
     '' : '',
     'MY.taxonConfidenceSure' : t('MY.taxonConfidenceSure'),
-    'MY.taxonConfidenceUnsure' : t('MY.taxonConfidenceUnsure'),
-    'MY.taxonConfidenceSubspeciesUnsure' : t('MY.taxonConfidenceSubspeciesUnsure')
+    'MY.taxonConfidenceUnsure' : t('MY.taxonConfidenceUnsure')
   }
   const recordBasisDictionary: { [key: string]: any } = {
     '' : '',
@@ -47,13 +46,6 @@ const ObservationForm = (register: Function, setValue: Function,
     if (defaults.lifeStage !== undefined) { defaultLifeStage = defaults.lifeStage }
     if (defaults.notes !== undefined) { defaultNotes = defaults.notes }
   }
-
-  // inserting the hardcoded default options from the schema to the variables in case where there was no default value from the user
-  if (defaultTaxonConfidence === null || defaultTaxonConfidence === undefined) { defaultTaxonConfidence = 'MY.taxonConfidenceSure' }
-  if (defaultRecordBasis === null || defaultRecordBasis === undefined) { defaultRecordBasis = '' }
-  if (defaultCount === null || defaultCount === undefined) { defaultCount = '' }
-  if (defaultLifeStage === null || defaultLifeStage === undefined) {defaultLifeStage = 'MY.lifeStageAlive'}
-  if (defaultNotes === null || defaultNotes === undefined) {defaultNotes = ''}
 
   // creating the actual form elements, they're hardcoded and use the above variables to define the default values
   toReturn.push(createPicker(t('taxonConfidence'), 'taxonConfidence', defaultTaxonConfidence, register, setValue, watch, errors, unregister, taxonConfidenceDictionary))

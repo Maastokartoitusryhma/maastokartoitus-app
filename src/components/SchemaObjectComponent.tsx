@@ -14,8 +14,8 @@ type Props = {
 }
 
 const SchemaObjectComponent = (props: Props) => {
-  const [label, setLabel] = useState('')
-  const [text, setText] = useState('')
+  const [label, setLabel] = useState<string>('')
+  const [text, setText] = useState<string>('')
 
   useEffect(() => {
     findObjectDataFromSchemaObject()
@@ -45,7 +45,7 @@ const SchemaObjectComponent = (props: Props) => {
         <Text style={Ts.boldText}>{label === '' ? props.name : label}</Text>
       </View>
       <View style={Cs.observationPropertyValue}>
-      <Text>{text === '' ? props.value : text}</Text>
+      <Text>{text === '' ? props.value.toString() : text}</Text>
       </View>
     </View>
   )
