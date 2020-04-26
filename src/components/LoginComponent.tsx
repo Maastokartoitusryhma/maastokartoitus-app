@@ -88,7 +88,7 @@ const LoginComponent = (props: Props) => {
       i18n.changeLanguage(userData.defaultLanguage)
       await fetchObservationEvents()
       await fetchSchemasFromServer()
-      await fecthObservationZones()
+      await fetchObservationZones()
       props.onSuccessfulLogin()
       setLoggingIn(false)
     }
@@ -169,7 +169,7 @@ const LoginComponent = (props: Props) => {
     props.setSchemaSv(schemaInSv)
   }
 
-  const fecthObservationZones = async () => {
+  const fetchObservationZones = async () => {
     // Try to fetch observation zones from server
     let zones = await zoneController.getZones()
     if (zones === null) {
