@@ -35,7 +35,7 @@ const ObservationEventForm = (register: Function, setValue: Function,
     if (defaults.secureLevel !== undefined) { defaultSecureLevel = defaults.secureLevel }
     if (defaults.gatheringEvent.dateBegin != undefined) { defaultDateBegin = defaults.gatheringEvent.dateBegin }
     if (defaults.gatheringEvent.dateEnd != undefined) { defaultDateEnd = defaults.gatheringEvent.dateEnd }
-    if (defaults.keywords !== undefined) { defaultKeywords = defaults.keywords }
+    if (defaults.keywords !== undefined) { defaultKeywords = defaults.keywords.toString() }
   }
 
   // creating the actual form elements, they're hardcoded and use the above variables to define the default values
@@ -45,6 +45,7 @@ const ObservationEventForm = (register: Function, setValue: Function,
   toReturn.push(createInputElement('Alku', 'dateBegin', '', 'string', defaultDateBegin, register, setValue, watch, errors, unregister, false, undefined))
   toReturn.push(createInputElement('Loppu', 'dateEnd', '', 'string', defaultDateEnd, register, setValue, watch, errors, unregister, false, undefined))
   toReturn.push(createInputElement('Avainsanat', 'keywords', '', 'string', defaultKeywords, register, setValue, watch, errors, unregister, false, undefined))
+  
   return (toReturn)
 }
 
