@@ -22,7 +22,7 @@ const findSchemaObject = (objectKey: string, objectValue: any, schemaObject: Bas
       case 'string':
         componentArray.push(
           <SchemaObjectComponent
-            key={objectKey} name={objectKey} value={objectValue} 
+            key={objectKey} name={objectKey} value={objectValue !== null ? objectValue : ''} 
             schemaObject={schemaObject}>
           </SchemaObjectComponent>)
         break
