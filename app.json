@@ -3,7 +3,6 @@
     "name": "maastokartoitus-app",
     "slug": "maastokartoitus-app",
     "privacy": "public",
-    "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
       "android",
@@ -24,9 +23,9 @@
       "**/*"
     ],
     "ios": {
-        "bundleIdentifier": "com.yourcompany.yourappname",
-        "buildNumber": "1.0.0",
-        "supportsTablet": true
+      "bundleIdentifier": "com.yourcompany.yourappname",
+      "buildNumber": "1.0.0",
+      "supportsTablet": true
     },
     "android": {
       "package": "org.luomus.maastokartoitus",
