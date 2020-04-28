@@ -158,7 +158,7 @@ const ObservationEventComponent = (props: Props) => {
                 }
                 removeButton={
                   <Button
-                    buttonStyle={Bs.removeObservationButton}
+                    buttonStyle={Bs.basicNegativeButton}
                     title={t('remove button')}
                     iconRight={true}
                     icon={<Icon name='delete' type='material-icons' color='white' size={22} />}
@@ -182,7 +182,7 @@ const ObservationEventComponent = (props: Props) => {
                 <View style={Cs.singleButton}>
                   <Button
                     title='OK'
-                    buttonStyle={Bs.removeObservationButton}
+                    buttonStyle={Bs.basicNeutralButton}
                     onPress={() => {
                       deleteObservation()
                       setShowModal(!showModal)
@@ -196,7 +196,7 @@ const ObservationEventComponent = (props: Props) => {
                 <View style={Cs.singleButton}>
                   <Button
                     title='Cancel'
-                    buttonStyle={Bs.editObservationButton}
+                    buttonStyle={Bs.basicNegativeButton}
                     onPress={() => {
                       setShowModal(!showModal)
                       setId({
