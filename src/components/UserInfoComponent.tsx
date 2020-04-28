@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { Text, Button, View } from 'react-native'
-import { Button as ButtonElement, Icon } from 'react-native-elements'
+import { Text, View } from 'react-native'
+import { Button, Icon } from 'react-native-elements'
+import Modal from 'react-native-modal'
 import { connect, ConnectedProps } from 'react-redux'
 import { clearObservationEvents } from '../stores/observation/actions'
-import Colors from '../styles/Colors'
 import { useTranslation } from 'react-i18next'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import Bs from '../styles/ButtonStyles'
 import { removeUser, clearPersonToken } from '../stores/user/actions'
 import storageController from '../controllers/storageController'
+import MessageComponent from './MessageComponent'
+import { setMessageVisibilityTrue, updateMessageContent } from '../stores/other/actions'
 
 type UserObject = {
   id: string
@@ -30,7 +32,9 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = {
   clearObservationEvents,
   removeUser,
-  clearPersonToken
+  clearPersonToken,
+  updateMessageContent,
+  setMessageVisibilityTrue
 }
 
 const connector = connect(
@@ -47,6 +51,7 @@ type Props = PropsFromRedux & {
 const UserInfoComponent = (props: Props) => {
 
   const { t } = useTranslation()
+  const [showModal, setShowModal] = useState<boolean>(false)
 
   const logout = () => {
     clearUserData()
@@ -75,13 +80,39 @@ const UserInfoComponent = (props: Props) => {
           </Text>
         </View>
         <View style={Cs.logoutButtonContainer}>
-          <ButtonElement
+          <Button
             buttonStyle={Bs.logoutButton}
             icon={<Icon name='logout' type='material-community' color='white' size={22} />}
-            onPress={() => logout()}
+            onPress={() => setShowModal(true)}
           />
         </View>
       </View>
+      <Modal isVisible={showModal}>
+          <View style={Cs.observationAddModal}>
+            <Text style={Cs.containerWithJustPadding}>{t('logout?')}</Text>
+            <View style={Cs.editObservationButtonContainer}>
+              <View style={Cs.singleButton}>
+                <Button
+                  title={t('yes')}
+                  buttonStyle={Bs.basicNeutralButton}
+                  onPress={() => {
+                    logout()
+                    setShowModal(false)
+                  }}
+                />
+              </View>
+              <View style={Cs.singleButton}>
+                <Button
+                  title={t('no')}
+                  buttonStyle={Bs.basicNegativeButton}
+                  onPress={() => {
+                    setShowModal(false)
+                  }}
+                />
+              </View>
+            </View>
+          </View>
+        </Modal>
     </View>
   )
 }

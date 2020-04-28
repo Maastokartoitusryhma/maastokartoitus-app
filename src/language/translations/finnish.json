@@ -96,5 +96,9 @@
   "changes saved": "Muutokset tallennettu!",
   "images": "Kuvat",
   "edit button": "MUOKKAA ",
-  "remove button": "POISTA "
+  "remove button": "POISTA ",
+  "logout?": "Haluatko varmasti kirjautua ulos?",
+  "yes": "KYLLÄ",
+  "no": "EI",
+  "remove observation?": "Haluatko varmasti poistaa tämän havainnon?"
 }

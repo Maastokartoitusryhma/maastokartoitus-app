@@ -96,5 +96,9 @@
   "changes saved": "Förändringar sparat!",
   "images": "Bilder",
   "edit button": "REDIGERA ",
-  "remove button": "RADERA "
+  "remove button": "RADERA ",
+  "logout?": "Är du säker på att du vill logga ut?",
+  "yes": "JA",
+  "no": "NEJ",
+  "remove observation?": "Är du säker på att du vill radera denna observation?"
 }

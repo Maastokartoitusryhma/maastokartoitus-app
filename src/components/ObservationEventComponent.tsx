@@ -20,7 +20,6 @@ import storageController from '../controllers/storageController'
 import MessageComponent from './MessageComponent' 
 import { parseDateForUI } from '../utilities/dateHelper'
 import _ from 'lodash'
-import Colors from '../styles/Colors'
 
 type UserObject = {
   id: string
@@ -177,11 +176,11 @@ const ObservationEventComponent = (props: Props) => {
           )}
           <Modal isVisible={showModal}>
             <View style={Cs.observationAddModal}>
-              <Text style={Cs.containerWithJustPadding}>{t('remove observation')}</Text>
+              <Text style={Cs.containerWithJustPadding}>{t('remove observation?')}</Text>
               <View style={Cs.editObservationButtonContainer}>
                 <View style={Cs.singleButton}>
                   <Button
-                    title='OK'
+                    title={t('yes')}
                     buttonStyle={Bs.basicNeutralButton}
                     onPress={() => {
                       deleteObservation()
@@ -195,7 +194,7 @@ const ObservationEventComponent = (props: Props) => {
                 </View>
                 <View style={Cs.singleButton}>
                   <Button
-                    title='Cancel'
+                    title={t('no')}
                     buttonStyle={Bs.basicNegativeButton}
                     onPress={() => {
                       setShowModal(!showModal)

@@ -96,5 +96,9 @@
   "changes saved": "Changes saved!",
   "images": "Images",
   "edit button": "EDIT ",
-  "remove button": "REMOVE "
+  "remove button": "REMOVE ",
+  "logout?": "Are you sure you want to log out?",
+  "yes": "YES",
+  "no": "NO",
+  "remove observation?": "Are you sure you want to remove this observation?"
 }
