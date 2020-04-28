@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import WebView from 'react-native-webview'
-import userController from '../controllers/userController'
+import { postTmpToken, getUserByPersonToken } from '../controllers/userController'
 import storageController from '../controllers/storageController'
 import { connect, ConnectedProps } from 'react-redux'
 import { setUser, setPersonToken } from '../stores/user/actions'
@@ -64,7 +64,7 @@ const WebViewComponent = (props: Props) => {
   const pollPostRequest = async (tmpToken: string) => {
     console.log('run poll')
     props.callback(timer)
-    const result = await userController.postTmpToken(tmpToken)
+    const result = await postTmpToken(tmpToken)
     if (result.token !== undefined) { // Check if login is successful and personToken is returned in result
       const userData = await getUserInfo(result.token)
       await storeUserData(userData, result.token)
@@ -74,11 +74,10 @@ const WebViewComponent = (props: Props) => {
 
   // Fetch user info from API
   const getUserInfo = async (token: string) => {
-    const userObject = await userController.getUserByPersonToken(token)
+    const userObject = await getUserByPersonToken(token)
     if (userObject !== null || userObject.error === undefined) {
       return userObject
     } else {
-      //console.log('SOME ERROR')
       setMessageVisibilityTrue()
       updateMessageContent('Sisääkirjautuminen epäonnistui.')
     }

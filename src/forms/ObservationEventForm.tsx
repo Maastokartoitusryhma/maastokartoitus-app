@@ -42,9 +42,9 @@ const ObservationEventForm = (register: Function, setValue: Function,
   toReturn.push(createArray('Havainnoijat', '', 'leg', 'string', defaultLeg, register, setValue, watch, errors, unregister))
   toReturn.push(createPicker('Havainnoijien nimet ovat julkisia', 'legPublic', defaultLegPublic, register, setValue, watch, errors, unregister, legPublicDictionary))
   toReturn.push(createPicker('Havainnon tarkat paikkatiedot ovat julkisia', 'secureLevel', defaultSecureLevel, register, setValue, watch, errors, unregister, secureLevelDictionary))
-  toReturn.push(createInputElement('Alku', 'dateBegin', '', 'string', defaultDateBegin, register, setValue, watch, errors, unregister, false, undefined))
-  toReturn.push(createInputElement('Loppu', 'dateEnd', '', 'string', defaultDateEnd, register, setValue, watch, errors, unregister, false, undefined))
-  toReturn.push(createInputElement('Avainsanat', 'keywords', '', 'string', defaultKeywords, register, setValue, watch, errors, unregister, false, undefined))
+  toReturn.push(createInputElement('Alku', 'dateBegin', '', 'string', defaultDateBegin, register, setValue, watch, errors, unregister, false, undefined, true))
+  toReturn.push(createInputElement('Loppu', 'dateEnd', '', 'string', defaultDateEnd, register, setValue, watch, errors, unregister, false, undefined, true))
+  toReturn.push(createInputElement('Avainsanat', 'keywords', '', 'string', defaultKeywords, register, setValue, watch, errors, unregister, false, undefined, true))
   
   return (toReturn)
 }

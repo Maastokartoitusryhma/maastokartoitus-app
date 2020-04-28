@@ -150,7 +150,7 @@ const HomeComponent = (props: Props) => {
       observationForm.gatheringEvent.dateBegin = setDateForDocument()
       observationForm.formID = 'MHL.45'
       observationForm.editors.push(props.user.id)
-      observationForm.gatheringEvent.leg.push(props.user.fullName)
+      observationForm.gatheringEvent.leg.push(props.user.id)
       const region: ZoneObject | undefined = props.observationZone.zones.find((region: BasicObject) => region.id === props.observationZone.currentZoneId)
       if (region) {
         observationForm.gatherings[0].geometry = region.geometry.geometries[0]

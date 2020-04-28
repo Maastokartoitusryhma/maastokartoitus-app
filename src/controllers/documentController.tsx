@@ -1,5 +1,4 @@
 import ApolloClient, { gql } from 'apollo-boost'
-import { Alert } from 'react-native'
 import axios from 'axios'
 import { otherActionTypes } from '../stores/other/types'
 import i18n from '../language/i18n'
@@ -38,7 +37,7 @@ export const getObservationEventSchema = async (language: string) => {
     const response = await client.query({ query })
     return response.data.form.schema
   } catch (error) {
-    Alert.alert(error)
+    console.log('Error:', error)
     return null
   }
 }
@@ -57,7 +56,7 @@ export const getSingleObservationSchema = async (language: string) => {
     const response = await client.query({ query })
     return response.data.form.schema.properties.gatherings.items.properties.units.items.properties
   } catch (error) {
-    Alert.alert(error)
+    console.log('Error:', error)
     return null
   }
 }

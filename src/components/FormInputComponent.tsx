@@ -16,6 +16,7 @@ interface Props {
   unregister: Function
   isArrayItem: boolean
   parentCallback: Function | undefined
+  editable: boolean
 }
 
 const FormInputComponent = (props: Props) => {
@@ -53,6 +54,7 @@ const FormInputComponent = (props: Props) => {
       <TextInput
         style={Os.textInput}
         keyboardType={props.keyboardType}
+        editable={props.editable}
         onChangeText={text => {
           props.parentObjectTitle !== ''
             ? addValueToArray(text)

@@ -32,6 +32,8 @@ export const createArray = (
   defaultValue: (Array<string>) | undefined, register: Function, setValue: Function,
   watch: Function, errors: Object, unregister: Function
   ) => {
+
+  console.log('parenttitle', parentObjectTitle)
   const key = title + ' ' + uuid.v4()
   let elementDictionary: { [key: string]: any } = {} // Create dictionary for handling removal of inputs
 
@@ -46,10 +48,18 @@ export const createArray = (
 
   //if there are default values for the array, we iterate them, create the according input elements and pass the elements to FormArrayComponent 
   let inputElements: Array<Element | undefined> = []
-  if(defaultValue) {
+
+  console.log('default value', defaultValue)
+
+  // Make first input of leg uneditable
+  if (parentObjectTitle === 'leg') {
+    inputElements.push(createInputElement(
+    key, objectTitle, parentObjectTitle, type, defaultValue[0],
+    register, setValue, watch, errors, unregister, true, callbackFunction, false))
+  } else if (defaultValue) {
     defaultValue.forEach((value) => inputElements.push(createInputElement(
       key, objectTitle, parentObjectTitle, type, value,
-      register, setValue, watch, errors, unregister, true, callbackFunction)))
+      register, setValue, watch, errors, unregister, true, callbackFunction, true)))
   }
 
   return <FormArrayComponent
@@ -63,7 +73,7 @@ export const createInputElement = (
   title: string, objectTitle: string, parentObjectTitle: string,
   type: string, defaultValue: string, register: Function,
   setValue: Function, watch: Function, errors: Object,
-  unregister: Function, isArrayItem: boolean, callbackFunction: Function|undefined
+  unregister: Function, isArrayItem: boolean, callbackFunction: Function|undefined, editable: boolean
   ) => {
 
   if (objectTitle === 'dateBegin' || objectTitle === 'dateEnd') {
@@ -80,7 +90,7 @@ export const createInputElement = (
       parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
       keyboardType='default' register={register} setValue={setValue}
       watch={watch} errors={errors} unregister={unregister}
-      isArrayItem={isArrayItem} parentCallback={callbackFunction}
+      isArrayItem={isArrayItem} parentCallback={callbackFunction} editable={editable}
     />
   } else if (type === 'integer') {
     return <FormInputComponent
@@ -88,7 +98,7 @@ export const createInputElement = (
       parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
       keyboardType='numeric' register={register} setValue={setValue}
       watch={watch} errors={errors} unregister={unregister}
-      isArrayItem={isArrayItem} parentCallback={callbackFunction}
+      isArrayItem={isArrayItem} parentCallback={callbackFunction} editable={editable}
     />    
   }
 }

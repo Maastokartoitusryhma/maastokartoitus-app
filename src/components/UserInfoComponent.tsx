@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import Cs from '../styles/ContainerStyles'
 import Ts from '../styles/TextStyles'
 import Bs from '../styles/ButtonStyles'
-import { removeUser } from '../stores/user/actions'
+import { removeUser, clearPersonToken } from '../stores/user/actions'
 import storageController from '../controllers/storageController'
 
 type UserObject = {
@@ -29,7 +29,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = {
   clearObservationEvents,
-  removeUser
+  removeUser,
+  clearPersonToken
 }
 
 const connector = connect(
@@ -57,7 +58,9 @@ const UserInfoComponent = (props: Props) => {
   const clearUserData = async () => {
     try {
       await storageController.remove('userData')
+      await storageController.remove('personToken')
       props.removeUser()
+      props.clearPersonToken()
     } catch (e) {
       console.log('Error removing user data from storage or reducer: ', e)
     }

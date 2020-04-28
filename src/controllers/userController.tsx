@@ -1,20 +1,20 @@
 import axios from 'axios'
-import { Alert } from 'react-native'
 
 const accessToken = 'OIL8AEzGrFMDvhUmOxzLlbZhW71VEFkQF739VdR1cZxiNNldURZo8leRx0uyKbPl'
 
-const getTempTokenAndLoginUrl = async () => {
+export const getTempTokenAndLoginUrl = async () => {
   const url = `https://fmnh-ws-test.it.helsinki.fi/laji-auth/app-login?access_token=${accessToken}`
   try {
-    const result = await axios.get(url)
-    return result.data
+    //const result = await axios.get(url)
+    const result = await fetch(url, { method: 'GET' })
+    return result.json()
   } catch (error) {
-    Alert.alert(error)
+    console.log('Error:', error)
     return null
   }
 }
 
-const postTmpToken = async (tmpToken: string) => {
+export const postTmpToken = async (tmpToken: string) => {
   const url = `https://fmnh-ws-test.it.helsinki.fi/laji-auth/app-login/check?tmpToken=${tmpToken}&access_token=${accessToken}`
   try {
     const result = await axios.post(url)
@@ -26,13 +26,13 @@ const postTmpToken = async (tmpToken: string) => {
   }
 }
 
-const getUserByPersonToken = async (personToken: string) => {
+export const getUserByPersonToken = async (personToken: string) => {
   const url = `https://apitest.laji.fi/v0/person/${personToken}?access_token=${accessToken}`
   try {
     const fetchResult = await axios.get(url)
     return fetchResult.data
   } catch (error) {
-    Alert.alert(error)
+    console.log('Error:', error)
     return null
   }
 }

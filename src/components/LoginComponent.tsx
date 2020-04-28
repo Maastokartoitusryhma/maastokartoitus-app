@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, Button, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import userController from '../controllers/userController'
+import { getTempTokenAndLoginUrl, getUserByPersonToken } from '../controllers/userController'
 import storageController from '../controllers/storageController'
 import { getObservationEventSchema } from '../controllers/documentController'
 import zoneController from '../controllers/zoneController'
@@ -74,9 +74,14 @@ const LoginComponent = (props: Props) => {
 
   // Check if user has previously logged in, redirect to home screen if is
   const loadData = async () => {
+    
+
+
+    console.log('loading data')
     const userData = await storageController.fetch('userData')
+    console.log('USERDATA', userData)
     const personToken = await storageController.fetch('personToken')
-    //console.log(personToken)
+    console.log('PERSONTOKEN', personToken)
     if (userData !== null && personToken !== null) { // User data found from storage ==> user has logged in previously
       setLoggingIn(true)
       if (props.user === null) { // Set user data to reducer if it's not already there
@@ -94,14 +99,43 @@ const LoginComponent = (props: Props) => {
     }
   }
 
+  const getUserInfo = async (token: string) => {
+    const userObject = await getUserByPersonToken(token)
+    if (userObject !== null || userObject.error === undefined) {
+      return userObject
+    } else {
+      //console.log('SOME ERROR')
+      setMessageVisibilityTrue()
+      updateMessageContent('Sisääkirjautuminen epäonnistui.')
+    }
+  }
+
+  const storeUserData = async (userData: UserObject, personToken: string) => {
+    try {
+      await storageController.save('userData', userData)
+      await storageController.save('personToken', personToken)
+      props.setUser(userData)
+      props.setPersonToken(personToken)
+    } catch (e) {
+      console.log('Error saving user data to storage or reducer: ', e)
+    }
+  }
+
   const login = async () => {
-    const result = await userController.getTempTokenAndLoginUrl()
+    setLoggingIn(true)
+
+    /*
+    const result = await getTempTokenAndLoginUrl()
+    console.log('result', result)
     if (result === null) {
       setMessageVisibilityTrue()
       updateMessageContent('Sisäänkirjautuminen epäonnistui.')
+      setLoggingIn(false)
     } else {
       props.onPressLogin(result)
-    }  
+    }  */
+    const data = await getUserInfo('NjlhZDVkZTgtYmVjMi00MDBhLTljZmEtMDFjZDUzMGEzZTYz')
+    await storeUserData(data, 'NjlhZDVkZTgtYmVjMi00MDBhLTljZmEtMDFjZDUzMGEzZTYz')
   }
 
   const fetchObservationEvents = async () => {
@@ -118,7 +152,7 @@ const LoginComponent = (props: Props) => {
 
   const fetchSchemasFromServer = async () => {
     // Try to fetch Finnish schema from server
-    let schemaInFi: object = await getObservationEventSchema('fi')    
+    let schemaInFi: object = await getObservationEventSchema('fi')
     if (schemaInFi === null) {
       // Couldn't load schema from server. Check for local copy.
       setMessageVisibilityTrue()
