@@ -187,6 +187,13 @@ const HomeComponent = (props: Props) => {
     props.allObservationEvents
   }
 
+  const getCurrentZoneName = () => 
+    props.observationZone.zones.map((zone: BasicObject) => {
+      if (zone.id === props.observationZone.currentZoneId) {
+        return zone.name
+      }
+    })  
+
   return (
     <View>
       <ScrollView>
@@ -197,11 +204,7 @@ const HomeComponent = (props: Props) => {
             {props.observing
               ? 
               <Text style={Ts.zoneText}>
-                {t('observation zone')}: {props.observationZone.zones.map((zone: BasicObject) => {
-                  if (zone.id === props.observationZone.currentZoneId) {
-                    return zone.name
-                  }
-                })}
+                {t('observation zone')}: {getCurrentZoneName()}
               </Text>
               : 
               <View>
