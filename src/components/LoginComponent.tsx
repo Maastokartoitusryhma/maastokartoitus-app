@@ -74,11 +74,8 @@ const LoginComponent = (props: Props) => {
 
   // Check if user has previously logged in, redirect to home screen if is
   const loadData = async () => {
-    console.log('loading data')
     const userData = await storageController.fetch('userData')
-    console.log('USERDATA', userData)
     const personToken = await storageController.fetch('personToken')
-    console.log('PERSONTOKEN', personToken)
     if (userData !== null && personToken !== null) { // User data found from storage ==> user has logged in previously
       setLoggingIn(true)
       if (props.user === null) { // Set user data to reducer if it's not already there
@@ -98,9 +95,7 @@ const LoginComponent = (props: Props) => {
 
   const login = async () => {
     setLoggingIn(true)
-
     const result = await getTempTokenAndLoginUrl()
-    console.log('result', result)
     if (result === null) {
       setMessageVisibilityTrue()
       updateMessageContent('Sisäänkirjautuminen epäonnistui.')
