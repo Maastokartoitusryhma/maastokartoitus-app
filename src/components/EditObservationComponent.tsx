@@ -227,11 +227,11 @@ const EditObservationComponent = (props: Props) => {
                   title='OK'
                   color={Colors.neutralColor}
                   onPress={() => {
-                  setShowModal(!showModal)
-                  props.fromMap ?
-                    props.toMap() :
-                    props.onPress(eventId)
-                }} />
+                    setShowModal(!showModal)
+                    props.fromMap ?
+                      props.toMap() :
+                      props.onPress(eventId)
+                  }} />
               </View>
             </View>
           </Modal>

@@ -20,7 +20,12 @@ export default class EditObservationEventScreen extends Component<NavigationStac
 
   render() {
     return (
-      <EditObservationEventComponent onPress={() => this.props.navigation.navigate('Home')} />
+      <EditObservationEventComponent
+        onPress={(id: string) => {
+          this.props.navigation.navigate('ObservationEvent', {id})
+        }}/>
     )
   }
 }
+
+//onPress={() => this.props.navigation.navigate('Home')}

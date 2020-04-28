@@ -37,8 +37,9 @@ const connector = connect(
 )
 
 type PropsFromRedux = ConnectedProps<typeof connector>
+
 type Props = PropsFromRedux & {
-  onPress: () => void
+  onPress: (id: string) => void
 }
 
 const EditObservationEventComponent = (props: Props) => {
@@ -111,6 +112,8 @@ const EditObservationEventComponent = (props: Props) => {
     setShowModal(true)
   }
 
+  console.log('event', event)
+
   if (form === undefined) {
     return <View><Text>Ladataan...</Text></View>
   } else {
@@ -132,9 +135,9 @@ const EditObservationEventComponent = (props: Props) => {
                   title='OK'
                   color={Colors.neutralColor}
                   onPress={() => {
-                  setShowModal(!showModal)
-                  props.onPress()
-                }} />
+                    setShowModal(!showModal)
+                    props.onPress(event.id)
+                  }} />
               </View>
             </View>
           </Modal>
