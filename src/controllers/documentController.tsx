@@ -4,6 +4,7 @@ import axios from 'axios'
 import { otherActionTypes } from '../stores/other/types'
 import i18n from '../language/i18n'
 import * as FileSystem from 'expo-file-system'
+import _ from 'lodash'
 
 interface BasicObject {
   [key: string]: any
@@ -62,9 +63,9 @@ export const getSingleObservationSchema = async (language: string) => {
 }
 
 export const postObservationEvent = async (observationEvent: BasicObject, token: string, setMessageVisibilityTrue: () => otherActionTypes, setMessageContent: (content: string) => otherActionTypes) => {
-  
-  const event = observationEvent.schema
-  const units = observationEvent.schema.gatherings[0].units
+
+  const event = _.cloneDeep(observationEvent.schema)
+  const units = _.cloneDeep(observationEvent.schema.gatherings[0].units)
 
   // remove unnecessary fields
   units.forEach((observation: BasicObject) => {
@@ -79,7 +80,6 @@ export const postObservationEvent = async (observationEvent: BasicObject, token:
   let url = `https://apitest.laji.fi/v0/documents?personToken=${token}&access_token=${accessToken}&validationErrorFormat=remote`
   
   try {
-    console.log('EVENT:', event)
     let response = await axios.post(url, event)
     console.log(response)
     setMessageVisibilityTrue()

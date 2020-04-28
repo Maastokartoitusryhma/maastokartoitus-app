@@ -187,8 +187,6 @@ const HomeComponent = (props: Props) => {
     props.allObservationEvents
   }
 
-  
-
   return (
     <View>
       <ScrollView>
