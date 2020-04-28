@@ -50,9 +50,9 @@ const ObservationForm = (register: Function, setValue: Function,
   // creating the actual form elements, they're hardcoded and use the above variables to define the default values
   toReturn.push(createPicker(t('taxonConfidence'), 'taxonConfidence', defaultTaxonConfidence, register, setValue, watch, errors, unregister, taxonConfidenceDictionary))
   toReturn.push(createPicker(t('recordBasis'), 'recordBasis', defaultRecordBasis, register, setValue, watch, errors, unregister, recordBasisDictionary))
-  toReturn.push(createInputElement(t('count'), 'count', '', 'string', defaultCount, register, setValue, watch, errors, unregister, false, undefined))
+  toReturn.push(createInputElement(t('count'), 'count', '', 'string', defaultCount, register, setValue, watch, errors, unregister, false, undefined, true))
   toReturn.push(createPicker(t('lifeStage'), 'lifeStage', defaultLifeStage, register, setValue, watch, errors, unregister, lifeStageDictionary))
-  toReturn.push(createInputElement(t('notes'), 'notes', '', 'string', defaultNotes, register, setValue, watch, errors, unregister, false, undefined))
+  toReturn.push(createInputElement(t('notes'), 'notes', '', 'string', defaultNotes, register, setValue, watch, errors, unregister, false, undefined, true))
   
   return (toReturn)
 }

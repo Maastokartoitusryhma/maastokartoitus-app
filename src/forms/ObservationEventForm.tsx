@@ -39,7 +39,7 @@ const ObservationEventForm = (register: Function, setValue: Function,
   }
 
   // creating the actual form elements, they're hardcoded and use the above variables to define the default values
-  toReturn.push(createArray('Havainnoijat', '', 'leg', 'string', defaultLeg, register, setValue, watch, errors, unregister))
+  toReturn.push(createArray('Havainnoijat', '', 'leg', 'string', defaultLeg, register, setValue, watch, errors, unregister, true))
   toReturn.push(createPicker('Havainnoijien nimet ovat julkisia', 'legPublic', defaultLegPublic, register, setValue, watch, errors, unregister, legPublicDictionary))
   toReturn.push(createPicker('Havainnon tarkat paikkatiedot ovat julkisia', 'secureLevel', defaultSecureLevel, register, setValue, watch, errors, unregister, secureLevelDictionary))
   toReturn.push(createInputElement('Alku', 'dateBegin', '', 'string', defaultDateBegin, register, setValue, watch, errors, unregister, false, undefined, true))

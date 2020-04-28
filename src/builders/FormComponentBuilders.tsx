@@ -30,7 +30,7 @@ export const createPicker = (
 export const createArray = (
   title: string, objectTitle: string, parentObjectTitle: string, type: string,
   defaultValue: (Array<string>) | undefined, register: Function, setValue: Function,
-  watch: Function, errors: Object, unregister: Function
+  watch: Function, errors: Object, unregister: Function, editable: boolean
   ) => {
 
   console.log('parenttitle', parentObjectTitle)
@@ -66,7 +66,7 @@ export const createArray = (
     key={title} title={title} objectTitle={objectTitle} parentObjectTitle={parentObjectTitle}
     inputType={type} register={register} setValue={setValue} watch={watch} errors={errors}
     unregister={unregister} inputElements={inputElements} elementDictionary={elementDictionary}
-    callbackFunction={callbackFunction} />
+    callbackFunction={callbackFunction} editable={editable} />
 }
 
 export const createInputElement = (

@@ -63,7 +63,7 @@ const FecesObservationForm = (
     register, setValue, watch, errors, unregister, lolifeDroppingsQualityDictionary))
 
   toReturn.push(createInputElement(t('notes'), 'notes', '', 'string', defaultNotes, 
-    register, setValue, watch, errors, unregister, false, undefined))
+    register, setValue, watch, errors, unregister, false, undefined, true))
     
   return (toReturn)
 }

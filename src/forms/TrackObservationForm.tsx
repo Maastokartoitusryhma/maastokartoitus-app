@@ -30,7 +30,7 @@ const TrackObservationForm = (register: Function, setValue: Function,
 
   // creating the actual form elements, they're hardcoded and use the above variables to define the default values
   toReturn.push(createPicker(t('indirectObservationType'), 'indirectObservationType', defaultIndirectObservationType , register, setValue, watch, errors, unregister, indirectObservationTypeDictionary))
-  toReturn.push(createInputElement(t('notes'), 'notes', '', 'string', defaultNotes, register, setValue, watch, errors, unregister, false, undefined))
+  toReturn.push(createInputElement(t('notes'), 'notes', '', 'string', defaultNotes, register, setValue, watch, errors, unregister, false, undefined, true))
   return (toReturn)
 }
 

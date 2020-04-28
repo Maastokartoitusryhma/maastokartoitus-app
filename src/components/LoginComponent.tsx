@@ -74,9 +74,6 @@ const LoginComponent = (props: Props) => {
 
   // Check if user has previously logged in, redirect to home screen if is
   const loadData = async () => {
-    
-
-
     console.log('loading data')
     const userData = await storageController.fetch('userData')
     console.log('USERDATA', userData)
@@ -99,32 +96,9 @@ const LoginComponent = (props: Props) => {
     }
   }
 
-  const getUserInfo = async (token: string) => {
-    const userObject = await getUserByPersonToken(token)
-    if (userObject !== null || userObject.error === undefined) {
-      return userObject
-    } else {
-      //console.log('SOME ERROR')
-      setMessageVisibilityTrue()
-      updateMessageContent('Sisääkirjautuminen epäonnistui.')
-    }
-  }
-
-  const storeUserData = async (userData: UserObject, personToken: string) => {
-    try {
-      await storageController.save('userData', userData)
-      await storageController.save('personToken', personToken)
-      props.setUser(userData)
-      props.setPersonToken(personToken)
-    } catch (e) {
-      console.log('Error saving user data to storage or reducer: ', e)
-    }
-  }
-
   const login = async () => {
     setLoggingIn(true)
 
-    /*
     const result = await getTempTokenAndLoginUrl()
     console.log('result', result)
     if (result === null) {
@@ -133,9 +107,7 @@ const LoginComponent = (props: Props) => {
       setLoggingIn(false)
     } else {
       props.onPressLogin(result)
-    }  */
-    const data = await getUserInfo('NjlhZDVkZTgtYmVjMi00MDBhLTljZmEtMDFjZDUzMGEzZTYz')
-    await storeUserData(data, 'NjlhZDVkZTgtYmVjMi00MDBhLTljZmEtMDFjZDUzMGEzZTYz')
+    }
   }
 
   const fetchObservationEvents = async () => {

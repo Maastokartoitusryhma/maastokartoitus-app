@@ -19,6 +19,7 @@ interface Props {
   inputElements: Array<Element | undefined>
   elementDictionary: any
   callbackFunction: Function | undefined
+  editable: boolean
 }
 
 const FormArrayComponent = (props: Props) => {
@@ -30,7 +31,7 @@ const FormArrayComponent = (props: Props) => {
     elements.push(createInputElement(
       props.title, props.objectTitle, props.parentObjectTitle,
       props.inputType, '', props.register, props.setValue,
-      props.watch, props.errors, props.unregister
+      props.watch, props.errors, props.unregister, props.editable
     ))
     setInputElements(elements)
   }
@@ -61,7 +62,7 @@ const FormArrayComponent = (props: Props) => {
   const createInputElement = (
     title: string, objectTitle: string, parentObjectTitle: string,
     type: string, defaultValue: string, register: Function,
-    setValue: Function, watch: Function, errors: Object, unregister: Function
+    setValue: Function, watch: Function, errors: Object, unregister: Function, editable: boolean
     ) => {
     const key = title + ' ' + uuid.v4()
     if (type === 'string') {
@@ -70,7 +71,7 @@ const FormArrayComponent = (props: Props) => {
         parentObjectTitle={parentObjectTitle} keyboardType='default'
         defaultValue={defaultValue} register={register} setValue={setValue}
         watch={watch} errors={errors} unregister={unregister} 
-        isArrayItem={true} parentCallback={props.callbackFunction}
+        isArrayItem={true} parentCallback={props.callbackFunction} editable={editable}
       />
     } else if (type === 'integer') {
       return <FormInputComponent 
@@ -78,7 +79,7 @@ const FormArrayComponent = (props: Props) => {
         parentObjectTitle={parentObjectTitle} keyboardType='numeric'
         defaultValue={defaultValue} register={register} setValue={setValue}
         watch={watch} errors={errors} unregister={unregister} 
-        isArrayItem={true} parentCallback={props.callbackFunction}
+        isArrayItem={true} parentCallback={props.callbackFunction} editable={editable}
       />
     }
   }

@@ -77,12 +77,12 @@ const parseNested = (
     } else if (title !== '' && type !== '' && isArray) { // Go to create Array element
       toReturn.push(createArray(
         title, objectTitle, parentObjectTitle, type,
-        defaultValue, register, setValue, watch, errors, unregister
+        defaultValue, register, setValue, watch, errors, unregister, true
       ))
     } else if (title !== '' && type !== '') { // Go to create Input element
       toReturn.push(createInputElement(
         title, objectTitle, parentObjectTitle, type, defaultValue,
-        register, setValue, watch, errors, unregister, false, undefined
+        register, setValue, watch, errors, unregister, false, undefined, true
       ))
     }
 
@@ -122,7 +122,7 @@ const createPicker = (
 const createArray = (
   title: string, objectTitle: string, parentObjectTitle: string, type: string,
   defaultValue: string, register: Function, setValue: Function,
-  watch: Function, errors: Object, unregister: Function
+  watch: Function, errors: Object, unregister: Function, editable: boolean
   ) => {
   const key = title + ' ' + uuid.v4()
   let elementDictionary: { [key: string]: any } = {} // Create dictionary for handling removal of inputs
@@ -137,20 +137,20 @@ const createArray = (
   }
   const inputElements = [createInputElement(
     key, objectTitle, parentObjectTitle, type, defaultValue,
-    register, setValue, watch, errors, unregister, true, callbackFunction
+    register, setValue, watch, errors, unregister, true, callbackFunction, true
   )]
   return <FormArrayComponent
     key={title} title={title} objectTitle={objectTitle} parentObjectTitle={parentObjectTitle}
     inputType={type} register={register} setValue={setValue} watch={watch} errors={errors}
     unregister={unregister} inputElements={inputElements} elementDictionary={elementDictionary}
-    callbackFunction={callbackFunction} />
+    callbackFunction={callbackFunction} editable={editable}  />
 }
 
 const createInputElement = (
   title: string, objectTitle: string, parentObjectTitle: string,
   type: string, defaultValue: string, register: Function,
   setValue: Function, watch: Function, errors: Object,
-  unregister: Function, isArrayItem: boolean, callbackFunction: Function|undefined
+  unregister: Function, isArrayItem: boolean, callbackFunction: Function|undefined, editable: boolean
   ) => {
   if (type === 'string') {
     return <FormInputComponent
@@ -158,7 +158,7 @@ const createInputElement = (
       parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
       keyboardType='default' register={register} setValue={setValue}
       watch={watch} errors={errors} unregister={unregister}
-      isArrayItem={isArrayItem} parentCallback={callbackFunction}
+      isArrayItem={isArrayItem} parentCallback={callbackFunction} editable={editable}
     />
   } else if (type === 'integer') {
     return <FormInputComponent
@@ -166,7 +166,7 @@ const createInputElement = (
       parentObjectTitle={parentObjectTitle} defaultValue={defaultValue}
       keyboardType='numeric' register={register} setValue={setValue}
       watch={watch} errors={errors} unregister={unregister}
-      isArrayItem={isArrayItem} parentCallback={callbackFunction}
+      isArrayItem={isArrayItem} parentCallback={callbackFunction} editable={editable}
     />    
   }
 } 
